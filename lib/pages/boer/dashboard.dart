@@ -2,6 +2,7 @@ import 'package:b_one_project_4_0/widgets/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/DashboardButtonsOverview.dart';
 import 'package:b_one_project_4_0/widgets/IconTextLeftButton.dart';
+import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopBarButtons.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         Padding(padding: EdgeInsets.all(10.0)),
                         TopBarButtons(
-                          onPressedLeft: () {},
+                          onPressedLeft: () {
+                            _filter(context);
+                          },
                           onPressedRight: () {},
                           textLeft: "Filters",
                           textRight: "Box",
@@ -53,6 +56,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           iconRight: Icons.business_center,
                           color: Colors.grey.shade900,
                         ),
+                        //Botton
+                        TextFieldBOne(context: context, labelText: "test"),
                         Padding(padding: EdgeInsets.all(15.0)),
                         SizedBox(
                           width: 250.0,
@@ -90,4 +95,38 @@ class _DashboardPageState extends State<DashboardPage> {
       bottomNavigationBar: BottomAppBarBOne(),
     );
   }
+}
+
+void _filter(context) {
+  showModalBottomSheet(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(30),
+      ),
+    ),
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    backgroundColor: Colors.white,
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(builder: (BuildContext context,
+          StateSetter setState /*You can rename this!*/) {
+        return Container(
+          height: 600,
+          color: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.all(25),
+            child: Column(
+              children: [
+                Text(
+                  "Filters",
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+                Text("okss"),
+              ],
+            ),
+          ),
+        );
+      });
+    },
+  );
 }
