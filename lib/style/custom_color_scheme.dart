@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-MaterialColor garnotecColor = const MaterialColor(
+MaterialColor bOneColor = const MaterialColor(
   0xFFF58220, // Orange color from VITO
   const <int, Color>{
     50: const Color.fromRGBO(245, 130, 32, .1),
@@ -29,26 +29,26 @@ ThemeData _buildBOneTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
       accentColor: bOneAccent,
-      primaryColor: garnotecColor,
+      primaryColor: bOneColor,
       canvasColor: Colors.transparent,
       buttonTheme: base.buttonTheme.copyWith(
-        buttonColor: garnotecColor.shade100,
+        buttonColor: bOneColor.shade100,
         colorScheme: base.colorScheme.copyWith(
-          secondary: garnotecColor.shade900,
+          secondary: bOneColor.shade900,
         ),
         textTheme: ButtonTextTheme.accent,
       ),
       buttonBarTheme: base.buttonBarTheme.copyWith(
         buttonTextTheme: ButtonTextTheme.accent,
       ),
-      buttonColor: garnotecColor,
+      buttonColor: bOneColor,
       scaffoldBackgroundColor: bOneBackgroundWhite,
-      // textSelectionColor: garnotecColor.shade100,
+      // textSelectionColor: bOneColor.shade100,
       errorColor: bOneErrorRed,
       textTheme: _buildBOneTextTheme(base.textTheme),
       primaryTextTheme: _buildBOneTextTheme(base.primaryTextTheme),
       accentTextTheme: _buildBOneTextTheme(base.accentTextTheme),
-      primaryColorLight: garnotecColor.shade200,
+      primaryColorLight: bOneColor.shade200,
       indicatorColor: bOneCMT,
       primaryIconTheme: IconThemeData(color: bOneAccent),
       iconTheme: IconThemeData(color: bOneAccent),
@@ -68,7 +68,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
           headline2: base.headline2.copyWith(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
-            color: garnotecColor.shade900,
+            color: bOneColor.shade900,
           ),
           headline5: base.headline5.copyWith(
             fontWeight: FontWeight.w500,
@@ -91,7 +91,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
           ))
       .apply(
           // fontFamily: 'Poppins',
-          // displayColor: garnotecColor.shade900,
-          // bodyColor: garnotecColor.shade900,
+          // displayColor: bOneColor.shade900,
+          // bodyColor: bOneColor.shade900,
           );
 }
