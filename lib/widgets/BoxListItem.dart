@@ -4,16 +4,18 @@ class BoxListItem extends StatelessWidget {
   const BoxListItem({
     @required this.boxText,
     @required this.locationText,
+    @required this.onPressed,
     Key key,
   }) : super(key: key);
 
   final String boxText;
   final String locationText;
+  final GestureTapCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      onPressed: () {},
+      onPressed: this.onPressed,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
         padding: EdgeInsets.all(10),

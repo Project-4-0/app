@@ -106,10 +106,12 @@ _boxItems() {
   return Column(children: [
     // for (var _boxItems in _box.)
     BoxListItem(
+      onPressed: () {},
       boxText: "Box1",
       locationText: "winkelom",
     ),
     BoxListItem(
+      onPressed: () {},
       boxText: "Box2",
       locationText: "Geel",
     ),
@@ -134,7 +136,7 @@ void _boxModal(context) {
           height: 600,
           color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.only(top: 25),
             child: Column(
               children: [
                 Text(

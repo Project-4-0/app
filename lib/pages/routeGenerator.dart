@@ -1,3 +1,4 @@
+import 'package:b_one_project_4_0/pages/profile.dart';
 import 'package:b_one_project_4_0/pages/boer/dashboard.dart';
 import 'package:b_one_project_4_0/pages/home.dart';
 import 'package:b_one_project_4_0/pages/test.dart';
@@ -14,6 +15,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HomePage());
       case '/test':
         return MaterialPageRoute(builder: (_) => TestPage());
+      case '/profile':
+        return MaterialPageRoute(builder: (_) => ProfilePage());
       case '/boer/dashboard':
         return MaterialPageRoute(builder: (_) => DashboardPage());
       // case '/registration':
