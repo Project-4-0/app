@@ -1,7 +1,6 @@
 import 'package:b_one_project_4_0/widgets/BottomAppBarBOne.dart';
-import 'package:b_one_project_4_0/widgets/FlatButtonBOne.dart';
-import 'package:b_one_project_4_0/widgets/DashboardButtonsOverview.dart';
 import 'package:flutter/material.dart';
+import 'package:b_one_project_4_0/widgets/SimpleLineChart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -53,6 +52,7 @@ class _HomePageState extends State<HomePage> {
                                     onPressed: () {
                                       Navigator.pushNamedAndRemoveUntil(
                                           context, '/users', (route) => false);
+                                      print("Go to user overview");
                                     },
                                     color: Theme.of(context).buttonColor,
                                     shape: RoundedRectangleBorder(
@@ -84,6 +84,7 @@ class _HomePageState extends State<HomePage> {
                                     onPressed: () {
                                       Navigator.pushNamedAndRemoveUntil(
                                           context, '/boxen', (route) => false);
+                                      print("Go to box overview");
                                     },
                                     color: Theme.of(context).buttonColor,
                                     shape: RoundedRectangleBorder(
@@ -113,27 +114,22 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
+                          width: double.infinity,
+                          height: 200.0,
+                          child: SimpleLineChart.withSampleData(),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
+                          width: double.infinity,
+                          height: 200.0,
+                          child: SimpleLineChart.withSampleData(),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Sat!')),
+                          width: double.infinity,
+                          height: 200.0,
+                          child: SimpleLineChart.withSampleData(),
                         ),
-                        SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
-                        )
                       ],
                     ),
                   ),

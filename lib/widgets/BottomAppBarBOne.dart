@@ -86,7 +86,9 @@ class FloatingActionButtonBOne extends StatelessWidget {
           ),
         ),
         backgroundColor: Colors.white,
-        onPressed: () {/**/},
+        onPressed: () {
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        },
       ),
     );
   }
