@@ -1,6 +1,6 @@
-import 'package:b_one_project_4_0/widgets/BottomAppBarBOne.dart';
-import 'package:b_one_project_4_0/widgets/FlatButtonBOne.dart';
-import 'package:b_one_project_4_0/widgets/DashboardButtonsOverview.dart';
+import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
+import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
+import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
