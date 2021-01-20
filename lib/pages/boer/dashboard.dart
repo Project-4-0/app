@@ -2,6 +2,7 @@ import 'package:b_one_project_4_0/widgets/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/DashboardButtonsOverview.dart';
 import 'package:b_one_project_4_0/widgets/IconTextLeftButton.dart';
+import 'package:b_one_project_4_0/widgets/OutlineFlatButtonBone.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopBarButtons.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(10.0)),
+
                         TopBarButtons(
                           onPressedLeft: () {
                             _filter(context);
@@ -56,8 +58,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           iconRight: Icons.business_center,
                           color: Colors.grey.shade900,
                         ),
+
                         //Botton
-                        TextFieldBOne(context: context, labelText: "test"),
+                        // TextFieldBOne(context: context, labelText: "test"),
                         Padding(padding: EdgeInsets.all(15.0)),
                         SizedBox(
                           width: 250.0,
@@ -121,7 +124,50 @@ void _filter(context) {
                   "Filters",
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                Text("okss"),
+                Padding(padding: EdgeInsets.all(20)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    OutlineFlatButtonBOne(
+                      text: "Begin datum",
+                      onPressed: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2222),
+                        );
+                      },
+                    ),
+                    Padding(padding: EdgeInsets.all(5)),
+                    OutlineFlatButtonBOne(
+                      text: "Eind datum",
+                      onPressed: () {
+                        showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2222),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          FlatButtonBOne(
+                            text: "Filters Toevoegen",
+                            onPressed: () {},
+                          ),
+                        ]),
+                  ),
+                )
               ],
             ),
           ),

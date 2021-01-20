@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 // Default design button BOne
-class FlatButtonBOne extends StatelessWidget {
-  const FlatButtonBOne({
+class OutlineFlatButtonBOne extends StatelessWidget {
+  const OutlineFlatButtonBOne({
     Key key,
     @required this.text,
     @required this.onPressed(),
@@ -19,18 +19,19 @@ class FlatButtonBOne extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: onPressed,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+      shape: ContinuousRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: Theme.of(context).primaryColor),
       ),
       minWidth: 160,
-      height: 50,
+      height: 40,
       disabledColor: Theme.of(context).accentColor,
       disabledTextColor: Colors.white,
-      color: Theme.of(context).buttonColor,
+      // color: Theme.of(context).buttonColor,
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.white,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );
