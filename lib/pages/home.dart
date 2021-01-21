@@ -1,6 +1,7 @@
 import 'package:b_one_project_4_0/widgets/BottomAppBarBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/widgets/SimpleLineChart.dart';
+import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -113,23 +114,40 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
+                        // Light sensor
                         SizedBox(
                           width: double.infinity,
-                          height: 200.0,
-                          child: SimpleLineChart.withSampleData(),
+                          height: 250.0,
+                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                          child: TimeSeriesChart.withSampleData(
+                            title: "Lichthoeveelheid",
+                            animate: true,
+                            unit: "%",
+                            lineColor: Colors.green,
+                            meassureAxisValues: [0, 25, 50, 75, 100],
+                          ),
+                        ),
+                        // Temp sensor
+                        SizedBox(
+                          width: double.infinity,
+                          height: 250.0,
+                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                          child: TimeSeriesChart.withSampleData(
+                              title: "Temperatuur",
+                              animate: true,
+                              unit: "°C",
+                              lineColor: Colors.red,
+                              meassureAxisValues: [
+                                -20,
+                                -10,
+                                0,
+                                10,
+                                20,
+                                30,
+                                40
+                              ]),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 200.0,
-                          child: SimpleLineChart.withSampleData(),
-                        ),
-                        Padding(padding: EdgeInsets.all(15.0)),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 200.0,
-                          child: SimpleLineChart.withSampleData(),
-                        ),
                       ],
                     ),
                   ),
