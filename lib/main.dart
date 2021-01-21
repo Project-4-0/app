@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'B One',
       theme: bOneTheme,
       // initialRoute: '/admin/dashboard',
-      initialRoute: '/boer/dashboard',
+      initialRoute: '/monteur/connected',
       // initialRoute: '/profile',
       // Work with Generate routes
       onGenerateRoute: RouteGenerator.generateRoute,
