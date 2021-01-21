@@ -1,5 +1,6 @@
 import 'package:b_one_project_4_0/pages/info.dart';
 import 'package:b_one_project_4_0/pages/login.dart';
+import 'package:b_one_project_4_0/pages/monteur/dashboard.dart';
 import 'package:b_one_project_4_0/pages/profile.dart';
 import 'package:b_one_project_4_0/pages/boer/dashboard.dart';
 import 'package:b_one_project_4_0/pages/admin/dashboard.dart';
@@ -25,6 +26,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => InfoPage());
       case '/login':
         return MaterialPageRoute(builder: (_) => LoginPage());
+
+      case '/monteur':
+        return MaterialPageRoute(builder: (_) => MonteurDashboardPage());
       // case '/registration':
       // case '/registration':
       //   return MaterialPageRoute(builder: (_) => RegistrationPage());

@@ -21,15 +21,16 @@ class DashboardButtonsOverview extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       padding: EdgeInsets.all(25.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(this.text,
-              style: TextStyle(color: Colors.white, fontSize: 22.0)),
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
           Icon(
             this.icon, // Icon from parent
             color: Colors.white,
+            size: 40,
           ),
+          Text(this.text,
+              style: TextStyle(color: Colors.white, fontSize: 22.0)),
         ],
       ),
     );
