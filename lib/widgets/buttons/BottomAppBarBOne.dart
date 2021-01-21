@@ -13,18 +13,19 @@ class BottomAppBarBOne extends StatelessWidget {
       notchMargin: 15.0,
       shape: CircularNotchedRectangle(),
       child: Container(
+        height: 70,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             // Home buttton
             FlatButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                    context, '/boer/dashboard', (route) => false);
               },
               child: Icon(
                 Icons.home,
+                size: 30,
                 color: Theme.of(context).accentColor,
               ),
             ),
@@ -34,9 +35,13 @@ class BottomAppBarBOne extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/profile', (route) => false);
               },
-              child: Icon(
-                Icons.account_circle,
-                color: Theme.of(context).accentColor,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 60),
+                child: Icon(
+                  Icons.account_circle,
+                  size: 30,
+                  color: Theme.of(context).accentColor,
+                ),
               ),
             ),
             // Info button
@@ -45,9 +50,13 @@ class BottomAppBarBOne extends StatelessWidget {
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/info', (route) => false);
               },
-              child: Icon(
-                Icons.info,
-                color: Theme.of(context).accentColor,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 60),
+                child: Icon(
+                  Icons.info,
+                  size: 30,
+                  color: Theme.of(context).accentColor,
+                ),
               ),
             ),
             // Logout button
@@ -58,6 +67,7 @@ class BottomAppBarBOne extends StatelessWidget {
               },
               child: Icon(
                 Icons.exit_to_app,
+                size: 30,
                 color: Theme.of(context).accentColor,
               ),
             ),
@@ -87,7 +97,7 @@ class FloatingActionButtonBOne extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, '/info', (route) => false);
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
@@ -27,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               SafeArea(
                 child: Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: safeAreaBOne(),
                   child: Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -58,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.grey.shade900,
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                         // Light sensor
+                        // Light sensor
                         SizedBox(
                           width: double.infinity,
                           height: 250.0,
