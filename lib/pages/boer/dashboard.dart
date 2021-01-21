@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
@@ -57,28 +58,39 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.grey.shade900,
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
+                         // Light sensor
                         SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
+                          width: double.infinity,
+                          height: 250.0,
+                          child: TimeSeriesChart.withSampleData(
+                            title: "Lichthoeveelheid",
+                            animate: true,
+                            unit: "%",
+                            lineColor: Colors.green,
+                            meassureAxisValues: [0, 25, 50, 75, 100],
+                          ),
+                        ),
+                        // Temp sensor
+                        SizedBox(
+                          width: double.infinity,
+                          height: 250.0,
+                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                          child: TimeSeriesChart.withSampleData(
+                              title: "Temperatuur",
+                              animate: true,
+                              unit: "°C",
+                              lineColor: Colors.red,
+                              meassureAxisValues: [
+                                -20,
+                                -10,
+                                0,
+                                10,
+                                20,
+                                30,
+                                40
+                              ]),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
-                        ),
-                        Padding(padding: EdgeInsets.all(15.0)),
-                        SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Sat!')),
-                        ),
-                        SizedBox(
-                          width: 250.0,
-                          height: 150.0,
-                          child: const Card(child: Text('Graph!')),
-                        )
                       ],
                     ),
                   ),
