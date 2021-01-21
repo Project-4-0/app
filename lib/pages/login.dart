@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/widgets/CardBOne.dart';
+import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
@@ -17,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: safeAreaBOne(),
             child: Center(
               child: Column(
                 children: [

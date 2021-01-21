@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/widgets/CardBOne.dart';
+import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _InfoPageState extends State<InfoPage> {
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: safeAreaBOne(),
             child: Center(
               child: Column(
                 children: [
