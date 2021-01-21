@@ -24,6 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/admin/boxen',
       // initialRoute: '/admin/users',
       // initialRoute: '/boer/dashboard',
+      // initialRoute: '/monteur/connected',
       // initialRoute: '/profile',
       // Work with Generate routes
       onGenerateRoute: RouteGenerator.generateRoute,

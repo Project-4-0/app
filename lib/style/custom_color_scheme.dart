@@ -62,7 +62,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
       .copyWith(
           bodyText2: base.bodyText2.copyWith(
             fontWeight: FontWeight.w500,
-            fontSize: 16.0,
+            fontSize: 30.0,
             color: bOneAccent,
           ),
           headline2: base.headline2.copyWith(

@@ -4,12 +4,12 @@ import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart'
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
 
-class AdminDashboardPage extends StatefulWidget {
+class MonteurDashboardPage extends StatefulWidget {
   @override
-  _AdminDashboardPageState createState() => _AdminDashboardPageState();
+  _MonteurDashboardPageState createState() => _MonteurDashboardPageState();
 }
 
-class _AdminDashboardPageState extends State<AdminDashboardPage> {
+class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +60,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   icon: Icons.group,
                                 ),
                               ),
-                              Padding(padding: EdgeInsets.all(5.0)),
+                              Padding(padding: EdgeInsets.all(10.0)),
                               Expanded(
                                 child: DashboardButtonsOverview(
                                   text: "Boxen",
@@ -71,77 +71,31 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   },
                                   icon: Icons.widgets,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         // Seccond row of dashboard buttons
                         Container(
-                          width: double.infinity,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Expanded(
+                                flex: 1,
                                 child: DashboardButtonsOverview(
                                   text: "Koppelen",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/connect', (route) => false);
-                                    print("Go to connect box with user");
+                                        context, '/users', (route) => false);
+                                    print("Go to user overview");
                                   },
                                   icon: Icons.link,
                                 ),
                               ),
-                              // Padding(padding: EdgeInsets.all(5.0)),
-                              // Expanded(
-                              //   child: DashboardButtonsOverview(
-                              //     text: "Boxen",
-                              //     onPressed: () {
-                              //       Navigator.pushNamedAndRemoveUntil(
-                              //           context, '/boxen', (route) => false);
-                              //       print("Go to box overview");
-                              //     },
-                              //     icon: Icons.widgets,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(15.0)),
-                        // Light sensor
-                        SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          child: TimeSeriesChart.withSampleData(
-                            title: "Lichthoeveelheid",
-                            animate: true,
-                            unit: "%",
-                            lineColor: Colors.green,
-                            meassureAxisValues: [0, 25, 50, 75, 100],
-                          ),
-                        ),
-                        // Temp sensor
-                        SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                          child: TimeSeriesChart.withSampleData(
-                              title: "Temperatuur",
-                              animate: true,
-                              unit: "°C",
-                              lineColor: Colors.red,
-                              meassureAxisValues: [
-                                -20,
-                                -10,
-                                0,
-                                10,
-                                20,
-                                30,
-                                40
-                              ]),
-                        ),
-                        Padding(padding: EdgeInsets.all(15.0)),
                       ],
                     ),
                   ),

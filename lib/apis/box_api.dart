@@ -21,7 +21,7 @@ class BoxApi {
       {
         "name": "Box 3",
         "mac_address": "mac_address54654654",
-        "comment": "Hi i'm comment",
+        "comment": null,
         "active": false,
         "id": 3
       },

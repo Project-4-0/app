@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:b_one_project_4_0/models/box.dart';
+
 
 class BoxListItem extends StatelessWidget {
   const BoxListItem({
     @required this.boxText,
     @required this.locationText,
     @required this.onPressed,
+    this.box, // TODO: Expect to get a full box object !!!
     Key key,
   }) : super(key: key);
 
   final String boxText;
+  final Box box;
   final String locationText;
   final GestureTapCallback onPressed;
 
@@ -52,7 +56,7 @@ class BoxListItem extends StatelessWidget {
                 ],
               ),
               child: Text(
-                boxText,
+                box.name!=null?box.name:boxText,
                 style: TextStyle(color: Colors.white),
               ),
             ),

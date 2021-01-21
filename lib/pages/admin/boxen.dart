@@ -1,3 +1,4 @@
+import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/apis/box_api.dart';
 import 'package:b_one_project_4_0/models/box.dart';
@@ -101,14 +102,29 @@ class _BoxenOverviewPage extends State {
       // shrinkWrap: true,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
-        return BoxListItem(
-          onPressed: () {
-            print("Show box detail model");
-            _boxDetail(context, this.boxList[position]);
-          },
-          boxText: this.boxList[position].name,
-          locationText: "Geel",
-        );
+        return FractionalTranslation(
+            translation: Offset(0.0, 0.0),
+            child: Stack(children: <Widget>[
+              BoxListItem(
+                boxText: "!!!!!! needs to be replaced",
+                box: this.boxList[position],
+                onPressed: () {
+                  print("Show box detail model");
+                  _boxDetail(context, this.boxList[position]);
+                },
+                locationText: "Geel !!!",
+              ),
+              Positioned(
+                // Marble to show active status
+                top: 10.0,
+                right: 10.0,
+                child: Icon(Icons.brightness_1,
+                    size: 15.0,
+                    color: this.boxList[position].active
+                        ? Colors.green
+                        : Colors.red),
+              )
+            ]));
       },
     );
   }
@@ -127,17 +143,18 @@ void _boxDetail(context, Box box) {
     builder: (BuildContext context) {
       return StatefulBuilder(builder: (BuildContext context,
           StateSetter setState /*You can rename this!*/) {
-        return Container(
+        return SingleChildScrollView(
+            child: Container(
           height: 600,
           color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.all(25),
+            padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
             child: Column(
               children: [
                 FractionalTranslation(
-                    translation: Offset(0.0, -0.0),
+                    translation: Offset(0.0, 0.0),
                     child: Align(
-                      child: new Stack(children: <Widget>[
+                      child: Stack(children: <Widget>[
                         CircleAvatar(
                           radius: 50.0,
                           backgroundColor: Theme.of(context).primaryColor,
@@ -146,60 +163,56 @@ void _boxDetail(context, Box box) {
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold)),
                         ),
-                        new Positioned(
+                        Positioned(
                           // Marble to show active status
                           top: 0.0,
                           right: 0.0,
-                          child: new Icon(Icons.brightness_1,
-                              size: 30.0, color: box.active? Colors.green: Colors.red),
+                          child: Icon(Icons.brightness_1,
+                              size: 30.0,
+                              color: box.active ? Colors.green : Colors.red),
                         )
                       ]),
                       alignment: FractionalOffset(0.5, 0.0),
                     )),
                 Padding(padding: EdgeInsets.all(20)),
+                // Values of box
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text("Mac adress:"),
-                    Text(box.macAddress),
+                    Text(
+                      "Mac adress:\n" + box.macAddress,
+                      style: TextStyle(fontSize: 18),
+                    ),
                     Padding(padding: EdgeInsets.all(5)),
-                    Text("Locatie:"),
-                    Text(box.macAddress),
+                    Text(
+                      "Locatie:\n" + "Harmoniestraat 44 !!!\n" + "2230 Ramsel",
+                      style: TextStyle(fontSize: 18),
+                    ),
                     Padding(padding: EdgeInsets.all(5)),
-                    Text("Opmerking:"),
-                    Text(box.comment),
-                    // OutlineFlatButtonBOne(
-                    //   text: "Eind datum",
-                    //   onPressed: () {
-                    //     showDatePicker(
-                    //       context: context,
-                    //       initialDate: DateTime.now(),
-                    //       firstDate: DateTime(2000),
-                    //       lastDate: DateTime(2222),
-                    //     );
-                    //   },
-                    // ),
+                    Text(
+                      "In gebruik door:\n" + "Arno Vangoetsenhoven !!!",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    if (box.comment != null)
+                      Padding(padding: EdgeInsets.all(5)),
+                    if (box.comment != null)
+                      Text(
+                        "Opmerking:\n" + box.comment,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    Padding(padding: EdgeInsets.all(5)),
+                    OutlineFlatButtonBOne(
+                      text: "Wijzigen",
+                      onPressed: () {
+                        print("Go to edit page of box");
+                      },
+                    ),
                   ],
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // FlatButtonBOne(
-                          //   text: "Filters Toevoegen",
-                          //   onPressed: () {},
-                          // ),
-                        ]),
-                  ),
-                )
               ],
             ),
           ),
-        );
+        ));
       });
     },
   );
