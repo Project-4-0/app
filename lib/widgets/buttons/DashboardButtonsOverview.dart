@@ -4,30 +4,34 @@ import 'package:flutter/material.dart';
 class DashboardButtonsOverview extends StatelessWidget {
   const DashboardButtonsOverview({
     Key key,
-    // @required this.text,
+    @required this.text,
+    @required this.icon,
     @required this.onPressed(),
-    // this.isActive,
-    // this.color,
   }) : super(key: key);
 
-  // final String text;
-  // final Color color;
-  // final bool isActive;
+  final String text;
+  final IconData icon;
   final GestureTapCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return new RaisedButton(
       onPressed: onPressed,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      minWidth: 160,
-      height: 50,
-      disabledColor: Theme.of(context).accentColor,
-      disabledTextColor: Colors.white,
       color: Theme.of(context).buttonColor,
-      child: Text("Gebruikers"),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      padding: EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(this.text,
+              style: TextStyle(color: Colors.white, fontSize: 22.0)),
+          Icon(
+            this.icon, // Icon from parent
+            color: Colors.white,
+          ),
+        ],
+      ),
     );
   }
 }
