@@ -241,7 +241,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
           padding: const EdgeInsets.only(top: 30),
           child: Column(
             children: [
-              Text("ok"),
+              Text(
+                "Bevestigen",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
               CardBOne(
                 child: Text("Box"),
               ),
@@ -262,7 +265,28 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
         );
 
       case 3:
-        return Text("final");
+        return Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Column(
+            children: [
+              Text(
+                "Final",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              Icon(
+                Icons.check_circle_outline,
+                color: Colors.green.shade300,
+                size: 300,
+              ),
+              Text(
+                "De gegevens zijn succesvol opgeslagen",
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+            ],
+          ),
+        );
 
       default:
         return Text("ok");
