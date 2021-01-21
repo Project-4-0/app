@@ -6,6 +6,8 @@ import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:badges/badges.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
 
 class BoxenOverviewPage extends StatefulWidget {
   @override
@@ -145,7 +147,7 @@ void _boxDetail(context, Box box) {
           StateSetter setState /*You can rename this!*/) {
         return SingleChildScrollView(
             child: Container(
-          height: 600,
+          // height: 600,
           color: Colors.white,
           child: Padding(
             padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
@@ -207,6 +209,25 @@ void _boxDetail(context, Box box) {
                         print("Go to edit page of box");
                       },
                     ),
+                    Padding(padding: EdgeInsets.all(5)),
+                    OutlineFlatButtonBOne(
+                      text: "QR-code",
+                      icon: Icon(
+                        Icons.qr_code,
+                      ),
+                      onPressed: () {
+                        print("Show the QR code (for printing?) of the box");
+                        // _showQRCode(context, box.macAddress);
+                      },
+                    ), 
+                    Center(
+                      // Make a qr-code from the mac-address of the box
+                      child: QrImage(
+                        data: box.macAddress,
+                        version: QrVersions.auto,
+                        size: 150,
+                        gapless: false,
+                    )),           
                   ],
                 ),
               ],
@@ -217,3 +238,51 @@ void _boxDetail(context, Box box) {
     },
   );
 }
+
+
+// void _showQRCode(context, String macAddress) {
+// showModalBottomSheet(
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(
+//         top: Radius.circular(30),
+//       ),
+//     ),
+//     clipBehavior: Clip.antiAliasWithSaveLayer,
+//     backgroundColor: Colors.white,
+//     context: context,
+//     builder: (BuildContext context) {
+//       return StatefulBuilder(builder: (BuildContext context,
+//           StateSetter setState /*You can rename this!*/) {
+//         return SingleChildScrollView(
+//             child: Container(
+//           height: 600,
+//           color: Colors.white,
+//           child:QrImage(
+//             data: 'This is a simple QR code',
+//             version: QrVersions.auto,
+//             size: 320,
+//             gapless: false,
+//           )));
+
+//           }
+//           );
+//           },
+// );
+// }
+
+
+// void _showQRCode(context, String macAddress) {
+//     builder: (BuildContext context) {
+//       return SimpleDialog(
+//         title: const Text('QR code for box...'),
+//         children: <Widget>[
+//           QrImage(
+//             data: "1234567890",
+//             version: QrVersions.auto,
+//             size: 200.0,
+//           ),
+//         ],
+//       );
+//     };
+// }
+

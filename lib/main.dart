@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: bOneTheme,
       // initialRoute: '/admin/dashboard',
       // initialRoute: '/admin/users/1',
-      initialRoute: '/admin/boxen/1',
+      initialRoute: '/admin/boxen',
       // initialRoute: '/admin/users',
       // initialRoute: '/boer/dashboard',
       // initialRoute: '/monteur/connected',
