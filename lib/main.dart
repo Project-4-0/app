@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'B One',
       theme: bOneTheme,
-      initialRoute: '/profile',
+      initialRoute: '/info',
       // Work with Generate routes
       onGenerateRoute: RouteGenerator.generateRoute,
     );
