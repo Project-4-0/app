@@ -1,6 +1,6 @@
 import 'package:b_one_project_4_0/pages/profile.dart';
 import 'package:b_one_project_4_0/pages/boer/dashboard.dart';
-import 'package:b_one_project_4_0/pages/home.dart';
+import 'package:b_one_project_4_0/pages/admin/dashboard.dart';
 import 'package:b_one_project_4_0/pages/test.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +11,8 @@ class RouteGenerator {
     switch (settings.name) {
       // case '/':
       //   return MaterialPageRoute(builder: (_) => LoginPage());
-      case '/home':
-        return MaterialPageRoute(builder: (_) => HomePage());
+      case '/admin/dashboard':
+        return MaterialPageRoute(builder: (_) => AdminDashboardPage());
       case '/test':
         return MaterialPageRoute(builder: (_) => TestPage());
       case '/profile':
@@ -23,16 +23,6 @@ class RouteGenerator {
       //   return MaterialPageRoute(builder: (_) => RegistrationPage());
       // case '/login':
       //   return MaterialPageRoute(builder: (_) => LoginPage());
-
-      // case '/scanProduct':
-      //   return MaterialPageRoute(builder: (_) => ScanProductPage());
-
-      // case '/cart':
-      //   return MaterialPageRoute(builder: (_) => CartPage());
-
-      // case '/cartSucceed':
-      //   return MaterialPageRoute(builder: (_) => CartSucceedPage());
-
       default:
         return _errorRoute();
     }
