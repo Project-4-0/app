@@ -9,6 +9,9 @@
 .history
 .svn/
 
+#public lock
+pubspec.lock
+
 #ignore plugin
 /plugin
 
