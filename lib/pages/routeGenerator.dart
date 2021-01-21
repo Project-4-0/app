@@ -1,5 +1,7 @@
 import 'package:b_one_project_4_0/pages/info.dart';
 import 'package:b_one_project_4_0/pages/login.dart';
+import 'package:b_one_project_4_0/pages/monteur/QRScanner.dart';
+import 'package:b_one_project_4_0/pages/monteur/connected.dart';
 import 'package:b_one_project_4_0/pages/monteur/dashboard.dart';
 import 'package:b_one_project_4_0/pages/profile.dart';
 import 'package:b_one_project_4_0/pages/boer/dashboard.dart';
@@ -29,6 +31,11 @@ class RouteGenerator {
 
       case '/monteur':
         return MaterialPageRoute(builder: (_) => MonteurDashboardPage());
+      case '/monteur/connected':
+        return MaterialPageRoute(builder: (_) => MonteurConnectedPage());
+
+      case '/monteur/QRSCanner':
+        return MaterialPageRoute(builder: (_) => QRScannerPage());
       // case '/registration':
       // case '/registration':
       //   return MaterialPageRoute(builder: (_) => RegistrationPage());
