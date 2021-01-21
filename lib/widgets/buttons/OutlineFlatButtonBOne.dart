@@ -8,11 +8,13 @@ class OutlineFlatButtonBOne extends StatelessWidget {
     @required this.onPressed(),
     this.isActive,
     this.color,
+    this.icon,
   }) : super(key: key);
 
   final String text;
   final Color color;
   final bool isActive;
+  final Icon icon;
   final GestureTapCallback onPressed;
 
   @override
@@ -27,13 +29,19 @@ class OutlineFlatButtonBOne extends StatelessWidget {
       height: 40,
       disabledColor: Theme.of(context).accentColor,
       disabledTextColor: Colors.white,
-      // color: Theme.of(context).buttonColor,
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Theme.of(context).primaryColor,
-        ),
-      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            text,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          if(icon!=null) Padding(padding: EdgeInsets.all(5.0)),
+          if(icon!=null) icon
+  ],
+)
     );
   }
 }

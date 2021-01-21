@@ -194,7 +194,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     flex: 1,
                     child: FlatButtonBOne(
                       minWidth: double.infinity,
-                      text: "Handmatisch zoeken",
+                      text: "Handmatig zoeken",
                       onPressed: null,
                     ),
                   ),
