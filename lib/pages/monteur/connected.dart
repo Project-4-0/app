@@ -1,7 +1,10 @@
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:b_one_project_4_0/widgets/CardBOne.dart';
+import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
+import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -156,14 +159,22 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   // Returns the header text based on the activeStep.
   Widget headerText() {
     switch (activeStep) {
+      //TODO handmatig add modal
       case 0:
         return Column(
           children: [
             Container(
-              height: 400,
+              height: 450,
               width: double.infinity,
               child: Column(
                 children: [
+                  Text(
+                    "Box",
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Expanded(flex: 5, child: _buildQrView(context)),
                   Expanded(
                     flex: 1,
@@ -192,16 +203,66 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
           ],
         );
       case 1:
-        return Text("page 2");
+        return Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Column(
+            children: [
+              Text(
+                "Gebruiker",
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              DashboardButtonsOverview(
+                minWidth: double.infinity,
+                text: "Registeren",
+                onPressed: () {},
+                icon: Icons.group,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              DashboardButtonsOverview(
+                minWidth: double.infinity,
+                text: "Gebruiker zoeken",
+                onPressed: () {},
+                icon: Icons.group,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
+        );
 
       case 2:
-        return Text("ok");
+        return Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: Column(
+            children: [
+              Text("ok"),
+              CardBOne(
+                child: Text("Box"),
+              ),
+              CardBOne(
+                child: Text("User"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextFieldBOne(
+                context: context,
+                labelText: "Opmerkingen",
+                keyboardType: TextInputType.multiline,
+                maxLength: 100,
+              ),
+            ],
+          ),
+        );
 
       case 3:
-        return Text("ok");
-
-      case 4:
-        return Text("ok");
+        return Text("final");
 
       default:
         return Text("ok");
