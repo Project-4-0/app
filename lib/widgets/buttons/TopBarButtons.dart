@@ -1,4 +1,4 @@
-import 'package:b_one_project_4_0/widgets/IconTextLeftButton.dart';
+import 'package:b_one_project_4_0/widgets/buttons/IconTextLeftButton.dart';
 import 'package:flutter/material.dart';
 
 // Default design button BOne

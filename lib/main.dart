@@ -19,8 +19,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'B One',
       theme: bOneTheme,
-      initialRoute: '/home',
-      // initialRoute: '/boer/dashboard',
+      // initialRoute: '/admin/dashboard',
+      initialRoute: '/boer/dashboard',
+      // initialRoute: '/profile',
       // Work with Generate routes
       onGenerateRoute: RouteGenerator.generateRoute,
     );
