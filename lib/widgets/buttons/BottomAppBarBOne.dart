@@ -58,7 +58,7 @@ class BottomAppBarBOne extends StatelessWidget {
               },
               child: Icon(
                 Icons.exit_to_app,
-                color: Theme.of(context).accentColor,
+                color: Colors.redAccent,
               ),
             ),
           ],
