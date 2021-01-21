@@ -13,6 +13,8 @@ class TextFieldBOne extends StatelessWidget {
     this.maxLength,
     this.onSave,
     this.keyboardType = TextInputType.text,
+    this.textInputAction: TextInputAction.next,
+    this.textCapitalization: TextCapitalization.sentences,
     this.obscureText = false,
   }) : super(key: key);
 
@@ -24,11 +26,14 @@ class TextFieldBOne extends StatelessWidget {
   final Function validator;
   final Function onSave;
   final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final TextCapitalization textCapitalization;
   final bool obscureText;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: null,
       obscureText: obscureText,
       maxLength: maxLength,
       onSaved: onSave,
@@ -36,6 +41,8 @@ class TextFieldBOne extends StatelessWidget {
       validator: validator,
       autofocus: false,
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      textCapitalization: textCapitalization,
       decoration: InputDecoration(
         focusColor: Theme.of(context).accentColor,
         hoverColor: Theme.of(context).accentColor,
