@@ -24,11 +24,13 @@ class TopSearchBar extends StatelessWidget {
       children: [
         // Searchfield
         Expanded(
-            child: TextFieldBOne(
+            child: Padding(
+              padding: EdgeInsets.only(right: 8.0),
+                child: TextFieldBOne(
           context: context,
           labelText: "Zoek",
           icon: Icon(Icons.search),
-        )),
+        ))),
 
         IconTextLeftButton(
           text: textRight,

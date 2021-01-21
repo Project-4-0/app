@@ -123,56 +123,6 @@ class UserApi {
         "postal_code": "2230",
         "city": "Ramsel",
         "id": 2
-      },
-      {
-        "first_name": "Arno",
-        "last_name": "Vangoetsenhoven",
-        "password": "test",
-        "email": "arno.vgh2@hotmail.com",
-        "address": "Harmoniestraat 44",
-        "postal_code": "2230",
-        "city": "Ramsel",
-        "id": 2
-      },
-      {
-        "first_name": "Arno",
-        "last_name": "Vangoetsenhoven",
-        "password": "test",
-        "email": "arno.vgh2@hotmail.com",
-        "address": "Harmoniestraat 44",
-        "postal_code": "2230",
-        "city": "Ramsel",
-        "id": 2
-      },
-      {
-        "first_name": "Arno",
-        "last_name": "Vangoetsenhoven",
-        "password": "test",
-        "email": "arno.vgh2@hotmail.com",
-        "address": "Harmoniestraat 44",
-        "postal_code": "2230",
-        "city": "Ramsel",
-        "id": 2
-      },
-      {
-        "first_name": "Arno",
-        "last_name": "Vangoetsenhoven",
-        "password": "test",
-        "email": "arno.vgh2@hotmail.com",
-        "address": "Harmoniestraat 44",
-        "postal_code": "2230",
-        "city": "Ramsel",
-        "id": 2
-      },
-      {
-        "first_name": "Arno",
-        "last_name": "Vangoetsenhoven",
-        "password": "test",
-        "email": "arno.vgh2@hotmail.com",
-        "address": "Harmoniestraat 44",
-        "postal_code": "2230",
-        "city": "Ramsel",
-        "id": 2
       }
     ];
     print("Inside user API - Get all users");
