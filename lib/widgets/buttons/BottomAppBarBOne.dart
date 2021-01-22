@@ -36,7 +36,8 @@ class BottomAppBarBOne extends StatelessWidget {
                     context, '/profile', (route) => false);
               },
               child: Padding(
-                padding: const EdgeInsets.only(right: 60),
+                // padding: const EdgeInsets.only(right: 60),
+                padding: const EdgeInsets.only(right: 10),
                 child: Icon(
                   Icons.account_circle,
                   size: 30,
@@ -51,7 +52,8 @@ class BottomAppBarBOne extends StatelessWidget {
                     context, '/info', (route) => false);
               },
               child: Padding(
-                padding: const EdgeInsets.only(left: 60),
+                // padding: const EdgeInsets.only(left: 60),
+                padding: const EdgeInsets.only(left: 10),
                 child: Icon(
                   Icons.info,
                   size: 30,
