@@ -5,6 +5,8 @@ import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
+import 'package:b_one_project_4_0/apis/box_api.dart';
+import 'package:b_one_project_4_0/models/box.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -13,6 +15,26 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+    List<Box> boxList = List<Box>();
+  int count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _getBoxen();
+  }
+
+  
+  void _getBoxen() {
+    BoxApi.fetchBoxen().then((result) {
+      setState(() {
+        boxList = result;
+        count = result.length;
+        print("Count: " + count.toString());
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +72,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             _filterModal(context);
                           },
                           onPressedRight: () {
-                            _boxModal(context);
+                            _boxModal(context, this.boxList, this.count);
                           },
                           textLeft: "Filters",
                           textRight: "Box",
@@ -92,6 +114,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               ]),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
+                        Text("Satellietbeelden:", style: TextStyle(color: Colors.grey[800])),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 250.0,
+                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                          child: Image(image: AssetImage('assets/satelite.JPG'))
+                        ),
+                        Padding(padding: EdgeInsets.all(15.0)),
                       ],
                     ),
                   ),
@@ -108,31 +138,41 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-_boxItems() {
-  //Wait for state
-  // if (_cartEmpty) {
-  //   return Text("Winkelmand is leeg.");
-  // }
-  // if (this._cart == null) {
-  //   return CircularProgressIndicator();
-  // }
-  return Column(children: [
-    // for (var _boxItems in _box.)
-    BoxListItem(
-      onPressed: () {},
-      boxText: "Box1",
-      locationText: "winkelom",
-    ),
-    BoxListItem(
-      onPressed: () {},
-      boxText: "Box2",
-      locationText: "Geel",
-    ),
-  ]);
-  // }
-}
+    ListView _boxItems(boxList, count) {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      itemCount: count,
+      itemBuilder: (BuildContext context, int position) {
+        return FractionalTranslation(
+            translation: Offset(0.0, 0.0),
+            child: Stack(children: <Widget>[
+              BoxListItem(
+                boxText: "!!!!!! needs to be replaced",
+                box: boxList[position],
+                onPressed: () {
+                  print("Show only the data from one box");
+                },
+                locationText: "Geel !!!",
+              ),
+              Positioned(
+                // Marble to show active status
+                top: 10.0,
+                right: 10.0,
+                child: Icon(Icons.brightness_1,
+                    size: 15.0,
+                    color: boxList[position].active
+                        ? Colors.green
+                        : Colors.red),
+              )
+            ]));
+      },
+    );
+  }
 
-void _boxModal(context) {
+void _boxModal(context, boxList, count) {
   showModalBottomSheet(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -156,7 +196,7 @@ void _boxModal(context) {
                   "Boxen",
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                _boxItems(),
+                _boxItems(boxList, count),
               ],
             ),
           ),

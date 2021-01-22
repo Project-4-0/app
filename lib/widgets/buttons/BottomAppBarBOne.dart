@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class BottomAppBarBOne extends StatelessWidget {
   const BottomAppBarBOne({
     Key key,
+    // this.active,
   }) : super(key: key);
+
+  // final String active;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +29,7 @@ class BottomAppBarBOne extends StatelessWidget {
               child: Icon(
                 Icons.home,
                 size: 30,
+                // active=="home"? (color: Theme.of(context).primaryColor) : (color: Theme.of(context).accentColor),
                 color: Theme.of(context).accentColor,
               ),
             ),
@@ -37,7 +41,7 @@ class BottomAppBarBOne extends StatelessWidget {
               },
               child: Padding(
                 // padding: const EdgeInsets.only(right: 60),
-                padding: const EdgeInsets.only(right: 10),
+                padding: const EdgeInsets.only(right: 30),
                 child: Icon(
                   Icons.account_circle,
                   size: 30,
@@ -53,7 +57,7 @@ class BottomAppBarBOne extends StatelessWidget {
               },
               child: Padding(
                 // padding: const EdgeInsets.only(left: 60),
-                padding: const EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 30),
                 child: Icon(
                   Icons.info,
                   size: 30,

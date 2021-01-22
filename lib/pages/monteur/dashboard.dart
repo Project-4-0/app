@@ -54,7 +54,7 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
                                   text: "Gebruikers",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/users', (route) => false);
+                                        context, '/admin/users', (route) => false);
                                     print("Go to user overview");
                                   },
                                   icon: Icons.group,
@@ -66,7 +66,7 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
                                   text: "Boxen",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/boxen', (route) => false);
+                                        context, '/admin/boxen', (route) => false);
                                     print("Go to box overview");
                                   },
                                   icon: Icons.widgets,
@@ -87,8 +87,8 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
                                   text: "Koppelen",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/users', (route) => false);
-                                    print("Go to user overview");
+                                        context, '/monteur/connected', (route) => false);
+                                    print("Go to connect box with user");
                                   },
                                   icon: Icons.link,
                                 ),

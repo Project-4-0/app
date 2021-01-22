@@ -18,8 +18,7 @@ class RouteGenerator {
     // final args = settings.arguments;
 
     switch (settings.name) {
-      // case '/':
-      //   return MaterialPageRoute(builder: (_) => LoginPage());
+
       case '/admin/dashboard':
         return MaterialPageRoute(builder: (_) => AdminDashboardPage());
       case '/admin/users':
@@ -31,8 +30,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => BoxenOverviewPage());
       case '/admin/boxen/1':
         return MaterialPageRoute(builder: (_) => BoxPage());
+
       case '/test':
         return MaterialPageRoute(builder: (_) => TestPage());
+
       case '/profile':
         return MaterialPageRoute(builder: (_) => ProfilePage());
       case '/boer/dashboard':
@@ -42,18 +43,13 @@ class RouteGenerator {
       case '/login':
         return MaterialPageRoute(builder: (_) => LoginPage());
 
-      case '/monteur':
+      case '/monteur/dashboard':
         return MaterialPageRoute(builder: (_) => MonteurDashboardPage());
       case '/monteur/connected':
         return MaterialPageRoute(builder: (_) => MonteurConnectedPage());
-
       case '/monteur/QRSCanner':
         return MaterialPageRoute(builder: (_) => QRScannerPage());
-      // case '/registration':
-      // case '/registration':
-      //   return MaterialPageRoute(builder: (_) => RegistrationPage());
-      // case '/login':
-      //   return MaterialPageRoute(builder: (_) => LoginPage());
+
       default:
         return _errorRoute();
     }

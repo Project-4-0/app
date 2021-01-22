@@ -6,7 +6,6 @@ import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-// import 'package:share/share.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -79,6 +78,8 @@ GlobalKey globalKey = new GlobalKey();
                       onPressedRight: () {
                         // TODO: go to user detail with empty values
                         print("Pressed add box");
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, '/admin/boxen/1', (route) => false);
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
@@ -239,8 +240,6 @@ void _boxDetail(context, Box box) {
                         ),
                       ],
                     )
-
-       
                   ],
                 ),
               ],

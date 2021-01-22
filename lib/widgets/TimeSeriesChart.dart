@@ -104,11 +104,11 @@ class TimeSeriesChart extends StatelessWidget {
   static List<charts.Series<TimeSeries, DateTime>> _createSampleData(
       Color lineColor) {
     final data = [
-      new TimeSeries(new DateTime(2020, 9, 19), 5.0),
+      new TimeSeries(new DateTime(2020, 9, 19), 1.0),
       new TimeSeries(new DateTime(2020, 9, 20), 25.0),
       new TimeSeries(new DateTime(2020, 9, 21), 30.0),
-      new TimeSeries(new DateTime(2020, 9, 22), 95.0),
-      new TimeSeries(new DateTime(2020, 9, 23), 99.0),
+      new TimeSeries(new DateTime(2020, 9, 22), 39.0),
+      new TimeSeries(new DateTime(2020, 9, 23), 39.0),
       new TimeSeries(new DateTime(2020, 9, 24), 33.5),
       new TimeSeries(new DateTime(2020, 9, 25), 15.0),
       new TimeSeries(new DateTime(2020, 9, 26), 20.0),
