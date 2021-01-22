@@ -3,6 +3,7 @@ import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class BoxPage extends StatefulWidget {
   @override

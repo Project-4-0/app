@@ -1,8 +1,7 @@
-import 'package:b_one_project_4_0/widgets/CardBOne.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
-import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
+import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -56,7 +55,36 @@ class _LoginPageState extends State<LoginPage> {
                   FlatButtonBOne(
                     minWidth: double.infinity,
                     text: "Aanmelden",
-                    onPressed: () {},
+                    onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(context, '/admin/dashboard', (route) => false);
+                    },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  OutlineFlatButtonBOne(
+                    text: "Aanmelden (Boer)",
+                    onPressed: () {
+                      Navigator.pushNamedAndRemoveUntil(context, '/boer/dashboard', (route) => false);
+                    },
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  OutlineFlatButtonBOne(
+                    text: "Aanmelden (Monteur)",
+                    onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(context, '/monteur/dashboard', (route) => false);
+                    },
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  OutlineFlatButtonBOne(
+                    text: "Aanmelden (Admin)",
+                    onPressed: () {
+                          Navigator.pushNamedAndRemoveUntil(context, '/admin/dashboard', (route) => false);
+                    },
                   ),
                 ],
               ),

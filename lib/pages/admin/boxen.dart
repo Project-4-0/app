@@ -5,9 +5,16 @@ import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
-import 'package:badges/badges.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui';
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 
 class BoxenOverviewPage extends StatefulWidget {
   @override
@@ -19,8 +26,7 @@ class _BoxenOverviewPage extends State {
   // List boxList = List();
   int count = 0;
 
-  final GlobalKey<ScaffoldState> _scaffoldKeyUsers =
-      new GlobalKey<ScaffoldState>();
+GlobalKey globalKey = new GlobalKey();
 
   @override
   void initState() {
@@ -47,7 +53,6 @@ class _BoxenOverviewPage extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKeyUsers,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Container(
         child: SafeArea(
@@ -73,6 +78,8 @@ class _BoxenOverviewPage extends State {
                       onPressedRight: () {
                         // TODO: go to user detail with empty values
                         print("Pressed add box");
+                        Navigator.pushNamedAndRemoveUntil(
+                          context, '/admin/boxen/1', (route) => false);
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
@@ -130,9 +137,11 @@ class _BoxenOverviewPage extends State {
       },
     );
   }
-}
+  
 
 void _boxDetail(context, Box box) {
+  // GlobalKey globalKey = new GlobalKey();
+
   showModalBottomSheet(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
@@ -210,24 +219,27 @@ void _boxDetail(context, Box box) {
                       },
                     ),
                     Padding(padding: EdgeInsets.all(5)),
-                    OutlineFlatButtonBOne(
-                      text: "QR-code",
-                      icon: Icon(
-                        Icons.qr_code,
-                      ),
-                      onPressed: () {
-                        print("Show the QR code (for printing?) of the box");
-                        // _showQRCode(context, box.macAddress);
-                      },
-                    ), 
-                    Center(
-                      // Make a qr-code from the mac-address of the box
-                      child: QrImage(
-                        data: box.macAddress,
-                        version: QrVersions.auto,
-                        size: 150,
-                        gapless: false,
-                    )),           
+                    Column(
+                      children: <Widget>[
+                        RepaintBoundary(
+                key: globalKey, 
+                child:
+                        QrImage(
+                            data: box.macAddress,
+                            version: QrVersions.auto,
+                            size: 150,
+                            gapless: false,
+                        )),
+                        IconButton(
+                          icon: Icon(Icons.share, color: Theme.of(context).primaryColor),
+                          tooltip: 'Increase volume by 10',
+                          onPressed: () {
+                            print("Share QR-Code");
+                            _captureAndSharePng(box.name);
+                          },
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ],
@@ -237,52 +249,33 @@ void _boxDetail(context, Box box) {
       });
     },
   );
+
+
+ 
+}
+
+   Future<void> _captureAndSharePng(String boxName) async {
+    try {
+      print("Make image");
+      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      var image = await boundary.toImage();
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/image.png').create();
+      await file.writeAsBytes(pngBytes);
+      
+await Share.file(boxName, boxName + '.png', byteData.buffer.asUint8List(), 'image/png');
+
+    } catch(e) {
+      print(e.toString());
+            print("Make image");
+    }
+  }
+
 }
 
 
-// void _showQRCode(context, String macAddress) {
-// showModalBottomSheet(
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.vertical(
-//         top: Radius.circular(30),
-//       ),
-//     ),
-//     clipBehavior: Clip.antiAliasWithSaveLayer,
-//     backgroundColor: Colors.white,
-//     context: context,
-//     builder: (BuildContext context) {
-//       return StatefulBuilder(builder: (BuildContext context,
-//           StateSetter setState /*You can rename this!*/) {
-//         return SingleChildScrollView(
-//             child: Container(
-//           height: 600,
-//           color: Colors.white,
-//           child:QrImage(
-//             data: 'This is a simple QR code',
-//             version: QrVersions.auto,
-//             size: 320,
-//             gapless: false,
-//           )));
 
-//           }
-//           );
-//           },
-// );
-// }
-
-
-// void _showQRCode(context, String macAddress) {
-//     builder: (BuildContext context) {
-//       return SimpleDialog(
-//         title: const Text('QR code for box...'),
-//         children: <Widget>[
-//           QrImage(
-//             data: "1234567890",
-//             version: QrVersions.auto,
-//             size: 200.0,
-//           ),
-//         ],
-//       );
-//     };
-// }
 

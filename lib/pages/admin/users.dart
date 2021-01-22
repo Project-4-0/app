@@ -36,7 +36,7 @@ class _UserOverviewPage extends State {
 
 // TODO: Go to user dertail by id;
   void _userDetail(int id) {
-    Navigator.pushNamedAndRemoveUntil(context, 'admin/users/1', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(context, '/admin/users/1', (route) => false);
   }
 
   @override
@@ -174,7 +174,7 @@ class _UserOverviewPage extends State {
               color: Theme.of(context).accentColor,
               tooltip: 'Open actions menu',
               onPressed: () {
-                print("Show dialog");
+                print("Pressed trailing icon");
                 // _showMyDialog(this.userList[position]);
               },
             ),
@@ -183,7 +183,7 @@ class _UserOverviewPage extends State {
             onTap: () {
               debugPrint("Tapped on " + this.userList[position].id.toString());
               print("Navigate to detail");
-              // _showUser(this.userList[position].id);
+              _userDetail(this.userList[position].id);
             },
           ),
         );

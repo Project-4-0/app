@@ -54,7 +54,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   text: "Gebruikers",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/users', (route) => false);
+                                        context, '/admin/users', (route) => false);
                                     print("Go to user overview");
                                   },
                                   icon: Icons.group,
@@ -66,7 +66,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   text: "Boxen",
                                   onPressed: () {
                                     Navigator.pushNamedAndRemoveUntil(
-                                        context, '/boxen', (route) => false);
+                                        context, '/admin/boxen', (route) => false);
                                     print("Go to box overview");
                                   },
                                   icon: Icons.widgets,
@@ -114,7 +114,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           width: double.infinity,
                           height: 250.0,
                           child: TimeSeriesChart.withSampleData(
-                            title: "Lichthoeveelheid",
+                            title: "Lichthoeveelheid gem.",
                             animate: true,
                             unit: "%",
                             lineColor: Colors.green,
@@ -127,7 +127,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           height: 250.0,
                           // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
                           child: TimeSeriesChart.withSampleData(
-                              title: "Temperatuur",
+                              title: "Temperatuur gem.",
                               animate: true,
                               unit: "°C",
                               lineColor: Colors.red,
