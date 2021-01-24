@@ -1,3 +1,5 @@
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
+import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
@@ -10,6 +12,22 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  void _login() {
+    UserController.login(
+            email: emailController.text, password: passwordController.text)
+        .then((result) async {
+      if (result) {
+        SnackBarController()
+            .show(text: "U bent ingelogd", title: "Login", type: "GOOD");
+        await new Future.delayed(const Duration(seconds: 2));
+        Navigator.pushNamed(context, '/home');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,39 +51,14 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "E-mail",
-                    icon: Icon(Icons.person_outline),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "wachtwoord",
-                    icon: Icon(Icons.lock),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  FlatButtonBOne(
-                    minWidth: double.infinity,
-                    text: "Aanmelden",
-                    onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(context, '/admin/dashboard', (route) => false);
-                    },
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+
+                  _inputForm(),
+                  //TODO NOG weg
                   OutlineFlatButtonBOne(
                     text: "Aanmelden (Boer)",
                     onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(context, '/boer/dashboard', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/boer/dashboard', (route) => false);
                     },
                   ),
                   SizedBox(
@@ -74,7 +67,8 @@ class _LoginPageState extends State<LoginPage> {
                   OutlineFlatButtonBOne(
                     text: "Aanmelden (Monteur)",
                     onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(context, '/monteur/dashboard', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/monteur/dashboard', (route) => false);
                     },
                   ),
                   SizedBox(
@@ -83,7 +77,8 @@ class _LoginPageState extends State<LoginPage> {
                   OutlineFlatButtonBOne(
                     text: "Aanmelden (Admin)",
                     onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(context, '/admin/dashboard', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/admin/dashboard', (route) => false);
                     },
                   ),
                 ],
@@ -95,6 +90,46 @@ class _LoginPageState extends State<LoginPage> {
       // floatingActionButton: FloatingActionButtonBOne(),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // bottomNavigationBar: BottomAppBarBOne(),
+    );
+  }
+
+  _inputForm() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 60,
+        ),
+        TextFieldBOne(
+          controller: emailController,
+          context: context,
+          labelText: "E-mail",
+          icon: Icon(Icons.person_outline),
+          keyboardType: TextInputType.emailAddress,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        TextFieldBOne(
+          controller: passwordController,
+          context: context,
+          labelText: "wachtwoord",
+          // keyboardType: TextInputType.visiblePassword,
+          icon: Icon(Icons.lock),
+        ),
+        SizedBox(
+          height: 40,
+        ),
+        FlatButtonBOne(
+          minWidth: double.infinity,
+          text: "Aanmelden",
+          onPressed: () {
+            _login();
+          },
+        ),
+        SizedBox(
+          height: 20,
+        ),
+      ],
     );
   }
 }
