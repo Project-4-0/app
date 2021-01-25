@@ -41,6 +41,14 @@ class AuthController {
     return User.fromJson(jsonDecode(userString));
   }
 
+  static Future<String> getUserTypeName() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    String userString;
+    userString = pref.getString(_userObject) ?? null;
+
+    return User.fromJson(jsonDecode(userString)).userType.userTypeName;
+  }
+
   static Future<void> deleteUser() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
     pref.remove(_userObject);

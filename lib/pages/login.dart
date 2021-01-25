@@ -23,7 +23,9 @@ class _LoginPageState extends State<LoginPage> {
         SnackBarController()
             .show(text: "U bent ingelogd", title: "Login", type: "GOOD");
         await new Future.delayed(const Duration(seconds: 1));
-        Navigator.pushNamed(context, '/home');
+
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/dashboard', (route) => false);
       }
     });
   }
