@@ -1,24 +1,26 @@
+import 'package:b_one_project_4_0/models/userType.dart';
+
 class User {
   int id;
   String firstName;
   String lastName;
-  String password;
   String email;
   String address;
   String posatlCode;
   String city;
   int userTypeID;
+  UserType userType;
 
   User({
     this.id,
     this.firstName,
     this.lastName,
-    this.password,
     this.email,
     this.address,
     this.posatlCode,
     this.city,
     this.userTypeID,
+    this.userType,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -26,23 +28,23 @@ class User {
       id: json['UserID'],
       firstName: json['FirstName'],
       lastName: json['LastName'],
-      // password: json['Password'],
       email: json['Email'],
       address: json['Address'],
       posatlCode: json['PostalCode'],
       city: json['City'],
       userTypeID: json['UserTypeID'],
+      userType: UserType.fromJson(json['UserType']),
     );
   }
 
   Map<String, dynamic> toJson() => {
         'FirstName': firstName,
         'LastName': lastName,
-        'password': password,
         'Email': email,
         'Address': address,
         'PostalCode': posatlCode,
         'City': city,
         'UserTypeID': userTypeID,
+        'UserType': userType,
       };
 }

@@ -9,7 +9,7 @@ class UserType {
 
   factory UserType.fromJson(Map<String, dynamic> json) {
     return UserType(
-      id: json['UserID'],
+      id: json['UserTypeID'],
       userTypeName: json['UserTypeName'],
     );
   }
