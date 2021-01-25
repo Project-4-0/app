@@ -1,3 +1,4 @@
+import 'package:b_one_project_4_0/controller/authController.dart';
 import 'package:b_one_project_4_0/pages/info.dart';
 import 'package:b_one_project_4_0/pages/login.dart';
 import 'package:b_one_project_4_0/pages/monteur/QRScanner.dart';
@@ -17,8 +18,11 @@ class RouteGenerator {
   static Route generateRoute(RouteSettings settings) {
     // final args = settings.arguments;
 
-    switch (settings.name) {
+    var user = AuthController.getUser().then((value) => {
+          print(value),
+        });
 
+    switch (settings.name) {
       case '/admin/dashboard':
         return MaterialPageRoute(builder: (_) => AdminDashboardPage());
       case '/admin/users':

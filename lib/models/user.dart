@@ -7,6 +7,7 @@ class User {
   String address;
   String posatlCode;
   String city;
+  int userTypeID;
 
   User({
     this.id,
@@ -17,6 +18,7 @@ class User {
     this.address,
     this.posatlCode,
     this.city,
+    this.userTypeID,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class User {
       address: json['Address'],
       posatlCode: json['PostalCode'],
       city: json['City'],
+      userTypeID: json['UserTypeID'],
     );
   }
 
@@ -40,5 +43,6 @@ class User {
         'Address': address,
         'PostalCode': posatlCode,
         'City': city,
+        'UserTypeID': userTypeID,
       };
 }
