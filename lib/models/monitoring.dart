@@ -1,3 +1,5 @@
+import 'package:b_one_project_4_0/models/box.dart';
+
 class Monitoring {
   int id;
   int boxID;
@@ -5,17 +7,29 @@ class Monitoring {
   bool batteryStatus;
   double batteryPercentage;
   DateTime endDate;
+  Box box;
 
-  Monitoring({
-    this.id,
-    this.boxID,
-    this.sdCapacity,
-    this.batteryStatus,
-    this.batteryPercentage,
-    this.endDate,
-  });
+  Monitoring(
+      {this.id,
+      this.boxID,
+      this.sdCapacity,
+      this.batteryStatus,
+      this.batteryPercentage,
+      this.endDate,
+      this.box});
 
   factory Monitoring.fromJson(Map<String, dynamic> json) {
+    return Monitoring(
+        id: json['MonitoringID'],
+        boxID: json['BoxID'],
+        sdCapacity: json['SDCapacity'],
+        batteryStatus: json['BatteryStatus'],
+        batteryPercentage: json['BatteryPercentage'],
+        box: Box.fromJson(json['Box']));
+  }
+
+  // Without extra tables included
+  factory Monitoring.fromJsonW(Map<String, dynamic> json) {
     return Monitoring(
       id: json['MonitoringID'],
       boxID: json['BoxID'],

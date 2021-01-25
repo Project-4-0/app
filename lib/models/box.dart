@@ -4,16 +4,8 @@ class Box {
   String name;
   String comment;
   bool active;
-// ...
 
-  Box({
-    this.id,
-    this.macAddress,
-    this.name,
-    this.comment,
-    this.active,
-// ...
-  });
+  Box({this.id, this.macAddress, this.name, this.comment, this.active});
 
   factory Box.fromJson(Map<String, dynamic> json) {
     return Box(
