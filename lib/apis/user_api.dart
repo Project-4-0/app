@@ -54,9 +54,9 @@ class UserApi {
     }
   }
 
-  static Future<User> updateUser(int id, User user) async {
+  static Future<User> updateUser(User user) async {
     final http.Response response = await http.put(
-      url + '/users/' + id.toString(),
+      url + '/users',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -36,7 +36,8 @@ class _UserOverviewPage extends State {
 
 // TODO: Go to user dertail by id;
   void _userDetail(int id) {
-    Navigator.pushNamedAndRemoveUntil(context, '/admin/users/1', (route) => false);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/admin/users/1', (route) => false);
   }
 
   @override
@@ -164,7 +165,7 @@ class _UserOverviewPage extends State {
                             ",\n" +
                             this.userList[position].city +
                             " " +
-                            this.userList[position].posatlCode),
+                            this.userList[position].postalCode),
                       ],
                     )),
               ],
