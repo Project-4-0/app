@@ -37,6 +37,20 @@ class User {
     );
   }
 
+  // Without extra tables included
+  factory User.fromJsonW(Map<String, dynamic> json) {
+    return User(
+      id: json['UserID'],
+      firstName: json['FirstName'],
+      lastName: json['LastName'],
+      email: json['Email'],
+      address: json['Address'],
+      posatlCode: json['PostalCode'],
+      city: json['City'],
+      userTypeID: json['UserTypeID'],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'FirstName': firstName,
         'LastName': lastName,
