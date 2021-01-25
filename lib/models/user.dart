@@ -1,44 +1,50 @@
+import 'package:b_one_project_4_0/models/userType.dart';
+
 class User {
   int id;
   String firstName;
   String lastName;
-  String password;
   String email;
   String address;
   String posatlCode;
   String city;
+  int userTypeID;
+  UserType userType;
 
   User({
     this.id,
     this.firstName,
     this.lastName,
-    this.password,
     this.email,
     this.address,
     this.posatlCode,
     this.city,
+    this.userTypeID,
+    this.userType,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      firstName: json['first_name'],
-      lastName: json['last_name'],
-      password: json['password'],
-      email: json['email'],
-      address: json['address'],
-      posatlCode: json['postal_code'],
-      city: json['city'],
+      id: json['UserID'],
+      firstName: json['FirstName'],
+      lastName: json['LastName'],
+      email: json['Email'],
+      address: json['Address'],
+      posatlCode: json['PostalCode'],
+      city: json['City'],
+      userTypeID: json['UserTypeID'],
+      userType: UserType.fromJson(json['UserType']),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'first_name': firstName,
-        'last_name': lastName,
-        'password': password,
-        'email': email,
-        'address': address,
-        'posatlCode': posatlCode,
-        'city': city,
+        'FirstName': firstName,
+        'LastName': lastName,
+        'Email': email,
+        'Address': address,
+        'PostalCode': posatlCode,
+        'City': city,
+        'UserTypeID': userTypeID,
+        'UserType': userType,
       };
 }

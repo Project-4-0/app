@@ -17,18 +17,18 @@ class Box {
 
   factory Box.fromJson(Map<String, dynamic> json) {
     return Box(
-      id: json['id'],
-      macAddress: json['mac_address'],
-      name: json['name'],
-      comment: json['comment'],
-      active: json['active'],
+      id: json['BoxID'],
+      macAddress: json['MacAdress'],
+      name: json['Name'],
+      comment: json['Comment'],
+      active: json['Active'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'macAddress': macAddress,
-        'name': name,
-        'comment': comment,
-        'active': active,
+        'MacAdress': macAddress,
+        'Name': name,
+        'Comment': comment,
+        'Active': active,
       };
 }
