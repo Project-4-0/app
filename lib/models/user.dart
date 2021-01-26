@@ -6,7 +6,7 @@ class User {
   String lastName;
   String email;
   String address;
-  String posatlCode;
+  String postalCode;
   String city;
   int userTypeID;
   UserType userType;
@@ -17,7 +17,7 @@ class User {
     this.lastName,
     this.email,
     this.address,
-    this.posatlCode,
+    this.postalCode,
     this.city,
     this.userTypeID,
     this.userType,
@@ -30,10 +30,11 @@ class User {
       lastName: json['LastName'],
       email: json['Email'],
       address: json['Address'],
-      posatlCode: json['PostalCode'],
+      postalCode: json['PostalCode'],
       city: json['City'],
       userTypeID: json['UserTypeID'],
-      userType: UserType.fromJson(json['UserType']),
+      userType:
+          json['UserType'] == null ? null : UserType.fromJson(json['UserType']),
     );
   }
 
@@ -52,11 +53,12 @@ class User {
   }
 
   Map<String, dynamic> toJson() => {
+        'UserID': id,
         'FirstName': firstName,
         'LastName': lastName,
         'Email': email,
         'Address': address,
-        'PostalCode': posatlCode,
+        'PostalCode': postalCode,
         'City': city,
         'UserTypeID': userTypeID,
         'UserType': userType,

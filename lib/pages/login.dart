@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
           controller: passwordController,
           context: context,
           labelText: "wachtwoord",
-          // keyboardType: TextInputType.visiblePassword,
+          keyboardType: TextInputType.visiblePassword,
           icon: Icon(Icons.lock),
         ),
         SizedBox(

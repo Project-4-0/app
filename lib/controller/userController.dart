@@ -3,6 +3,7 @@ Usercontroller
 */
 import 'package:b_one_project_4_0/apis/user_api.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/models/userRegistration.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -31,9 +32,32 @@ class UserController {
         user = await UserApi.fetchUser(auth.userID);
         AuthController.setUser(user);
       } catch (e) {
+        SnackBarController()
+            .show(text: "UserID not found", title: "backend", type: "ERROR");
         debugPrint(e);
       }
 
+      return true;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+
+  static Future<User> loadUser() async {
+    var us = (await AuthController.getUser());
+    return UserApi.fetchUser(us.id).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  static Future<bool> setUser(User user) async {
+    return UserApi.updateUser(user).then((user) {
       return true;
     }).catchError((error) {
       SnackBarController()

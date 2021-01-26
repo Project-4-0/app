@@ -24,7 +24,7 @@ class BottomAppBarBOne extends StatelessWidget {
             FlatButton(
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/boer/dashboard', (route) => false);
+                    context, '/dashboard', (route) => false);
               },
               child: Icon(
                 Icons.home,
