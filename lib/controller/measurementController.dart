@@ -10,9 +10,10 @@ import 'authController.dart';
 class MeasurementController {
   static Future<MeasurementGraphics> loadMeasurementsGraphics(
       String sensorTypeName) async {
+    //TODO change bak
     var us = (await AuthController.getUser());
 
-    return MeasurementApi.fetchMeasurementsGraphics(us.id, sensorTypeName)
+    return MeasurementApi.fetchMeasurementsGraphics(5, sensorTypeName)
         .then((measurementGraphics) {
       return measurementGraphics;
     }).catchError((error) {
