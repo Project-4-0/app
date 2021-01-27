@@ -3,8 +3,8 @@ import 'package:b_one_project_4_0/models/user.dart';
 
 class BoxUser {
   int id;
-  String boxID;
-  String userID;
+  int boxID;
+  int userID;
   DateTime startDate;
   DateTime endDate;
   User user;
@@ -24,8 +24,9 @@ class BoxUser {
         id: json['BoxUserID'],
         boxID: json['BoxID'],
         userID: json['UserID'],
-        startDate: json['StartDate'],
-        endDate: json['EndDate'],
+        // startDate: json['StartDate'],
+        startDate: DateTime.tryParse(json['StartDate']),
+        endDate: DateTime.tryParse(json['EndDate']),
         user: User.fromJson(json['User']),
         box: Box.fromJson(json['Box']));
   }
@@ -36,8 +37,8 @@ class BoxUser {
         id: json['BoxUserID'],
         boxID: json['BoxID'],
         userID: json['UserID'],
-        startDate: json['StartDate'],
-        endDate: json['EndDate']);
+        startDate: DateTime.tryParse(json['StartDate']),
+        endDate: DateTime.tryParse(json['EndDate']));
   }
 
   Map<String, dynamic> toJson() => {

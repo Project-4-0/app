@@ -63,7 +63,7 @@ class _UserOverviewPage extends State {
   }
 
 // TODO: Go to user dertail by id;
-  Future<void> _userDetail(int id) async {
+  Future<void> _userDetail(id) async {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
     bool result = await Navigator.push(
@@ -104,7 +104,7 @@ class _UserOverviewPage extends State {
                       onPressedRight: () {
                         // TODO: go to user detail with empty values
                         _userDetail(null);
-                        print("Pressed add user");
+                        print("Pressed add user!");
                       },
                       textRight: "Gebruiker",
                       iconRight: Icons.person_add_alt_1,

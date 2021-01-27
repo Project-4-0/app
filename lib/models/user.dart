@@ -51,6 +51,8 @@ class User {
       postalCode: json['PostalCode'],
       city: json['City'],
       userTypeID: json['UserTypeID'],
+      userType:
+          json['UserType'] == null ? null : UserType.fromJson(json['UserType']),
       boxes: (json['boxes'] as List)
           .map((tagJson) => Box.fromJson(tagJson))
           .toList(),

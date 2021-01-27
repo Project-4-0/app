@@ -2,11 +2,13 @@ import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/DropDownbOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
+import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_item/multi_select_item.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
+import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/userType.dart';
 
 class UserDetailPage extends StatefulWidget {
@@ -25,10 +27,9 @@ class _UserDetailPageState extends State<UserDetailPage> {
   User user;
 
   List<UserType> userTypeList;
+  List<Box> boxesList;
   List<String> userTypeNameList = [];
 
-  List mainList =
-      new List(); // TODO: Replace by list of boxes with a distinction between available, unavailble and owned boxes!
   MultiSelectController controller = new MultiSelectController();
 
   String dropdownValue = 'One';
@@ -46,6 +47,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
     print("UserID: " + this.id.toString());
     if (id == null) {
       // If there's no id, instantiate the new user, otherwise use the api to fetch the user data
+      print("Make new user");
       user = new User(
         firstName: "",
         lastName: "",
@@ -53,21 +55,17 @@ class _UserDetailPageState extends State<UserDetailPage> {
         address: "",
         postalCode: "",
         city: "",
-        userTypeID: null,
+        userTypeID: 3,
+        userType: new UserType(
+            id: 3,
+            userTypeName: "Boer"
+          ),
       );
     } else {
       _getUser(this.id); // get the user info using the api
     }
 
     _getAllUserTypes();
-
-    mainList.add({"key": "1"});
-    mainList.add({"key": "2"});
-    mainList.add({"key": "3"});
-    mainList.add({"key": "4"});
-
-    controller.disableEditingWhenNoneSelected = true;
-    controller.set(mainList.length);
   }
 
   void _getUser(int userID) {
@@ -76,9 +74,11 @@ class _UserDetailPageState extends State<UserDetailPage> {
       setState(() {
         print("Show info over: " + result.firstName);
         print("Show info over usertype: " + result.userType.userTypeName);
-        print("The amount of boxes of the user: " + result.boxes.length.toString());
+        print("The amount of boxes of the user: " +
+            result.boxes.length.toString());
 
         this.user = result;
+        this.boxesList = result.boxes;
 
         // Set controllers
         firstnameController.text = result.firstName;
@@ -87,6 +87,9 @@ class _UserDetailPageState extends State<UserDetailPage> {
         addressController.text = result.address;
         postalcodeController.text = result.postalCode;
         cityController.text = result.city;
+
+        controller.disableEditingWhenNoneSelected = true;
+        controller.set(this.user.boxes.length);
       });
     });
   }
@@ -257,46 +260,6 @@ class _UserDetailPageState extends State<UserDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Text('Type gebruiker: ', textAlign: TextAlign.left),
-
-                            // DropdownButton<int>(
-                            //   value: this.user.userType.id,
-                            //   icon: Icon(Icons.arrow_downward,
-                            //       color: Theme.of(context).primaryColor),
-                            //   iconSize: 24,
-                            //   elevation: 16,
-                            //   dropdownColor: Colors.white,
-                            //   underline: Container(
-                            //     height: 2,
-                            //     color: Theme.of(context).primaryColor,
-                            //   ),
-                            //   onChanged: (int newUserTypeValue) {
-                            //     print("UserType changed. Now: " +
-                            //         newUserTypeValue.toString());
-                            //     setState(() {
-                            //       this.user.userTypeID =
-                            //           newUserTypeValue;
-                            //     });
-                            //   },
-                            //   items: this.userTypeList != null &&
-                            //           this.userTypeList.isNotEmpty
-                            //       ? this
-                            //           .userTypeList
-                            //           .map<DropdownMenuItem<int>>(
-                            //               (userType) {
-                            //           return DropdownMenuItem<int>(
-                            //             value: userType.id,
-                            //             child: Text(userType.id.toString()),
-                            //           );
-                            //         }).toList()
-                            //       : <String>['Admin', 'Boer', 'Monteur', '...']
-                            //           .map<DropdownMenuItem<String>>(
-                            //               (String value) {
-                            //           return DropdownMenuItem<String>(
-                            //             value: value,
-                            //             child: Text(value),
-                            //           );
-                            //         }).toList(),
-                            // ),
                             DropdownButton<String>(
                               value: this.user.userType.userTypeName,
                               icon: Icon(Icons.arrow_downward,
@@ -341,39 +304,78 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        Text("Boxen:"),
+                        Text("Boxen van ${this.user.firstName}:"),
                         SizedBox(
-                            height: 200,
-                            child: Container(
-                                color: Colors.white,
-                                child: ListView.builder(
-                                  itemCount: mainList.length,
-                                  itemBuilder: (context, index) {
-                                    return MultiSelectItem(
-                                      isSelecting: controller.isSelecting,
-                                      // The function that will be called when item is long-tapped/tapped
-                                      onSelected: () {
-                                        setState(() {
-                                          controller.toggle(index);
-                                        });
-                                      },
-                                      child: Container(
-                                        child: ListTile(
-                                          title: new Text(
-                                              "Box ${mainList[index]['key']}"),
-                                          subtitle: new Text(
-                                              "Location ${mainList[index]['key']}"),
+                          height: 20,
+                        ),
+                        this.user.boxes.length > 0
+                            ? ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                physics:
+                                    const AlwaysScrollableScrollPhysics(), // new
+                                scrollDirection: Axis.vertical,
+                                // shrinkWrap: true,
+                                itemCount: this.user.boxes.length,
+                                itemBuilder:
+                                    (BuildContext context, int position) {
+                                  return FractionalTranslation(
+                                      translation: Offset(0.0, 0.0),
+                                      child: Stack(children: <Widget>[
+                                        BoxListItem(
+                                          boxText:
+                                              "!!!!!! needs to be replaced",
+                                          box: this.user.boxes[position],
+                                          onPressed: () {
+                                            print("Show box detail model");
+                                          },
+                                          locationText: "Geel !!!",
                                         ),
+                                        Positioned(
+                                          // Marble to show active status
+                                          top: 10.0,
+                                          right: 10.0,
+                                          child: Icon(Icons.brightness_1,
+                                              size: 15.0,
+                                              color: this
+                                                      .user
+                                                      .boxes[position]
+                                                      .active
+                                                  ? Colors.green
+                                                  : Colors.red),
+                                        )
+                                      ]));
+                                },
+                                // itemBuilder: (context, index) {
+                                //   return MultiSelectItem(
+                                //     isSelecting: controller.isSelecting,
+                                //     // The function that will be called when item is long-tapped/tapped
+                                //     onSelected: () {
+                                //       setState(() {
+                                //         controller.toggle(index);
+                                //       });
+                                //     },
+                                //     child: Container(
+                                //       child: ListTile(
+                                //         title: new Text(
+                                //             this.boxesList[index].name),
+                                //         subtitle: new Text(
+                                //             // "Location ${this.user.boxes[index]['key']}"),
+                                //             "Location"),
+                                //       ),
 
-                                        //change color based on wether the id is selected or not.
-                                        decoration: controller.isSelected(index)
-                                            ? new BoxDecoration(
-                                                color: Colors.grey[300])
-                                            : new BoxDecoration(),
-                                      ),
-                                    );
-                                  },
-                                ))),
+                                //       //change color based on wether the id is selected or not.
+                                //       decoration:
+                                //           controller.isSelected(index)
+                                //               ? new BoxDecoration(
+                                //                   color: Colors.grey[300])
+                                //               : new BoxDecoration(),
+                                //     ),
+                                //   );
+                                // },
+                              )
+                            : Text("Deze gebruiker heeft geen boxen!"),
+
                         SizedBox(
                           height: 20,
                         ),

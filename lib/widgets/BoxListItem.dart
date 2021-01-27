@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/models/box.dart';
-
+import 'package:intl/intl.dart';
 
 class BoxListItem extends StatelessWidget {
   const BoxListItem({
@@ -56,20 +56,72 @@ class BoxListItem extends StatelessWidget {
                 ],
               ),
               child: Text(
-                box.name!=null?box.name:boxText,
+                box.name != null ? box.name : boxText,
                 style: TextStyle(color: Colors.white),
               ),
             ),
             SizedBox(
               width: 20,
             ),
-            Icon(
-              Icons.location_on,
-              color: Theme.of(context).accentColor,
-            ),
-            Text(
-              locationText,
-              style: TextStyle(color: Theme.of(context).accentColor),
+            // Icon(
+            //   Icons.location_on,
+            //   color: Theme.of(context).accentColor,
+            // ),
+            // Text(
+            //   locationText,
+            //   style: TextStyle(color: Theme.of(context).accentColor),
+            // ),
+            Column(
+              children: <Widget>[
+                // Comment
+                if (box.comment != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.comment,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      Text(
+                        box.comment,
+                        style: TextStyle(color: Theme.of(context).accentColor),
+                      ),
+                    ],
+                  ),
+                SizedBox(
+                  width: 5,
+                ),
+                // StartDate
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.today,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    Text(
+                      DateFormat('dd/MM/yyyy – kk:mm:ss')
+                          .format(box.boxUser.startDate),
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor, fontSize: 14),
+                    ),
+                  ],
+                ),
+                // EndDate
+                if(this.box.boxUser.endDate!=null)
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.today,
+                      color: Colors.redAccent,
+                    ),
+                    Text(
+                      DateFormat('dd/MM/yyyy – kk:mm:ss')
+                          .format(box.boxUser.endDate),
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor, fontSize: 14),
+                    ),
+                  ],
+                )
+              ],
             ),
           ],
         ),
