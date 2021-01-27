@@ -66,12 +66,17 @@ class _UserOverviewPage extends State {
   Future<void> _userDetail(id) async {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
-    bool result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => UserDetailPage(id)),
-    );
-    if (result == true) {
-      _getUsers();
+    if (id == null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/admin/users/new', (route) => false);
+    } else {
+      bool result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserDetailPage(id)),
+      );
+      if (result == true) {
+        _getUsers();
+      }
     }
   }
 

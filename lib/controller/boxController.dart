@@ -1,0 +1,74 @@
+/*
+Usercontroller
+*/
+import 'package:b_one_project_4_0/apis/box_api.dart';
+import 'package:b_one_project_4_0/apis/usertype_api.dart';
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
+import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/userType.dart';
+import 'package:b_one_project_4_0/models/userRegistration.dart';
+import 'package:flutter/cupertino.dart';
+
+import 'authController.dart';
+
+class BoxController {
+  // All boxes
+  static Future<List<Box>> loadBoxes() async {
+    return BoxApi.fetchBoxes().then((boxList) {
+      return boxList;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  // One box
+  static Future<Box> loadBox(int id) async {
+    return BoxApi.fetchBox(id).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  // Create new box
+  static Future<Box> createBox(Box box) async {
+    return BoxApi.createBox(box).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+
+  // Update box
+  static Future<Box> updateBox(Box box) async {
+    return BoxApi.updateBox(box).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+
+  // Delete box
+  static Future<bool> deleteBox(int id) async {
+    return BoxApi.deleteBox(id).then((deleted) {
+      if (deleted) {
+        return true;
+      } else {
+        return false;
+      }
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+  
+}

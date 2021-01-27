@@ -8,7 +8,13 @@ class Box {
   bool active;
   BoxUser boxUser;
 
-  Box({this.id, this.macAddress, this.name, this.comment, this.active, this.boxUser});
+  Box(
+      {this.id,
+      this.macAddress,
+      this.name,
+      this.comment,
+      this.active,
+      this.boxUser});
 
   factory Box.fromJson(Map<String, dynamic> json) {
     return Box(
@@ -17,8 +23,18 @@ class Box {
       name: json['Name'],
       comment: json['Comment'],
       active: json['Active'],
-            boxUser:
+      boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
+    );
+  }
+
+    factory Box.fromJsonW(Map<String, dynamic> json) {
+    return Box(
+      id: json['BoxID'],
+      macAddress: json['MacAdress'],
+      name: json['Name'],
+      comment: json['Comment'],
+      active: json['Active']
     );
   }
 

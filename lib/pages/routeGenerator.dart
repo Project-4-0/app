@@ -9,6 +9,7 @@ import 'package:b_one_project_4_0/pages/profile.dart';
 import 'package:b_one_project_4_0/pages/boer/dashboard.dart';
 import 'package:b_one_project_4_0/pages/admin/dashboard.dart';
 import 'package:b_one_project_4_0/pages/admin/users.dart';
+import 'package:b_one_project_4_0/pages/admin/newUser.dart';
 import 'package:b_one_project_4_0/pages/admin/userDetail.dart';
 import 'package:b_one_project_4_0/pages/admin/boxen.dart';
 import 'package:b_one_project_4_0/pages/admin/box.dart';
@@ -30,6 +31,8 @@ class RouteGenerator {
       // Id parameter !!!
       case '/admin/users/1':
         return MaterialPageRoute(builder: (_) => UserDetailPage(1));
+              case '/admin/users/new':
+        return MaterialPageRoute(builder: (_) => NewUserPage());
       case '/admin/boxen':
         return MaterialPageRoute(builder: (_) => BoxenOverviewPage());
       case '/admin/boxen/1':
