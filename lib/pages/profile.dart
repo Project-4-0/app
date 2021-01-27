@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     UserController.setUser(this._user).then((response) {
       if (response) {
         SnackBarController().show(
-            text: "Wijzigen zijn succesvol opgeslagen",
+            text: "Wijzigingen zijn succesvol opgeslagen",
             title: "Update",
             type: "GOOD");
       }
