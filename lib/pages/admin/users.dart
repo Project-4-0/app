@@ -30,6 +30,10 @@ class _UserOverviewPage extends State {
     UserController.loadUsers().then((result) {
       setState(() {
         userList = result;
+        // Users sorted alphabetical by last name
+        userList.sort((a, b) {
+          return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
+        });
         count = result.length;
         print("Count users overview: " + count.toString());
       });
@@ -60,9 +64,9 @@ class _UserOverviewPage extends State {
 
 // TODO: Go to user dertail by id;
   Future<void> _userDetail(int id) async {
-  //   Navigator.pushNamedAndRemoveUntil(
-  //       context, '/admin/users/1', (route) => false);
-      bool result = await Navigator.push(
+    //   Navigator.pushNamedAndRemoveUntil(
+    //       context, '/admin/users/1', (route) => false);
+    bool result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => UserDetailPage(id)),
     );

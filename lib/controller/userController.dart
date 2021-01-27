@@ -2,15 +2,16 @@
 Usercontroller
 */
 import 'package:b_one_project_4_0/apis/user_api.dart';
+import 'package:b_one_project_4_0/apis/usertype_api.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
+import 'package:b_one_project_4_0/models/userType.dart';
 import 'package:b_one_project_4_0/models/userRegistration.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'authController.dart';
 
 class UserController {
-
   static Future<bool> registration(UserRegistration user) async {
     return UserApi.createUser(user).then((auth) {
       return true;
@@ -79,7 +80,7 @@ class UserController {
     });
   }
 
-    static Future<User> loadUserById(int id) async {
+  static Future<User> loadUserById(int id) async {
     return UserApi.fetchUser(id).then((user) {
       return user;
     }).catchError((error) {
@@ -89,7 +90,18 @@ class UserController {
     });
   }
 
-  static Future<User>updateUsers(User user) async {
+  static Future<User> loadUserByIdWithBoxes(int id) async {
+    print("Load user with with boxes: " + id.toString());
+    return UserApi.fetchUserWithBox(id).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  static Future<User> updateUsers(User user) async {
     return UserApi.updateUser(user).then((user) {
       // print("Number of users in controller: " + user.firstName);
       return user;
@@ -100,4 +112,14 @@ class UserController {
     });
   }
 
+  // Get all user types
+  static Future<List<UserType>> loadUserTypes() async {
+    return UserTypeApi.fetchUserTypes().then((userTypeList) {
+      return userTypeList;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
 }

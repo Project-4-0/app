@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
+import 'package:b_one_project_4_0/widgets/DropDownbOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:multi_select_item/multi_select_item.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
+import 'package:b_one_project_4_0/models/userType.dart';
 
 class UserDetailPage extends StatefulWidget {
   final int
@@ -22,9 +24,14 @@ class _UserDetailPageState extends State<UserDetailPage> {
 
   User user;
 
+  List<UserType> userTypeList;
+  List<String> userTypeNameList = [];
+
   List mainList =
       new List(); // TODO: Replace by list of boxes with a distinction between available, unavailble and owned boxes!
   MultiSelectController controller = new MultiSelectController();
+
+  String dropdownValue = 'One';
 
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
@@ -36,7 +43,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
   @override
   void initState() {
     super.initState();
-    print(id.toString());
+    print("UserID: " + this.id.toString());
     if (id == null) {
       // If there's no id, instantiate the new user, otherwise use the api to fetch the user data
       user = new User(
@@ -49,8 +56,10 @@ class _UserDetailPageState extends State<UserDetailPage> {
         userTypeID: null,
       );
     } else {
-      _getUser(id); // get the user info using the api
+      _getUser(this.id); // get the user info using the api
     }
+
+    _getAllUserTypes();
 
     mainList.add({"key": "1"});
     mainList.add({"key": "2"});
@@ -63,19 +72,35 @@ class _UserDetailPageState extends State<UserDetailPage> {
 
   void _getUser(int userID) {
     print("Get user with id: " + id.toString());
-    UserController.loadUserById(userID).then((result) {
+    UserController.loadUserByIdWithBoxes(userID).then((result) {
       setState(() {
-        print("Show info over" + result.firstName);
+        print("Show info over: " + result.firstName);
+        print("Show info over usertype: " + result.userType.userTypeName);
+        print("The amount of boxes of the user: " + result.boxes.length.toString());
 
         this.user = result;
 
-        //set controllers
+        // Set controllers
         firstnameController.text = result.firstName;
         lastnameController.text = result.lastName;
         emailController.text = result.email;
         addressController.text = result.address;
         postalcodeController.text = result.postalCode;
         cityController.text = result.city;
+      });
+    });
+  }
+
+  void _getAllUserTypes() {
+    print("Get all userTypes");
+    UserController.loadUserTypes().then((result) {
+      setState(() {
+        print("Number of userTypes: " + result.length.toString());
+        this.userTypeList = result;
+        for (UserType userType in result) {
+          // print("UsertypeName: " + userType.userTypeName);
+          this.userTypeNameList.add(userType.userTypeName);
+        }
       });
     });
   }
@@ -89,6 +114,36 @@ class _UserDetailPageState extends State<UserDetailPage> {
     this.user.address = addressController.text;
     this.user.postalCode = postalcodeController.text;
     this.user.city = cityController.text;
+
+    switch (this.user.userType.userTypeName) {
+      case "Admin":
+        {
+          print("Admin");
+          this.user.userTypeID = 1;
+        }
+        break;
+
+      case "Monteur":
+        {
+          print("Monteur");
+          this.user.userTypeID = 2;
+        }
+        break;
+
+      case "Boer":
+        {
+          print("Boer");
+          this.user.userTypeID = 3;
+        }
+        break;
+
+      default:
+        {
+          print("ERROR");
+          //statements;
+        }
+        break;
+    }
 
     UserController.setUser(this.user).then((response) {
       if (response) {
@@ -109,142 +164,240 @@ class _UserDetailPageState extends State<UserDetailPage> {
           child: Padding(
             padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 80.0),
             child: Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Gebruiker toevoegen',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.all(5.0)),
-                  Icon(
-                    Icons.person_add,
-                    size: 50,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "Voornaam",
-                    icon: Icon(Icons.person_outline),
-                    controller: firstnameController,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "Achternaam",
-                    icon: Icon(Icons.person_outline),
-                    controller: lastnameController,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "Email",
-                    icon: Icon(Icons.mail_outline),
-                    controller: emailController,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "Straat",
-                    icon: Icon(Icons.location_on_outlined),
-                    controller: addressController,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Flexible(
-                          child: TextFieldBOne(
-                        context: context,
-                        labelText: "Gemeente",
-                        icon: Icon(Icons.account_balance_outlined),
-                        controller: cityController,
-                      )),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: TextFieldBOne(
-                          context: context,
-                          labelText: "Postcode",
-                          icon: Icon(Icons.apartment_outlined),
-                          controller: postalcodeController,
+              child: (user == null || userTypeList == null)
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [Center(child: CircularProgressIndicator())],
+                    )
+                  : Column(
+                      children: [
+                        Text(
+                          this.user.id != null
+                              ? this.user.firstName + ' ' + this.user.lastName
+                              : 'Gebruiker toevoegen',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Boxen:"),
-                  SizedBox(
-                      height: 200,
-                      child: Container(
-                          color: Colors.white,
-                          child: ListView.builder(
-                            itemCount: mainList.length,
-                            itemBuilder: (context, index) {
-                              return MultiSelectItem(
-                                isSelecting: controller.isSelecting,
-                                // The function that will be called when item is long-tapped/tapped
-                                onSelected: () {
-                                  setState(() {
-                                    controller.toggle(index);
-                                  });
-                                },
-                                child: Container(
-                                  child: ListTile(
-                                    title: new Text(
-                                        "Box ${mainList[index]['key']}"),
-                                    subtitle: new Text(
-                                        "Location ${mainList[index]['key']}"),
-                                  ),
+                        Padding(padding: EdgeInsets.all(5.0)),
+                        if (this.user?.id == null)
+                          Icon(
+                            Icons.person_add,
+                            size: 50,
+                          ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFieldBOne(
+                          context: context,
+                          labelText: "Voornaam",
+                          icon: Icon(Icons.person_outline),
+                          controller: firstnameController,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFieldBOne(
+                          context: context,
+                          labelText: "Achternaam",
+                          icon: Icon(Icons.person_outline),
+                          controller: lastnameController,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFieldBOne(
+                          context: context,
+                          labelText: "Email",
+                          icon: Icon(Icons.mail_outline),
+                          controller: emailController,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextFieldBOne(
+                          context: context,
+                          labelText: "Straat",
+                          icon: Icon(Icons.location_on_outlined),
+                          controller: addressController,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Flexible(
+                                child: TextFieldBOne(
+                              context: context,
+                              labelText: "Gemeente",
+                              icon: Icon(Icons.account_balance_outlined),
+                              controller: cityController,
+                            )),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Flexible(
+                              child: TextFieldBOne(
+                                context: context,
+                                labelText: "Postcode",
+                                icon: Icon(Icons.apartment_outlined),
+                                controller: postalcodeController,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Text('Type gebruiker: ', textAlign: TextAlign.left),
 
-                                  //change color based on wether the id is selected or not.
-                                  decoration: controller.isSelected(index)
-                                      ? new BoxDecoration(
-                                          color: Colors.grey[300])
-                                      : new BoxDecoration(),
-                                ),
-                              );
-                            },
-                          ))),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.remove_circle),
-                    color: Colors.red,
-                    iconSize: 50,
-                    onPressed: () {
-                      print(
-                          "Show confirmation modal to delete or ban the user");
-                      _deleteDialog();
-                    },
-                  ),
-                  FlatButtonBOne(
-                    minWidth: double.infinity,
-                    text: "Opslaan",
-                    onPressed: () {
-                      print("Save user");
-                      _setUserProfile();
-                    },
-                  ),
-                ],
-              ),
+                            // DropdownButton<int>(
+                            //   value: this.user.userType.id,
+                            //   icon: Icon(Icons.arrow_downward,
+                            //       color: Theme.of(context).primaryColor),
+                            //   iconSize: 24,
+                            //   elevation: 16,
+                            //   dropdownColor: Colors.white,
+                            //   underline: Container(
+                            //     height: 2,
+                            //     color: Theme.of(context).primaryColor,
+                            //   ),
+                            //   onChanged: (int newUserTypeValue) {
+                            //     print("UserType changed. Now: " +
+                            //         newUserTypeValue.toString());
+                            //     setState(() {
+                            //       this.user.userTypeID =
+                            //           newUserTypeValue;
+                            //     });
+                            //   },
+                            //   items: this.userTypeList != null &&
+                            //           this.userTypeList.isNotEmpty
+                            //       ? this
+                            //           .userTypeList
+                            //           .map<DropdownMenuItem<int>>(
+                            //               (userType) {
+                            //           return DropdownMenuItem<int>(
+                            //             value: userType.id,
+                            //             child: Text(userType.id.toString()),
+                            //           );
+                            //         }).toList()
+                            //       : <String>['Admin', 'Boer', 'Monteur', '...']
+                            //           .map<DropdownMenuItem<String>>(
+                            //               (String value) {
+                            //           return DropdownMenuItem<String>(
+                            //             value: value,
+                            //             child: Text(value),
+                            //           );
+                            //         }).toList(),
+                            // ),
+                            DropdownButton<String>(
+                              value: this.user.userType.userTypeName,
+                              icon: Icon(Icons.arrow_downward,
+                                  color: Theme.of(context).primaryColor),
+                              iconSize: 24,
+                              elevation: 16,
+                              dropdownColor: Colors.white,
+                              underline: Container(
+                                height: 2,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onChanged: (String newUserTypeValue) {
+                                print("UserType changed. Now: " +
+                                    newUserTypeValue);
+                                setState(() {
+                                  this.user.userType.userTypeName =
+                                      newUserTypeValue;
+                                });
+                              },
+                              items: this.userTypeNameList != null &&
+                                      this.userTypeNameList.isNotEmpty
+                                  ? this
+                                      .userTypeNameList
+                                      .map<DropdownMenuItem<String>>(
+                                          (userTypeName) {
+                                      return DropdownMenuItem<String>(
+                                        value: userTypeName,
+                                        child: Text(userTypeName),
+                                      );
+                                    }).toList()
+                                  : <String>['Admin', 'Boer', 'Monteur', '...']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text("Boxen:"),
+                        SizedBox(
+                            height: 200,
+                            child: Container(
+                                color: Colors.white,
+                                child: ListView.builder(
+                                  itemCount: mainList.length,
+                                  itemBuilder: (context, index) {
+                                    return MultiSelectItem(
+                                      isSelecting: controller.isSelecting,
+                                      // The function that will be called when item is long-tapped/tapped
+                                      onSelected: () {
+                                        setState(() {
+                                          controller.toggle(index);
+                                        });
+                                      },
+                                      child: Container(
+                                        child: ListTile(
+                                          title: new Text(
+                                              "Box ${mainList[index]['key']}"),
+                                          subtitle: new Text(
+                                              "Location ${mainList[index]['key']}"),
+                                        ),
+
+                                        //change color based on wether the id is selected or not.
+                                        decoration: controller.isSelected(index)
+                                            ? new BoxDecoration(
+                                                color: Colors.grey[300])
+                                            : new BoxDecoration(),
+                                      ),
+                                    );
+                                  },
+                                ))),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        // TODO: Think about ban, delete, or end box subscriptions
+                        // IconButton(
+                        //   icon: Icon(Icons.remove_circle),
+                        //   color: Colors.red,
+                        //   iconSize: 50,
+                        //   onPressed: () {
+                        //     print(
+                        //         "Show confirmation modal to delete or ban the user");
+                        //     _deleteDialog();
+                        //   },
+                        // ),
+                        FlatButtonBOne(
+                          minWidth: double.infinity,
+                          text: "Opslaan",
+                          onPressed: () {
+                            print("Save user");
+                            _setUserProfile();
+                          },
+                        ),
+                      ],
+                    ),
             ),
           ),
         ),

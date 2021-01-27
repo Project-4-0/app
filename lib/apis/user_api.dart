@@ -31,6 +31,17 @@ class UserApi {
     }
   }
 
+    // GET: One users
+  static Future<User> fetchUserWithBox(int id) async {
+    final response = await http.get(url + '/users/' + id.toString() + '/with_boxes');
+    if (response.statusCode == 200) {
+      return User.fromJsonWithBoxes(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+
   // static Future<User> fetchUserByEmail(String email) async {
   //   final response = await http.get(url + '/users?email=' + email);
   //   if (response.statusCode == 200) {
