@@ -1,6 +1,6 @@
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
-import 'package:b_one_project_4_0/apis/box_api.dart';
+import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
@@ -12,7 +12,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
-import 'package:flutter/rendering.dart';
+// import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 
@@ -26,28 +26,22 @@ class _BoxenOverviewPage extends State {
   // List boxList = List();
   int count = 0;
 
-GlobalKey globalKey = new GlobalKey();
+  GlobalKey globalKey = new GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _getBoxen();
+    _getBoxes();
   }
 
-  void _getBoxen() {
-    BoxApi.fetchBoxen().then((result) {
+  void _getBoxes() {
+    BoxController.loadBoxes().then((result) {
       setState(() {
         boxList = result;
         count = result.length;
         print("Count: " + count.toString());
       });
     });
-  }
-
-// TODO: Go to user dertail by id;
-  void _userDetail(int id) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, 'admin/users/1', (route) => false);
   }
 
   @override
@@ -76,10 +70,10 @@ GlobalKey globalKey = new GlobalKey();
                     Padding(padding: EdgeInsets.all(10.0)),
                     TopSearchBar(
                       onPressedRight: () {
-                        // TODO: go to user detail with empty values
+                        // TODO: go to box detail with empty values
                         print("Pressed add box");
                         Navigator.pushNamedAndRemoveUntil(
-                          context, '/admin/boxen/1', (route) => false);
+                            context, '/admin/boxen/1', (route) => false);
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
@@ -137,127 +131,127 @@ GlobalKey globalKey = new GlobalKey();
       },
     );
   }
-  
 
-void _boxDetail(context, Box box) {
-  // GlobalKey globalKey = new GlobalKey();
-
-  showModalBottomSheet(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(30),
+  // Detail modal of a box
+  void _boxDetail(context, Box box) {
+    // GlobalKey globalKey = new GlobalKey();
+    showModalBottomSheet(
+      // isScrollControlled:true, // Full screen height
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
       ),
-    ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    backgroundColor: Colors.white,
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(builder: (BuildContext context,
-          StateSetter setState /*You can rename this!*/) {
-        return SingleChildScrollView(
-            child: Container(
-          // height: 600,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
-            child: Column(
-              children: [
-                FractionalTranslation(
-                    translation: Offset(0.0, 0.0),
-                    child: Align(
-                      child: Stack(children: <Widget>[
-                        CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: Text("Box naam",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Positioned(
-                          // Marble to show active status
-                          top: 0.0,
-                          right: 0.0,
-                          child: Icon(Icons.brightness_1,
-                              size: 30.0,
-                              color: box.active ? Colors.green : Colors.red),
-                        )
-                      ]),
-                      alignment: FractionalOffset(0.5, 0.0),
-                    )),
-                Padding(padding: EdgeInsets.all(20)),
-                // Values of box
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Mac adress:\n" + box.macAddress,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Padding(padding: EdgeInsets.all(5)),
-                    Text(
-                      "Locatie:\n" + "Harmoniestraat 44 !!!\n" + "2230 Ramsel",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Padding(padding: EdgeInsets.all(5)),
-                    Text(
-                      "In gebruik door:\n" + "Arno Vangoetsenhoven !!!",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    if (box.comment != null)
-                      Padding(padding: EdgeInsets.all(5)),
-                    if (box.comment != null)
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+              child: Container(
+            // height: 900,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
+              child: Column(
+                children: [
+                  FractionalTranslation(
+                      translation: Offset(0.0, 0.0),
+                      child: Align(
+                        child: Stack(children: <Widget>[
+                          CircleAvatar(
+                            radius: 50.0,
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Text(box.name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                          Positioned(
+                            // Marble to show active status
+                            top: 0.0,
+                            right: 0.0,
+                            child: Icon(Icons.brightness_1,
+                                size: 30.0,
+                                color: box.active ? Colors.green : Colors.red),
+                          )
+                        ]),
+                        alignment: FractionalOffset(0.5, 0.0),
+                      )),
+                  Padding(padding: EdgeInsets.all(20)),
+                  // Values of box
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Text(
-                        "Opmerking:\n" + box.comment,
+                        "Mac adress:\n" + box.macAddress,
                         style: TextStyle(fontSize: 18),
                       ),
-                    Padding(padding: EdgeInsets.all(5)),
-                    OutlineFlatButtonBOne(
-                      text: "Wijzigen",
-                      onPressed: () {
-                        print("Go to edit page of box");
-                      },
-                    ),
-                    Padding(padding: EdgeInsets.all(5)),
-                    Column(
-                      children: <Widget>[
-                        RepaintBoundary(
-                key: globalKey, 
-                child:
-                        QrImage(
-                            data: box.macAddress,
-                            version: QrVersions.auto,
-                            size: 150,
-                            gapless: false,
-                        )),
-                        IconButton(
-                          icon: Icon(Icons.share, color: Theme.of(context).primaryColor),
-                          tooltip: 'Increase volume by 10',
-                          onPressed: () {
-                            print("Share QR-Code");
-                            _captureAndSharePng(box.name);
-                          },
+                      Padding(padding: EdgeInsets.all(5)),
+                      Text(
+                        "Locatie:\n" +
+                            "Harmoniestraat 44 !!!\n" +
+                            "2230 Ramsel",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Padding(padding: EdgeInsets.all(5)),
+                      Text(
+                        "In gebruik door:\n" + "Arno Vangoetsenhoven !!!",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      if (box.comment != null)
+                        Padding(padding: EdgeInsets.all(5)),
+                      if (box.comment != null)
+                        Text(
+                          "Opmerking:\n" + box.comment,
+                          style: TextStyle(fontSize: 18),
                         ),
-                      ],
-                    )
-                  ],
-                ),
-              ],
+                      Padding(padding: EdgeInsets.all(5)),
+                      OutlineFlatButtonBOne(
+                        text: "Wijzigen",
+                        onPressed: () {
+                          print("Go to edit page of box");
+                        },
+                      ),
+                      Padding(padding: EdgeInsets.all(5)),
+                      Column(
+                        children: <Widget>[
+                          RepaintBoundary(
+                              key: globalKey,
+                              child: QrImage(
+                                data: box.macAddress,
+                                version: QrVersions.auto,
+                                size: 150,
+                                gapless: false,
+                              )),
+                          IconButton(
+                            icon: Icon(Icons.share,
+                                color: Theme.of(context).primaryColor),
+                            tooltip: 'Increase volume by 10',
+                            onPressed: () {
+                              print("Share QR-Code");
+                              _captureAndSharePng(box.name);
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ));
-      });
-    },
-  );
+          ));
+        });
+      },
+    );
+  }
 
-
- 
-}
-
-   Future<void> _captureAndSharePng(String boxName) async {
+  Future<void> _captureAndSharePng(String boxName) async {
     try {
       print("Make image");
-      RenderRepaintBoundary boundary = globalKey.currentContext.findRenderObject();
+      RenderRepaintBoundary boundary =
+          globalKey.currentContext.findRenderObject();
       var image = await boundary.toImage();
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -265,17 +259,12 @@ void _boxDetail(context, Box box) {
       final tempDir = await getTemporaryDirectory();
       final file = await new File('${tempDir.path}/image.png').create();
       await file.writeAsBytes(pngBytes);
-      
-await Share.file(boxName, boxName + '.png', byteData.buffer.asUint8List(), 'image/png');
 
-    } catch(e) {
+      await Share.file(boxName, boxName + '.png', byteData.buffer.asUint8List(),
+          'image/png');
+    } catch (e) {
       print(e.toString());
-            print("Make image");
+      print("Make image");
     }
   }
-
 }
-
-
-
-

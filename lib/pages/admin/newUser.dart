@@ -2,7 +2,7 @@ import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/DropDownbOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
-import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_item/multi_select_item.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
