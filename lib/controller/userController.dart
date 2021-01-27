@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'authController.dart';
 
 class UserController {
+
   static Future<bool> registration(UserRegistration user) async {
     return UserApi.createUser(user).then((auth) {
       return true;
@@ -57,6 +58,7 @@ class UserController {
   }
 
   static Future<bool> setUser(User user) async {
+    print("User is here");
     return UserApi.updateUser(user).then((user) {
       return true;
     }).catchError((error) {
@@ -65,4 +67,37 @@ class UserController {
       return false;
     });
   }
+
+  static Future<List<User>> loadUsers() async {
+    return UserApi.fetchUsers().then((userList) {
+      print("Number of users in controller: " + userList.length.toString());
+      return userList;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+    static Future<User> loadUserById(int id) async {
+    return UserApi.fetchUser(id).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  static Future<User>updateUsers(User user) async {
+    return UserApi.updateUser(user).then((user) {
+      // print("Number of users in controller: " + user.firstName);
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
 }

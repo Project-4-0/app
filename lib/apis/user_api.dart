@@ -10,9 +10,9 @@ import '../models/auth.dart';
 class UserApi {
   static String url = env['API_URL'];
 
+  // GET: All users
   static Future<List<User>> fetchUsers() async {
     final response = await http.get(url + '/users');
-
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((user) => new User.fromJson(user)).toList();
@@ -21,6 +21,7 @@ class UserApi {
     }
   }
 
+  // GET: One users
   static Future<User> fetchUser(int id) async {
     final response = await http.get(url + '/users/' + id.toString());
     if (response.statusCode == 200) {
@@ -55,6 +56,7 @@ class UserApi {
   }
 
   static Future<User> updateUser(User user) async {
+    print(user.firstName); print(user.lastName); print(user.id); print(user.email); print(user.address); print(user.postalCode); print(user.city); print(user.userTypeID);
     final http.Response response = await http.put(
       url + '/users',
       headers: <String, String>{

@@ -46,7 +46,7 @@ class User {
       lastName: json['LastName'],
       email: json['Email'],
       address: json['Address'],
-      posatlCode: json['PostalCode'],
+      postalCode: json['PostalCode'],
       city: json['City'],
       userTypeID: json['UserTypeID'],
     );

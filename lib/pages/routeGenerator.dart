@@ -29,7 +29,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => UserOverviewPage());
       // Id parameter !!!
       case '/admin/users/1':
-        return MaterialPageRoute(builder: (_) => UserDetailPage());
+        return MaterialPageRoute(builder: (_) => UserDetailPage(1));
       case '/admin/boxen':
         return MaterialPageRoute(builder: (_) => BoxenOverviewPage());
       case '/admin/boxen/1':

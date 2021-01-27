@@ -3,20 +3,54 @@ import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_item/multi_select_item.dart';
+import 'package:b_one_project_4_0/controller/userController.dart';
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 
 class UserDetailPage extends StatefulWidget {
+  final int
+      id; // UserDetailPage has an id-parameter which contains the id of the user to show
+  UserDetailPage(this.id);
+
   @override
-  _UserDetailPageState createState() => _UserDetailPageState();
+  _UserDetailPageState createState() => _UserDetailPageState(id);
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
+  int id; // UserDetailPageState has the same id-parameter
+  _UserDetailPageState(this.id);
+
+  User user;
+
   List mainList =
       new List(); // TODO: Replace by list of boxes with a distinction between available, unavailble and owned boxes!
   MultiSelectController controller = new MultiSelectController();
 
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController postalcodeController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    print(id.toString());
+    if (id == null) {
+      // If there's no id, instantiate the new user, otherwise use the api to fetch the user data
+      user = new User(
+        firstName: "",
+        lastName: "",
+        email: "",
+        address: "",
+        postalCode: "",
+        city: "",
+        userTypeID: null,
+      );
+    } else {
+      _getUser(id); // get the user info using the api
+    }
 
     mainList.add({"key": "1"});
     mainList.add({"key": "2"});
@@ -25,6 +59,45 @@ class _UserDetailPageState extends State<UserDetailPage> {
 
     controller.disableEditingWhenNoneSelected = true;
     controller.set(mainList.length);
+  }
+
+  void _getUser(int userID) {
+    print("Get user with id: " + id.toString());
+    UserController.loadUserById(userID).then((result) {
+      setState(() {
+        print("Show info over" + result.firstName);
+
+        this.user = result;
+
+        //set controllers
+        firstnameController.text = result.firstName;
+        lastnameController.text = result.lastName;
+        emailController.text = result.email;
+        addressController.text = result.address;
+        postalcodeController.text = result.postalCode;
+        cityController.text = result.city;
+      });
+    });
+  }
+
+  _setUserProfile() {
+    print("SetUserProfile");
+    // Set User with updated values
+    this.user.firstName = firstnameController.text;
+    this.user.lastName = lastnameController.text;
+    this.user.email = emailController.text;
+    this.user.address = addressController.text;
+    this.user.postalCode = postalcodeController.text;
+    this.user.city = cityController.text;
+
+    UserController.setUser(this.user).then((response) {
+      if (response) {
+        SnackBarController().show(
+            text: "Wijzigingen zijn succesvol opgeslagen",
+            title: "Update",
+            type: "GOOD");
+      }
+    });
   }
 
   @override
@@ -59,6 +132,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     context: context,
                     labelText: "Voornaam",
                     icon: Icon(Icons.person_outline),
+                    controller: firstnameController,
                   ),
                   SizedBox(
                     height: 20,
@@ -67,6 +141,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     context: context,
                     labelText: "Achternaam",
                     icon: Icon(Icons.person_outline),
+                    controller: lastnameController,
                   ),
                   SizedBox(
                     height: 20,
@@ -75,6 +150,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     context: context,
                     labelText: "Email",
                     icon: Icon(Icons.mail_outline),
+                    controller: emailController,
                   ),
                   SizedBox(
                     height: 20,
@@ -83,6 +159,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     context: context,
                     labelText: "Straat",
                     icon: Icon(Icons.location_on_outlined),
+                    controller: addressController,
                   ),
                   SizedBox(
                     height: 20,
@@ -90,12 +167,12 @@ class _UserDetailPageState extends State<UserDetailPage> {
                   Row(
                     children: [
                       Flexible(
-                        child: TextFieldBOne(
-                          context: context,
-                          labelText: "Huisnr.",
-                          icon: Icon(Icons.house_outlined),
-                        ),
-                      ),
+                          child: TextFieldBOne(
+                        context: context,
+                        labelText: "Gemeente",
+                        icon: Icon(Icons.account_balance_outlined),
+                        controller: cityController,
+                      )),
                       SizedBox(
                         width: 10,
                       ),
@@ -104,17 +181,10 @@ class _UserDetailPageState extends State<UserDetailPage> {
                           context: context,
                           labelText: "Postcode",
                           icon: Icon(Icons.apartment_outlined),
+                          controller: postalcodeController,
                         ),
                       ),
                     ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFieldBOne(
-                    context: context,
-                    labelText: "Gemeente",
-                    icon: Icon(Icons.account_balance_outlined),
                   ),
                   SizedBox(
                     height: 20,
@@ -170,6 +240,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     text: "Opslaan",
                     onPressed: () {
                       print("Save user");
+                      _setUserProfile();
                     },
                   ),
                 ],
