@@ -1,3 +1,4 @@
+import 'package:b_one_project_4_0/controller/measurementController.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
@@ -21,7 +22,16 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    _getBoxen();
+    //TODO is het nodig om al de boxen te laden?
+    // _getBoxen();
+    _getMeasurementGraphicLicht();
+  }
+
+  void _getMeasurementGraphicLicht() {
+    MeasurementController.loadMeasurementsGraphics("Licht")
+        .then((measurements) {
+      print(measurements[0].sensorID);
+    });
   }
 
   void _getBoxen() {
@@ -84,7 +94,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         SizedBox(
                           width: double.infinity,
                           height: 250.0,
-                          child: TimeSeriesChart(
+                          child: TimeSeriesChart.withSampleData(
                             title: "Lichthoeveelheid",
                             animate: true,
                             unit: "%",
