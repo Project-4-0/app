@@ -19,7 +19,7 @@ class Box {
   factory Box.fromJson(Map<String, dynamic> json) {
     return Box(
       id: json['BoxID'],
-      macAddress: json['MacAdress'],
+      macAddress: json['MacAddress'],
       name: json['Name'],
       comment: json['Comment'],
       active: json['Active'],
@@ -31,7 +31,7 @@ class Box {
     factory Box.fromJsonW(Map<String, dynamic> json) {
     return Box(
       id: json['BoxID'],
-      macAddress: json['MacAdress'],
+      macAddress: json['MacAddress'],
       name: json['Name'],
       comment: json['Comment'],
       active: json['Active']
@@ -39,7 +39,7 @@ class Box {
   }
 
   Map<String, dynamic> toJson() => {
-        'MacAdress': macAddress,
+        'MacAddress': macAddress,
         'Name': name,
         'Comment': comment,
         'Active': active,
