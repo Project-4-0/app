@@ -1,6 +1,7 @@
 // import 'package:gshop/models/MeasurementRegistration.dart';
 // import 'package:gshop/models/auth.dart';
 import 'package:b_one_project_4_0/models/measurement.dart';
+import 'package:b_one_project_4_0/models/measurementGraphics.dart';
 import 'package:b_one_project_4_0/models/userRegistration.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -84,7 +85,7 @@ class MeasurementApi {
   //   }
   // }
 
-  static Future<List<Measurement>> fetchMeasurementsGraphics(
+  static Future<MeasurementGraphics> fetchMeasurementsGraphics(
       int userID, String sensorTypeName) async {
     final http.Response response = await http.post(
       url + '/measurements/graphics',
@@ -94,10 +95,7 @@ class MeasurementApi {
       body: jsonEncode({"UserID": 5, "SensorTypeName": sensorTypeName}),
     );
     if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((measurement) => new Measurement.fromJson(measurement))
-          .toList();
+      return MeasurementGraphics.fromJson(jsonDecode(response.body));
     } else {
       throw Exception(response.body);
     }

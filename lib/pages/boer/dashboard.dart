@@ -1,4 +1,6 @@
 import 'package:b_one_project_4_0/controller/measurementController.dart';
+import 'package:b_one_project_4_0/models/measurement.dart';
+import 'package:b_one_project_4_0/models/measurementGraphics.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
@@ -8,6 +10,8 @@ import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/apis/box_api.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
+import 'package:b_one_project_4_0/widgets/charts/StackedAreacLineChart.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -17,6 +21,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   List<Box> boxList = List<Box>();
+  MeasurementGraphics measurementGraphics;
   int count = 0;
 
   @override
@@ -29,8 +34,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _getMeasurementGraphicLicht() {
     MeasurementController.loadMeasurementsGraphics("Licht")
-        .then((measurements) {
-      print(measurements[0].sensorID);
+        .then((measurementGraphics) {
+      //get licht measurements
+      setState(() {
+        this.measurementGraphics = measurementGraphics;
+      });
     });
   }
 
@@ -91,17 +99,24 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         // Light sensor
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   height: 250.0,
+                        //   child: TimeSeriesChart.withSampleData(
+                        //     title: "Lichthoeveelheid",
+                        //     animate: true,
+                        //     unit: "%",
+                        //     lineColor: Colors.green,
+                        //     meassureAxisValues: [0, 25, 50, 75, 100],
+                        //   ),
+                        // ),
                         SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          child: TimeSeriesChart.withSampleData(
-                            title: "Lichthoeveelheid",
-                            animate: true,
-                            unit: "%",
-                            lineColor: Colors.green,
-                            meassureAxisValues: [0, 25, 50, 75, 100],
-                          ),
-                        ),
+                            width: double.infinity,
+                            height: 250.0,
+                            child: StackAreacLineChartBone(
+                              measurementGraphics: this.measurementGraphics,
+                            )),
+
                         // Temp sensor
                         // SizedBox(
                         //   width: double.infinity,
