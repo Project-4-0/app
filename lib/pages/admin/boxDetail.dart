@@ -4,6 +4,7 @@ import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
@@ -45,10 +46,22 @@ class _BoxDetailPageState extends State<BoxDetailPage> {
     });
   }
 
-  void _saveBox(){
+  void _saveBox() {
     this.box.macAddress = macAddressController.text;
-    nameController.text == "" ? this.box.name = null : this.box.name = nameController.text;
+    commentController.text == ""
+        ? this.box.comment = null
+        : this.box.comment = commentController.text;
     this.box.name = nameController.text;
+
+    BoxController.updateBox(this.box).then((response) {
+      if (response != null) {
+        SnackBarController().show(
+            text: "Box \'" + response.name + "\' is geupdated!",
+            title: "Update",
+            type: "GOOD");
+      }
+    });
+
     // print("Comment by box:" + commentController.text + "Is een spatie?");
   }
 
@@ -64,7 +77,7 @@ class _BoxDetailPageState extends State<BoxDetailPage> {
               child: Column(
                 children: [
                   Text(
-                    'Box',
+                    this.box.name != null ? this.box.name : 'Box',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontSize: 50,

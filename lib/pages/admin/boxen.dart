@@ -42,7 +42,6 @@ class _BoxenOverviewPage extends State {
   }
 
   void _searchValueChanged() {
-    print("Value changed....");
     print("Second text field: ${searchController.text}");
     setState(() {
       this.boxList = originalBoxList
@@ -50,15 +49,10 @@ class _BoxenOverviewPage extends State {
               .toLowerCase()
               .contains(searchController.text.toLowerCase()))
           .toList();
+      this.boxList.sort((a, b) {
+        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      });
     });
-    boxList = originalBoxList
-        .where((box) => box.name
-            .toLowerCase()
-            .contains(searchController.text.toLowerCase()))
-        .toList();
-    // boxList.sort((a, b) {
-    //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
-    // });
     print("Filtered box list length: " + boxList.length.toString());
   }
 
@@ -137,7 +131,14 @@ class _BoxenOverviewPage extends State {
                     Expanded(
                       child: this.boxList.length != 0
                           ? _boxListItems()
-                          : Center(child: CircularProgressIndicator()),
+                          : Column(
+                              children: <Widget>[
+                                Text('Geen resultaten gevonden!'),
+                                Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              ],
+                            ),
                     ),
                   ]),
             ),

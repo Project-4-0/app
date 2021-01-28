@@ -69,6 +69,17 @@ class UserController {
     });
   }
 
+  static Future<User> loadUserWithBoxes() async {
+    var us = (await AuthController.getUser());
+    return UserApi.fetchUserWithBox(us.id).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
   static Future<bool> setUser(User user) async {
     print("User is here");
     return UserApi.updateUser(user).then((user) {
