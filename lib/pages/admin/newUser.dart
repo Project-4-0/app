@@ -69,6 +69,7 @@ class _NewUserPageState extends State<NewUserPage> {
   _saveNewUserPofile() {
     print("SaveUserProfile");
     // Set User with new values
+
     this.user.firstName = firstnameController.text;
     this.user.lastName = lastnameController.text;
     this.user.email = emailController.text;
@@ -76,11 +77,6 @@ class _NewUserPageState extends State<NewUserPage> {
     this.user.address = addressController.text;
     this.user.postalCode = postalcodeController.text;
     this.user.city = cityController.text;
-
-    // Get the user type id by the slected name of the dropdown
-    UserController.loadUserTypeByName(this.dropdownValue).then((userType) {
-      this.user.userTypeID = userType.id;
-    });
 
     UserController.newUser(this.user).then((response) {
       if (response != null) {
@@ -226,13 +222,19 @@ class _NewUserPageState extends State<NewUserPage> {
                                 color: Theme.of(context).primaryColor,
                               ),
                               onChanged: (String newUserTypeValue) {
-                                print("UserType changed. Now: " +
-                                    newUserTypeValue);
+                                print(
+                                    "New dropdown value: " + newUserTypeValue);
                                 setState(() {
-                                  print("New dropdown value: " +
-                                      newUserTypeValue);
                                   this.dropdownValue =
                                       newUserTypeValue.toString();
+                                });
+                                // Get the user type id by the slected name of the dropdown
+                                UserController.loadUserTypeByName(
+                                        this.dropdownValue)
+                                    .then((userType) {
+                                  this.user.userTypeID = userType.id;
+                                  print("New UserTypeID: " +
+                                      userType.id.toString());
                                 });
                               },
                               items: this.userTypeNameList != null &&
@@ -260,78 +262,7 @@ class _NewUserPageState extends State<NewUserPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        Text("Boxen van ${this.user.firstName}:"),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        // this.user.boxes.length > 0
-                        //     ? ListView.builder(
-                        //         primary: false,
-                        //         shrinkWrap: true,
-                        //         physics:
-                        //             const AlwaysScrollableScrollPhysics(), // new
-                        //         scrollDirection: Axis.vertical,
-                        //         // shrinkWrap: true,
-                        //         itemCount: this.user.boxes.length,
-                        //         itemBuilder:
-                        //             (BuildContext context, int position) {
-                        //           return FractionalTranslation(
-                        //               translation: Offset(0.0, 0.0),
-                        //               child: Stack(children: <Widget>[
-                        //                 BoxListItem(
-                        //                   boxText:
-                        //                       "!!!!!! needs to be replaced",
-                        //                   box: this.user.boxes[position],
-                        //                   onPressed: () {
-                        //                     print("Show box detail model");
-                        //                   },
-                        //                   locationText: "Geel !!!",
-                        //                 ),
-                        //                 Positioned(
-                        //                   // Marble to show active status
-                        //                   top: 10.0,
-                        //                   right: 10.0,
-                        //                   child: Icon(Icons.brightness_1,
-                        //                       size: 15.0,
-                        //                       color: this
-                        //                               .user
-                        //                               .boxes[position]
-                        //                               .active
-                        //                           ? Colors.green
-                        //                           : Colors.red),
-                        //                 )
-                        //               ]));
-                        //         },
-                        // itemBuilder: (context, index) {
-                        //   return MultiSelectItem(
-                        //     isSelecting: controller.isSelecting,
-                        //     // The function that will be called when item is long-tapped/tapped
-                        //     onSelected: () {
-                        //       setState(() {
-                        //         controller.toggle(index);
-                        //       });
-                        //     },
-                        //     child: Container(
-                        //       child: ListTile(
-                        //         title: new Text(
-                        //             this.boxesList[index].name),
-                        //         subtitle: new Text(
-                        //             // "Location ${this.user.boxes[index]['key']}"),
-                        //             "Location"),
-                        //       ),
-
-                        //       //change color based on wether the id is selected or not.
-                        //       decoration:
-                        //           controller.isSelected(index)
-                        //               ? new BoxDecoration(
-                        //                   color: Colors.grey[300])
-                        //               : new BoxDecoration(),
-                        //     ),
-                        //   );
-                        // },
-                        // )
-                        // : Text("Deze gebruiker heeft geen boxen!"),
-
+                        // TODO: Create list of available boxes
                         SizedBox(
                           height: 20,
                         ),

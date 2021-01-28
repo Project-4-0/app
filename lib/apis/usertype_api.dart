@@ -28,9 +28,17 @@ class UserTypeApi {
     }
   }
 
-    // GET: One user type by NAME
+    // POST: Get one user type by NAME
   static Future<UserType> fetchUserTypeByName(String userTypeName) async {
-    final response = await http.get(url + '/userTypes/' + userTypeName);
+      final http.Response response = await http.post(
+      url + '/userTypes/name',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+      'UserTypeName': userTypeName,
+    }),
+    );
     if (response.statusCode == 200) {
       return UserType.fromJson(jsonDecode(response.body));
     } else {
