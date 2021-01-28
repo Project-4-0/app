@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:b_one_project_4_0/controller/measurementController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
@@ -20,6 +22,9 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+  //liveUpdate Timer
+  Timer liveUpdateTimer;
+
   List<Box> boxList = List<Box>();
   MeasurementGraphics measurementGraphicsLicht;
   MeasurementGraphics measurementGraphicsGeleidbaarheid;
@@ -34,7 +39,15 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     //TODO is het nodig om al de boxen te laden?
     // _getBoxen();
+    liveUpdateTimer =
+        Timer.periodic(Duration(seconds: 10), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
+  }
+
+  @override
+  void dispose() {
+    liveUpdateTimer?.cancel();
+    super.dispose();
   }
 
   void _loadAllGraphics() {
@@ -122,7 +135,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
-                          title: "Licht inval",
+                          title: "Licht",
                         ),
                         SizedBox(
                           height: 40,
