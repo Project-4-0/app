@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:stats/stats.dart';
 
 // Default design button BOne
 class StackAreacLineChartBone extends StatefulWidget {
@@ -25,12 +27,31 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
     if (widget.measurementGraphics == null) {
       return Text("loading");
     }
+
+    if (widget.measurementGraphics.measurementsList.length <= 0) {
+      return Column(
+        children: [
+          Text(
+            this.widget.title,
+            style: TextStyle(fontSize: 25, color: Colors.black),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text("Geen gegevens beschikbaar."),
+        ],
+      );
+    }
     return Column(
       children: [
         Text(
           this.widget.title,
-          style: TextStyle(fontSize: 25),
+          style: TextStyle(fontSize: 25, color: Colors.black),
         ),
+        SizedBox(
+          height: 20,
+        ),
+        _forOneGraphicTop(),
         SizedBox(
           width: double.infinity,
           height: 250.0,
@@ -66,6 +87,107 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
               )
             ],
           ),
+        ),
+        // _forOneGraphicButton(),
+      ],
+    );
+  }
+
+  _checkforOneGraphic() {
+    //niks
+    if (this.widget.measurementGraphics.boxes.length != 1 &&
+        this.widget.measurementGraphics.measurementsList.length <= 0) {
+      return Container();
+    }
+  }
+
+  _forOneGraphicTop() {
+    _checkforOneGraphic();
+    //get statiestiek
+    List<double> result = this
+        .widget
+        .measurementGraphics
+        .measurementsList
+        .map((e) => double.parse(e.value))
+        .toList();
+    final stats = Stats.fromSortedList(result);
+    var stat = stats.withPrecision(3);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              "Gem. : " + stat.average.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+            Text(
+              "Med. : " + stat.median.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              "Min. : " + stat.min.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+            Text(
+              "Max. : " + stat.max.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  _forOneGraphicButton() {
+    _checkforOneGraphic();
+    //get statiestiek
+    List<double> result = this
+        .widget
+        .measurementGraphics
+        .measurementsList
+        .map((e) => double.parse(e.value))
+        .toList();
+    final stats = Stats.fromSortedList(result);
+    var stat = stats.withPrecision(3);
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              "Gemiddelde: " + stat.average.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+            Text(
+              "Mediaan: " + stat.median.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text(
+              "min: " + stat.min.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+            Text(
+              "max: " + stat.max.toString(),
+              style: TextStyle(fontSize: 13),
+            ),
+          ],
         ),
       ],
     );

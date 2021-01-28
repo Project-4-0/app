@@ -50,6 +50,9 @@ dependencies:
   # Environmental variables
   flutter_dotenv: ^3.1.0
 
+  #calulate average
+  stats: ^1.0.1
+
   # fl_chart: ^0.12.2
 
 dev_dependencies:

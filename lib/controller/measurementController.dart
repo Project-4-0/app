@@ -14,9 +14,8 @@ class MeasurementController {
     //TODO change usid
     var us = (await AuthController.getUser());
 
-    print(filterMeasurement);
-
-    return MeasurementApi.fetchMeasurementsGraphics(us.id, sensorTypeName,filterMeasurement)
+    return MeasurementApi.fetchMeasurementsGraphics(
+            5, sensorTypeName, filterMeasurement)
         .then((measurementGraphics) {
       return measurementGraphics;
     }).catchError((error) {
