@@ -4,6 +4,7 @@ import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
+import 'package:b_one_project_4_0/pages/admin/boxDetail.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -14,7 +15,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
 import 'package:intl/intl.dart';
-// import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 
@@ -25,25 +25,51 @@ class BoxenOverviewPage extends StatefulWidget {
 
 class _BoxenOverviewPage extends State {
   List<Box> boxList = List<Box>();
+  List<Box> originalBoxList = List<Box>();
   Box boxAll;
   // List boxList = List();
   int count = 0;
 
   GlobalKey globalKey = new GlobalKey();
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_searchValueChanged);
     _getBoxes();
+  }
+
+  void _searchValueChanged() {
+    print("Value changed....");
+    print("Second text field: ${searchController.text}");
+    setState(() {
+      this.boxList = originalBoxList
+          .where((box) => box.name
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase()))
+          .toList();
+    });
+    boxList = originalBoxList
+        .where((box) => box.name
+            .toLowerCase()
+            .contains(searchController.text.toLowerCase()))
+        .toList();
+    // boxList.sort((a, b) {
+    //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    // });
+    print("Filtered box list length: " + boxList.length.toString());
   }
 
   void _getBoxes() {
     BoxController.loadBoxes().then((result) {
       setState(() {
-        boxList = result;
-        boxList.sort((a, b) {
+        originalBoxList = result;
+        originalBoxList.sort((a, b) {
           return a.name.toLowerCase().compareTo(b.name.toLowerCase());
         });
+        boxList = originalBoxList; // Page loaded so list isn't filtered
         count = result.length;
         print("Count: " + count.toString());
       });
@@ -59,6 +85,16 @@ class _BoxenOverviewPage extends State {
       // Open the detail modal
       _boxDetail(context, this.boxAll);
     });
+  }
+
+  Future<void> _updateBoxPage(id) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BoxDetailPage(id)),
+    );
+    if (result == true) {
+      _getBoxes();
+    }
   }
 
   @override
@@ -94,11 +130,12 @@ class _BoxenOverviewPage extends State {
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
+                      controller: searchController,
                       color: Colors.grey.shade900,
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
                     Expanded(
-                      child: this.count != 0
+                      child: this.boxList.length != 0
                           ? _boxListItems()
                           : Center(child: CircularProgressIndicator()),
                     ),
@@ -120,7 +157,7 @@ class _BoxenOverviewPage extends State {
       physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
       // shrinkWrap: true,
-      itemCount: count,
+      itemCount: this.boxList.length,
       itemBuilder: (BuildContext context, int position) {
         return FractionalTranslation(
             translation: Offset(0.0, 0.0),
@@ -249,6 +286,7 @@ class _BoxenOverviewPage extends State {
                               text: "Wijzigen",
                               onPressed: () {
                                 print("Go to edit page of box");
+                                _updateBoxPage(box.id);
                               },
                             ),
                             Padding(padding: EdgeInsets.all(5)),
