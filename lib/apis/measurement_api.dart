@@ -1,11 +1,14 @@
 // import 'package:gshop/models/MeasurementRegistration.dart';
 // import 'package:gshop/models/auth.dart';
+import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
 import 'package:b_one_project_4_0/models/userRegistration.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:intl/intl.dart';
 
 class MeasurementApi {
   static String url = env['API_URL'];
@@ -85,14 +88,31 @@ class MeasurementApi {
   //   }
   // }
 
-  static Future<MeasurementGraphics> fetchMeasurementsGraphics(
-      int userID, String sensorTypeName) async {
+  static Future<MeasurementGraphics> fetchMeasurementsGraphics(int userID,
+      String sensorTypeName, FilterMeasurement filterMeasurement) async {
+    var sendJson = {"UserID": userID, "SensorTypeName": sensorTypeName};
+
+    //filters
+    if (filterMeasurement.startDate != null) {
+      sendJson["StartDate"] =
+          DateFormat("yyyy-MM-ddTHH:mm:ss").format(filterMeasurement.startDate);
+    }
+    if (filterMeasurement.endDate != null) {
+      sendJson["EndDate"] =
+          DateFormat("yyyy-MM-ddTHH:mm:ss").format(filterMeasurement.endDate);
+    }
+    if (filterMeasurement.boxID != null) {
+      sendJson["BoxID"] = filterMeasurement.boxID;
+    }
+
+    // print(sendJson);
+
     final http.Response response = await http.post(
       url + '/measurements/graphics',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode({"UserID": 5, "SensorTypeName": sensorTypeName}),
+      body: jsonEncode(sendJson),
     );
     if (response.statusCode == 200) {
       return MeasurementGraphics.fromJson(jsonDecode(response.body));

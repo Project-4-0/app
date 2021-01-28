@@ -1,10 +1,5 @@
 import 'dart:math';
-
-import 'package:b_one_project_4_0/models/measurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
-import 'package:b_one_project_4_0/widgets/buttons/IconTextLeftButton.dart';
-import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
-import 'package:b_one_project_4_0/widgets/charts/StackedAreacLineChart.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -13,22 +8,35 @@ class StackAreacLineChartBone extends StatelessWidget {
   const StackAreacLineChartBone({
     Key key,
     @required this.measurementGraphics,
+    @required this.title,
   }) : super(key: key);
 
   final MeasurementGraphics measurementGraphics;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     if (measurementGraphics == null) {
       return Text("loading");
     }
-
-    return new charts.TimeSeriesChart(
-      _transformBuildDate(),
-      defaultRenderer:
-          new charts.LineRendererConfig(includeArea: true, stacked: false),
-      animate: true,
-      dateTimeFactory: const charts.LocalDateTimeFactory(),
+    return Column(
+      children: [
+        Text(
+          this.title,
+          style: TextStyle(fontSize: 25),
+        ),
+        SizedBox(
+          width: double.infinity,
+          height: 250.0,
+          child: new charts.TimeSeriesChart(
+            _transformBuildDate(),
+            defaultRenderer: new charts.LineRendererConfig(
+                includeArea: true, stacked: false),
+            animate: true,
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
+          ),
+        ),
+      ],
     );
   }
 
