@@ -62,6 +62,7 @@ class Box {
   }
 
   Map<String, dynamic> toJson() => {
+        'BoxID': id,
         'MacAddress': macAddress,
         'Name': name,
         'Comment': comment,

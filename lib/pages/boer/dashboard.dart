@@ -6,7 +6,9 @@ import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -17,20 +19,23 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
     List<Box> boxList = List<Box>();
   int count = 0;
+  User user;
 
   @override
   void initState() {
     super.initState();
-    _getBoxen();
+    _getUser();
   }
 
-  
-  void _getBoxen() {
-    BoxController.loadBoxes().then((result) {
+  void _getUser() {
+    // Get the current logged in user
+    UserController.loadUserWithBoxes().then((result) {
       setState(() {
-        boxList = result;
-        count = result.length;
+        if(result.boxes!=null){
+        boxList = result.boxes;
+        count = result.boxes.length;
         print("Count: " + count.toString());
+        }
       });
     });
   }
@@ -185,7 +190,7 @@ void _boxModal(context, boxList, count) {
     builder: (BuildContext context) {
       return StatefulBuilder(builder: (BuildContext context,
           StateSetter setState /*You can rename this!*/) {
-        return Container(
+        return boxList!=null ? Container(
           height: 600,
           color: Colors.white,
           child: Padding(
@@ -197,6 +202,20 @@ void _boxModal(context, boxList, count) {
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 _boxItems(boxList, count),
+              ],
+            ),
+          ),
+        ) : Container(
+          height: 600,
+          color: Colors.white,
+          child: Padding(
+            padding: EdgeInsets.only(top: 25),
+            child: Column(
+              children: [
+                Text(
+                  "Geen boxen gevonden voor uw account!",
+                  style: Theme.of(context).textTheme.headline4,
+                ),
               ],
             ),
           ),

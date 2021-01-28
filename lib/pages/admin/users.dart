@@ -14,30 +14,67 @@ class UserOverviewPage extends StatefulWidget {
 
 class _UserOverviewPage extends State {
   List<User> userList = List<User>();
-  // List userList = List();
+  List<User> originalUserList = List<User>();
+
   int count = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKeyUsers =
       new GlobalKey<ScaffoldState>();
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_searchValueChanged);
     _getUsers();
   }
 
   void _getUsers() {
     UserController.loadUsers().then((result) {
       setState(() {
-        userList = result;
+        originalUserList = result;
         // Users sorted alphabetical by last name
-        userList.sort((a, b) {
+        originalUserList.sort((a, b) {
           return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
         });
-        count = result.length;
+        userList = originalUserList;
+        count = userList.length;
         print("Count users overview: " + count.toString());
       });
     });
+  }
+
+  void _searchValueChanged() {
+    print("Search text: ${searchController.text}");
+    setState(() {
+      this.userList = originalUserList
+          .where((user) =>
+              user.firstName
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.lastName
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.email
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.address
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.city
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.postalCode
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()))
+          .toList();
+      // Users sorted alphabetical by last name
+      this.userList.sort((a, b) {
+        return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
+      });
+    });
+    print("Filtered users list length: " + userList.length.toString());
   }
 
   // Open mail launcher on device
@@ -67,8 +104,8 @@ class _UserOverviewPage extends State {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
     if (id == null) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/admin/users/new', (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/admin/users/new', (route) => false);
     } else {
       bool result = await Navigator.push(
         context,
@@ -113,13 +150,21 @@ class _UserOverviewPage extends State {
                       },
                       textRight: "Gebruiker",
                       iconRight: Icons.person_add_alt_1,
+                      controller: searchController,
                       color: Colors.grey.shade900,
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
                     Expanded(
-                      child: this.count != 0
+                      child: this.userList.length != 0
                           ? _userListItems()
-                          : Center(child: CircularProgressIndicator()),
+                          : Column(
+                              children: <Widget>[
+                                Text('Geen resultaten gevonden!'),
+                                Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              ],
+                            ),
                     ),
                   ]),
             ),
@@ -139,7 +184,7 @@ class _UserOverviewPage extends State {
       physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
       // shrinkWrap: true,
-      itemCount: count,
+      itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           color: Colors.white,
