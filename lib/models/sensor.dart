@@ -16,6 +16,14 @@ class Sensor {
         sensorType: SensorType.fromJson(json['SensorType']));
   }
 
+  factory Sensor.fromJsonWithout(Map<String, dynamic> json) {
+    return Sensor(
+      id: json['SensorID'],
+      name: json['Name'],
+      sensorTypeID: json['SensorTypeID'],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
         'Name': name,
         'SensorTypeID': sensorTypeID,

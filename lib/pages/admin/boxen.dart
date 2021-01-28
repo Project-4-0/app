@@ -23,6 +23,7 @@ class BoxenOverviewPage extends StatefulWidget {
 
 class _BoxenOverviewPage extends State {
   List<Box> boxList = List<Box>();
+  Box boxAll;
   // List boxList = List();
   int count = 0;
 
@@ -41,6 +42,17 @@ class _BoxenOverviewPage extends State {
         count = result.length;
         print("Count: " + count.toString());
       });
+    });
+  }
+
+  void _showBoxDetail(int id) {
+    // Get all the box info to show the details
+    BoxController.loadBoxAll(id).then((result) {
+      setState(() {
+        boxAll = result;
+      });
+      // Open the detail modal
+      _boxDetail(context, this.boxAll);
     });
   }
 
@@ -113,7 +125,8 @@ class _BoxenOverviewPage extends State {
                 box: this.boxList[position],
                 onPressed: () {
                   print("Show box detail model");
-                  _boxDetail(context, this.boxList[position]);
+                  _showBoxDetail(this.boxList[position].id);
+                  // _boxDetail(context, this.boxList[position]);
                 },
                 locationText: "Geel !!!",
               ),
@@ -132,11 +145,13 @@ class _BoxenOverviewPage extends State {
     );
   }
 
-  // Detail modal of a box
+  // Detail modal of a box with all information
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
+
+    box!=null ? 
     showModalBottomSheet(
-      isScrollControlled:true, // Full screen height
+      isScrollControlled: true, // Full screen height
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(30),
@@ -161,15 +176,16 @@ class _BoxenOverviewPage extends State {
                       child: Align(
                         child: Stack(children: <Widget>[
                           CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text(box.name,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                          )),
+                              radius: 50.0,
+                              backgroundColor: Theme.of(context).primaryColor,
+                              child: Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Text(box.name,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center),
+                              )),
                           Positioned(
                             // Marble to show active status
                             top: 0.0,
@@ -243,6 +259,28 @@ class _BoxenOverviewPage extends State {
                 ],
               ),
             ),
+          ));
+        });
+      },
+    ) : 
+        showModalBottomSheet(
+      isScrollControlled: true, // Full screen height
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+              child: Container(
+            // height: 900,
+            color: Colors.white,
+            child: Center(child: CircularProgressIndicator()),
           ));
         });
       },
