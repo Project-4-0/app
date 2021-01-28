@@ -38,7 +38,7 @@ class BoxUser {
         boxID: json['BoxID'],
         userID: json['UserID'],
         startDate: DateTime.tryParse(json['StartDate']),
-        endDate: DateTime.tryParse(json['EndDate']));
+        endDate: json['EndDate'] == null ? null : DateTime.tryParse(json['EndDate']));
   }
 
   Map<String, dynamic> toJson() => {

@@ -41,6 +41,9 @@ class _BoxenOverviewPage extends State {
     BoxController.loadBoxes().then((result) {
       setState(() {
         boxList = result;
+        boxList.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
         count = result.length;
         print("Count: " + count.toString());
       });
@@ -87,7 +90,7 @@ class _BoxenOverviewPage extends State {
                         // TODO: go to box detail with empty values
                         print("Pressed add box");
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/admin/boxen/1', (route) => false);
+                            context, '/admin/boxen/new', (route) => false);
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
@@ -334,7 +337,8 @@ class _BoxenOverviewPage extends State {
                                 child: Text(
                                     userList[position].firstName +
                                         " " +
-                                        userList[position].lastName + ":",
+                                        userList[position].lastName +
+                                        ":",
                                     textAlign: TextAlign.left))),
                       ],
                     ),
@@ -384,7 +388,7 @@ class _BoxenOverviewPage extends State {
                                                     .format(userList[position]
                                                         .boxUser
                                                         .endDate))
-                                            : "neeen"),
+                                            : ""),
                                     textAlign: TextAlign.left))),
                       ],
                     )

@@ -13,6 +13,7 @@ import 'package:b_one_project_4_0/pages/admin/newUser.dart';
 import 'package:b_one_project_4_0/pages/admin/userDetail.dart';
 import 'package:b_one_project_4_0/pages/admin/boxen.dart';
 import 'package:b_one_project_4_0/pages/admin/box.dart';
+import 'package:b_one_project_4_0/pages/admin/newBox.dart';
 import 'package:b_one_project_4_0/pages/test.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +38,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => BoxenOverviewPage());
       case '/admin/boxen/1':
         return MaterialPageRoute(builder: (_) => BoxPage());
+              case '/admin/boxen/new':
+        return MaterialPageRoute(builder: (_) => NewBoxPage());
 
       case '/test':
         return MaterialPageRoute(builder: (_) => TestPage());
