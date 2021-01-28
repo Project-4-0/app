@@ -12,7 +12,8 @@ import 'package:b_one_project_4_0/pages/admin/users.dart';
 import 'package:b_one_project_4_0/pages/admin/newUser.dart';
 import 'package:b_one_project_4_0/pages/admin/userDetail.dart';
 import 'package:b_one_project_4_0/pages/admin/boxen.dart';
-import 'package:b_one_project_4_0/pages/admin/box.dart';
+import 'package:b_one_project_4_0/pages/admin/boxDetail.dart';
+import 'package:b_one_project_4_0/pages/admin/newBox.dart';
 import 'package:b_one_project_4_0/pages/test.dart';
 import 'package:flutter/material.dart';
 
@@ -31,12 +32,14 @@ class RouteGenerator {
       // Id parameter !!!
       case '/admin/users/1':
         return MaterialPageRoute(builder: (_) => UserDetailPage(1));
-              case '/admin/users/new':
+      case '/admin/users/new':
         return MaterialPageRoute(builder: (_) => NewUserPage());
       case '/admin/boxen':
         return MaterialPageRoute(builder: (_) => BoxenOverviewPage());
       case '/admin/boxen/1':
-        return MaterialPageRoute(builder: (_) => BoxPage());
+        return MaterialPageRoute(builder: (_) => BoxDetailPage(1));
+      case '/admin/boxen/new':
+        return MaterialPageRoute(builder: (_) => NewBoxPage());
 
       case '/test':
         return MaterialPageRoute(builder: (_) => TestPage());

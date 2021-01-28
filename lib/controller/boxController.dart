@@ -34,6 +34,17 @@ class BoxController {
     });
   }
 
+  // One box with all information
+  static Future<Box> loadBoxAll(int id) async {
+    return BoxApi.fetchBoxAll(id).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: "Kan box info niet ophalen!", title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
   // Create new box
   static Future<Box> createBox(Box box) async {
     return BoxApi.createBox(box).then((box) {
@@ -70,5 +81,4 @@ class BoxController {
       return false;
     });
   }
-  
 }

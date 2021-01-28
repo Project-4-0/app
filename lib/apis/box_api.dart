@@ -27,6 +27,16 @@ class BoxApi {
     }
   }
 
+  // GET: One box with ALL info
+  static Future<Box> fetchBoxAll(int id) async {
+    final response = await http.get(url + '/boxes/' + id.toString() + '/all');
+    if (response.statusCode == 200) {
+      return Box.fromJsonAll(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
   // POST: create a new box
   static Future<Box> createBox(Box box) async {
     final http.Response response = await http.post(
@@ -68,7 +78,6 @@ class BoxApi {
       throw Exception(response.body);
     }
   }
-
 
 // GET -> All boxen
   // static Future<List<Box>> fetchBoxen() async {

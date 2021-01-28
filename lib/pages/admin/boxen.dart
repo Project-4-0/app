@@ -2,7 +2,9 @@ import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
+import 'package:b_one_project_4_0/pages/admin/boxDetail.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -12,7 +14,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
-// import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
 
@@ -23,25 +25,76 @@ class BoxenOverviewPage extends StatefulWidget {
 
 class _BoxenOverviewPage extends State {
   List<Box> boxList = List<Box>();
+  List<Box> originalBoxList = List<Box>();
+  Box boxAll;
   // List boxList = List();
   int count = 0;
 
   GlobalKey globalKey = new GlobalKey();
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_searchValueChanged);
     _getBoxes();
+  }
+
+  void _searchValueChanged() {
+    print("Value changed....");
+    print("Second text field: ${searchController.text}");
+    setState(() {
+      this.boxList = originalBoxList
+          .where((box) => box.name
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase()))
+          .toList();
+    });
+    boxList = originalBoxList
+        .where((box) => box.name
+            .toLowerCase()
+            .contains(searchController.text.toLowerCase()))
+        .toList();
+    // boxList.sort((a, b) {
+    //   return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+    // });
+    print("Filtered box list length: " + boxList.length.toString());
   }
 
   void _getBoxes() {
     BoxController.loadBoxes().then((result) {
       setState(() {
-        boxList = result;
+        originalBoxList = result;
+        originalBoxList.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        boxList = originalBoxList; // Page loaded so list isn't filtered
         count = result.length;
         print("Count: " + count.toString());
       });
     });
+  }
+
+  void _showBoxDetail(int id) {
+    // Get all the box info to show the details
+    BoxController.loadBoxAll(id).then((result) {
+      setState(() {
+        boxAll = result;
+      });
+      // Open the detail modal
+      _boxDetail(context, this.boxAll);
+    });
+  }
+
+  Future<void> _updateBoxPage(id) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BoxDetailPage(id)),
+    );
+    if (result == true) {
+      _getBoxes();
+    }
   }
 
   @override
@@ -73,15 +126,16 @@ class _BoxenOverviewPage extends State {
                         // TODO: go to box detail with empty values
                         print("Pressed add box");
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/admin/boxen/1', (route) => false);
+                            context, '/admin/boxen/new', (route) => false);
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
+                      controller: searchController,
                       color: Colors.grey.shade900,
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
                     Expanded(
-                      child: this.count != 0
+                      child: this.boxList.length != 0
                           ? _boxListItems()
                           : Center(child: CircularProgressIndicator()),
                     ),
@@ -103,7 +157,7 @@ class _BoxenOverviewPage extends State {
       physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
       // shrinkWrap: true,
-      itemCount: count,
+      itemCount: this.boxList.length,
       itemBuilder: (BuildContext context, int position) {
         return FractionalTranslation(
             translation: Offset(0.0, 0.0),
@@ -113,7 +167,8 @@ class _BoxenOverviewPage extends State {
                 box: this.boxList[position],
                 onPressed: () {
                   print("Show box detail model");
-                  _boxDetail(context, this.boxList[position]);
+                  _showBoxDetail(this.boxList[position].id);
+                  // _boxDetail(context, this.boxList[position]);
                 },
                 locationText: "Geel !!!",
               ),
@@ -132,119 +187,281 @@ class _BoxenOverviewPage extends State {
     );
   }
 
-  // Detail modal of a box
+  // Detail modal of a box with all information
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
-    showModalBottomSheet(
-      isScrollControlled:true, // Full screen height
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
-        ),
-      ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      backgroundColor: Colors.white,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return SingleChildScrollView(
-              child: Container(
-            // height: 900,
-            color: Colors.white,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
-              child: Column(
-                children: [
-                  FractionalTranslation(
-                      translation: Offset(0.0, 0.0),
-                      child: Align(
-                        child: Stack(children: <Widget>[
-                          CircleAvatar(
-                            radius: 50.0,
-                            backgroundColor: Theme.of(context).primaryColor,
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text(box.name,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                          )),
-                          Positioned(
-                            // Marble to show active status
-                            top: 0.0,
-                            right: 0.0,
-                            child: Icon(Icons.brightness_1,
-                                size: 30.0,
-                                color: box.active ? Colors.green : Colors.red),
-                          )
-                        ]),
-                        alignment: FractionalOffset(0.5, 0.0),
-                      )),
-                  Padding(padding: EdgeInsets.all(20)),
-                  // Values of box
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        "Mac adress:\n" + box.macAddress,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Padding(padding: EdgeInsets.all(5)),
-                      Text(
-                        "Locatie:\n" +
-                            "Harmoniestraat 44 !!!\n" +
-                            "2230 Ramsel",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      Padding(padding: EdgeInsets.all(5)),
-                      Text(
-                        "In gebruik door:\n" + "Arno Vangoetsenhoven !!!",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      if (box.comment != null)
-                        Padding(padding: EdgeInsets.all(5)),
-                      if (box.comment != null)
-                        Text(
-                          "Opmerking:\n" + box.comment,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      Padding(padding: EdgeInsets.all(5)),
-                      OutlineFlatButtonBOne(
-                        text: "Wijzigen",
-                        onPressed: () {
-                          print("Go to edit page of box");
-                        },
-                      ),
-                      Padding(padding: EdgeInsets.all(5)),
-                      Column(
-                        children: <Widget>[
-                          RepaintBoundary(
-                              key: globalKey,
-                              child: QrImage(
-                                data: box.macAddress,
-                                version: QrVersions.auto,
-                                size: 150,
-                                gapless: false,
-                              )),
-                          IconButton(
-                            icon: Icon(Icons.share,
-                                color: Theme.of(context).primaryColor),
-                            tooltip: 'Increase volume by 10',
-                            onPressed: () {
-                              print("Share QR-Code");
-                              _captureAndSharePng(box.name);
-                            },
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+
+    box != null
+        ? showModalBottomSheet(
+            // isScrollControlled: true, // Full screen height
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
               ),
             ),
-          ));
-        });
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Colors.white,
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return SingleChildScrollView(
+                    child: Container(
+                  // height: 900,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
+                    child: Column(
+                      children: [
+                        FractionalTranslation(
+                            translation: Offset(0.0, 0.0),
+                            child: Align(
+                              child: Stack(children: <Widget>[
+                                CircleAvatar(
+                                    radius: 50.0,
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(16.0),
+                                      child: Text(box.name,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.center),
+                                    )),
+                                Positioned(
+                                  // Marble to show active status
+                                  top: 0.0,
+                                  right: 0.0,
+                                  child: Icon(Icons.brightness_1,
+                                      size: 30.0,
+                                      color: box.active
+                                          ? Colors.green
+                                          : Colors.red),
+                                )
+                              ]),
+                              alignment: FractionalOffset(0.5, 0.0),
+                            )),
+                        Padding(padding: EdgeInsets.all(20)),
+                        // Values of box
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              "Mac adress:\n" + box.macAddress,
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            // Padding(padding: EdgeInsets.all(5)),
+                            // Text(
+                            //   "Locatie:\n" +
+                            //       "Harmoniestraat 44 !!!\n" +
+                            //       "2230 Ramsel",
+                            //   style: TextStyle(fontSize: 18),
+                            // ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            Text(
+                              "In gebruik door:",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              child: _userList(context, box.users),
+                            ),
+                            if (box.comment != null)
+                              Padding(padding: EdgeInsets.all(5)),
+                            if (box.comment != null)
+                              Text(
+                                "Opmerking:\n" + box.comment,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            Text(
+                              "Sensors:",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Container(
+                              child: _sensorList(context, box.sensors),
+                            ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            OutlineFlatButtonBOne(
+                              text: "Wijzigen",
+                              onPressed: () {
+                                print("Go to edit page of box");
+                                _updateBoxPage(box.id);
+                              },
+                            ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            Column(
+                              children: <Widget>[
+                                RepaintBoundary(
+                                    key: globalKey,
+                                    child: QrImage(
+                                      data: box.macAddress,
+                                      version: QrVersions.auto,
+                                      size: 150,
+                                      gapless: false,
+                                    )),
+                                IconButton(
+                                  icon: Icon(Icons.share,
+                                      color: Theme.of(context).primaryColor),
+                                  tooltip: 'Increase volume by 10',
+                                  onPressed: () {
+                                    print("Share QR-Code");
+                                    _captureAndSharePng(box.name);
+                                  },
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
+              });
+            },
+          )
+        : showModalBottomSheet(
+            isScrollControlled: true, // Full screen height
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Colors.white,
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return SingleChildScrollView(
+                    child: Container(
+                  // height: 900,
+                  color: Colors.white,
+                  child: Center(child: CircularProgressIndicator()),
+                ));
+              });
+            },
+          );
+  }
+
+  ListView _userList(context, List<User> userList) {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      // physics: const AlwaysScrollableScrollPhysics(), // new
+      scrollDirection: Axis.vertical,
+      itemCount: userList.length,
+      itemBuilder: (context, int position) {
+        return Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: GestureDetector(
+                onTap: () {
+                  print("Tapped on user");
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.perm_identity,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    userList[position].firstName +
+                                        " " +
+                                        userList[position].lastName +
+                                        ":",
+                                    textAlign: TextAlign.left))),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.place,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    userList[position].address +
+                                        ",\n " +
+                                        userList[position].postalCode +
+                                        " " +
+                                        userList[position].city,
+                                    textAlign: TextAlign.left))),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.today,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    DateFormat('dd/MM/yyyy – kk:mm:ss').format(
+                                            userList[position]
+                                                .boxUser
+                                                .startDate) +
+                                        (userList[position].boxUser.endDate !=
+                                                null
+                                            ? (" - \n" +
+                                                DateFormat(
+                                                        'dd/MM/yyyy – kk:mm:ss')
+                                                    .format(userList[position]
+                                                        .boxUser
+                                                        .endDate))
+                                            : ""),
+                                    textAlign: TextAlign.left))),
+                      ],
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
+  ListView _sensorList(context, sensorList) {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      // physics: const AlwaysScrollableScrollPhysics(), // new
+      scrollDirection: Axis.vertical,
+      itemCount: sensorList.length,
+      itemBuilder: (context, int position) {
+        return Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+                  child: Icon(
+                    Icons.settings_input_hdmi,
+                    color: Theme.of(context).primaryColor,
+                    size: 14,
+                  ),
+                ),
+                Container(
+                    child: Flexible(
+                        child: Text(sensorList[position].name,
+                            textAlign: TextAlign.left))),
+              ],
+            ));
       },
     );
   }
