@@ -32,7 +32,7 @@ class StackAreacLineChartBone extends StatelessWidget {
             _transformBuildDate(),
             defaultRenderer: new charts.LineRendererConfig(
                 includeArea: true, stacked: false),
-            animate: true,
+            animate: false,
             dateTimeFactory: const charts.LocalDateTimeFactory(),
           ),
         ),

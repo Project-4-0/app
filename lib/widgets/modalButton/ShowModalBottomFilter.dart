@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ShowModalBottomFilter extends StatefulWidget {
-  final GestureTapCallback onPressedFilter;
+  final Function onPressedFilter;
   final Function(DateTime date) startDateCallBack;
   final Function(DateTime date) endDateCallBack;
 
@@ -67,6 +67,17 @@ class _ShowModalBottomFilterState extends State<ShowModalBottomFilter> {
     }
   }
 
+  _deleteFilter() {
+    setState(() {
+      this._startDate = null;
+      widget.startDateCallBack(null);
+      this._endDate = null;
+      widget.endDateCallBack(null);
+
+      widget.onPressedFilter();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -111,9 +122,30 @@ class _ShowModalBottomFilterState extends State<ShowModalBottomFilter> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      FlatButtonBOne(
-                        text: "Filters Toevoegen",
-                        onPressed: widget.onPressedFilter,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: FlatButtonBOne(
+                              text: "Filters Toevoegen",
+                              onPressed: widget.onPressedFilter,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: FlatButton(
+                              onPressed: () => _deleteFilter(),
+                              child: Row(children: [
+                                Icon(
+                                  Icons.delete_outline,
+                                  color: Colors.red,
+                                  size: 30,
+                                ),
+                              ]),
+                            ),
+                          ),
+                        ],
                       ),
                     ]),
               ),
