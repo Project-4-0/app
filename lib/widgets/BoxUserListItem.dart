@@ -40,26 +40,39 @@ class BoxUserListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(200),
-                ),
-                color: Theme.of(context).primaryColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 5.0, // soften the shadow
-                    spreadRadius: 1.0, //extend the shadow
-                  )
-                ],
-              ),
-              child: Text(
-                box.name != null ? box.name : boxText,
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.all(20),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.all(
+            //       Radius.circular(200),
+            //     ),
+            //     color: Theme.of(context).primaryColor,
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.grey.withOpacity(0.1),
+            //         blurRadius: 5.0, // soften the shadow
+            //         spreadRadius: 1.0, //extend the shadow
+            //       )
+            //     ],
+            //   ),
+            //   child: Text(
+            //     box.name != null ? box.name : boxText,
+            //     style: TextStyle(color: Colors.white),
+            //   ),
+            // ),
+            CircleAvatar(
+                radius: 50.0,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                  child: Center(
+                      child: Text(box.name,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0),
+                          textAlign: TextAlign.center)),
+                )),
             SizedBox(
               width: 20,
             ),
@@ -72,6 +85,8 @@ class BoxUserListItem extends StatelessWidget {
             //   style: TextStyle(color: Theme.of(context).accentColor),
             // ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 // Comment
                 if (box.comment != null)
@@ -106,21 +121,21 @@ class BoxUserListItem extends StatelessWidget {
                   ],
                 ),
                 // EndDate
-                if(this.box.boxUser.endDate!=null)
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.today,
-                      color: Colors.redAccent,
-                    ),
-                    Text(
-                      DateFormat('dd/MM/yyyy – kk:mm:ss')
-                          .format(box.boxUser.endDate),
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor, fontSize: 14),
-                    ),
-                  ],
-                )
+                if (this.box.boxUser.endDate != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.today,
+                        color: Colors.redAccent,
+                      ),
+                      Text(
+                        DateFormat('dd/MM/yyyy – kk:mm:ss')
+                            .format(box.boxUser.endDate),
+                        style: TextStyle(
+                            color: Theme.of(context).accentColor, fontSize: 14),
+                      ),
+                    ],
+                  )
               ],
             ),
           ],
