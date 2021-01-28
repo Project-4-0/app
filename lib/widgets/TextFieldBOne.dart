@@ -44,6 +44,7 @@ class TextFieldBOne extends StatelessWidget {
       textInputAction: textInputAction,
       textCapitalization: textCapitalization,
       decoration: InputDecoration(
+        counterText: '', // Hide max number of textfield
         focusColor: Theme.of(context).accentColor,
         hoverColor: Theme.of(context).accentColor,
         filled: true,

@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     UserController.setUser(this._user).then((response) {
       if (response) {
         SnackBarController().show(
-            text: "Wijzigen zijn succesvol opgeslagen",
+            text: "Wijzigingen zijn succesvol opgeslagen",
             title: "Update",
             type: "GOOD");
       }
@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           TextFieldBOne(
             context: context,
-            labelText: "Email",
+            labelText: "E-mail",
             icon: Icon(Icons.mail_outline),
             controller: emailController,
           ),
@@ -153,12 +153,12 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             children: [
               Flexible(
-                child: TextFieldBOne(
-                  context: context,
-                  labelText: "Huisnr.",
-                  icon: Icon(Icons.house_outlined),
-                ),
-              ),
+                  child: TextFieldBOne(
+                context: context,
+                labelText: "Gemeente",
+                icon: Icon(Icons.account_balance_outlined),
+                controller: cityController,
+              )),
               SizedBox(
                 width: 10,
               ),
@@ -171,15 +171,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
             ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          TextFieldBOne(
-            context: context,
-            labelText: "Gemeente",
-            icon: Icon(Icons.account_balance_outlined),
-            controller: cityController,
           ),
           SizedBox(
             height: 20,
