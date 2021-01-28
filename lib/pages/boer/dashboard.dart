@@ -17,7 +17,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-    List<Box> boxList = List<Box>();
+  List<Box> boxList = List<Box>();
   int count = 0;
   User user;
 
@@ -31,10 +31,10 @@ class _DashboardPageState extends State<DashboardPage> {
     // Get the current logged in user
     UserController.loadUserWithBoxes().then((result) {
       setState(() {
-        if(result.boxes!=null){
-        boxList = result.boxes;
-        count = result.boxes.length;
-        print("Count: " + count.toString());
+        if (result.boxes != null) {
+          boxList = result.boxes;
+          count = result.boxes.length;
+          print("Count: " + count.toString());
         }
       });
     });
@@ -119,13 +119,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               ]),
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        Text("Satellietbeelden:", style: TextStyle(color: Colors.grey[800])),
+                        Text("Satellietbeelden:",
+                            style: TextStyle(color: Colors.grey[800])),
                         SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                          child: Image(image: AssetImage('assets/satelite.JPG'))
-                        ),
+                            width: double.infinity,
+                            height: 250.0,
+                            // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                            child: Image(
+                                image: AssetImage('assets/satelite.JPG'))),
                         Padding(padding: EdgeInsets.all(15.0)),
                       ],
                     ),
@@ -143,39 +144,37 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-    ListView _boxItems(boxList, count) {
-    return new ListView.builder(
-      primary: false,
-      shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
-      scrollDirection: Axis.vertical,
-      itemCount: count,
-      itemBuilder: (BuildContext context, int position) {
-        return FractionalTranslation(
-            translation: Offset(0.0, 0.0),
-            child: Stack(children: <Widget>[
-              BoxUserListItem(
-                boxText: "!!!!!! needs to be replaced",
-                box: boxList[position],
-                onPressed: () {
-                  print("Show only the data from one box");
-                },
-                locationText: "Geel !!!",
-              ),
-              Positioned(
-                // Marble to show active status
-                top: 10.0,
-                right: 10.0,
-                child: Icon(Icons.brightness_1,
-                    size: 15.0,
-                    color: boxList[position].active
-                        ? Colors.green
-                        : Colors.red),
-              )
-            ]));
-      },
-    );
-  }
+ListView _boxItems(boxList, count) {
+  return new ListView.builder(
+    primary: false,
+    shrinkWrap: true,
+    physics: const AlwaysScrollableScrollPhysics(),
+    scrollDirection: Axis.vertical,
+    itemCount: count,
+    itemBuilder: (BuildContext context, int position) {
+      return FractionalTranslation(
+          translation: Offset(0.0, 0.0),
+          child: Stack(children: <Widget>[
+            BoxUserListItem(
+              boxText: "!!!!!! needs to be replaced",
+              box: boxList[position],
+              onPressed: () {
+                print("Show only the data from one box");
+              },
+              locationText: "Geel !!!",
+            ),
+            Positioned(
+              // Marble to show active status
+              top: 10.0,
+              right: 10.0,
+              child: Icon(Icons.brightness_1,
+                  size: 15.0,
+                  color: boxList[position].active ? Colors.green : Colors.red),
+            )
+          ]));
+    },
+  );
+}
 
 void _boxModal(context, boxList, count) {
   showModalBottomSheet(
@@ -190,36 +189,38 @@ void _boxModal(context, boxList, count) {
     builder: (BuildContext context) {
       return StatefulBuilder(builder: (BuildContext context,
           StateSetter setState /*You can rename this!*/) {
-        return boxList!=null ? Container(
-          height: 600,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: Column(
-              children: [
-                Text(
-                  "Boxen",
-                  style: Theme.of(context).textTheme.headline4,
+        return boxList != null
+            ? Container(
+                height: 600,
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 25),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Boxen",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      _boxItems(boxList, count),
+                    ],
+                  ),
                 ),
-                _boxItems(boxList, count),
-              ],
-            ),
-          ),
-        ) : Container(
-          height: 600,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: Column(
-              children: [
-                Text(
-                  "Geen boxen gevonden voor uw account!",
-                  style: Theme.of(context).textTheme.headline4,
+              )
+            : Container(
+                height: 600,
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 25),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Geen boxen gevonden voor uw account!",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        );
+              );
       });
     },
   );
