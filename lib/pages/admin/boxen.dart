@@ -2,6 +2,7 @@ import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
@@ -12,6 +13,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'dart:io';
+import 'package:intl/intl.dart';
 // import 'package:flutter/rendering.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
@@ -151,7 +153,7 @@ class _BoxenOverviewPage extends State {
 
     box != null
         ? showModalBottomSheet(
-            isScrollControlled: true, // Full screen height
+            // isScrollControlled: true, // Full screen height
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
                 top: Radius.circular(30),
@@ -209,17 +211,20 @@ class _BoxenOverviewPage extends State {
                               "Mac adress:\n" + box.macAddress,
                               style: TextStyle(fontSize: 18),
                             ),
+                            // Padding(padding: EdgeInsets.all(5)),
+                            // Text(
+                            //   "Locatie:\n" +
+                            //       "Harmoniestraat 44 !!!\n" +
+                            //       "2230 Ramsel",
+                            //   style: TextStyle(fontSize: 18),
+                            // ),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
-                              "Locatie:\n" +
-                                  "Harmoniestraat 44 !!!\n" +
-                                  "2230 Ramsel",
+                              "In gebruik door:",
                               style: TextStyle(fontSize: 18),
                             ),
-                            Padding(padding: EdgeInsets.all(5)),
-                            Text(
-                              "In gebruik door:\n" + "Arno Vangoetsenhoven !!!",
-                              style: TextStyle(fontSize: 18),
+                            Container(
+                              child: _userList(context, box.users),
                             ),
                             if (box.comment != null)
                               Padding(padding: EdgeInsets.all(5)),
@@ -298,31 +303,123 @@ class _BoxenOverviewPage extends State {
           );
   }
 
+  ListView _userList(context, List<User> userList) {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      // physics: const AlwaysScrollableScrollPhysics(), // new
+      scrollDirection: Axis.vertical,
+      itemCount: userList.length,
+      itemBuilder: (context, int position) {
+        return Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: GestureDetector(
+                onTap: () {
+                  print("Tapped on user");
+                },
+                child: Column(
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.perm_identity,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    userList[position].firstName +
+                                        " " +
+                                        userList[position].lastName + ":",
+                                    textAlign: TextAlign.left))),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.place,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    userList[position].address +
+                                        ",\n " +
+                                        userList[position].postalCode +
+                                        " " +
+                                        userList[position].city,
+                                    textAlign: TextAlign.left))),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+                          child: Icon(
+                            Icons.today,
+                            color: Theme.of(context).primaryColor,
+                            size: 14,
+                          ),
+                        ),
+                        Container(
+                            child: Flexible(
+                                child: Text(
+                                    DateFormat('dd/MM/yyyy – kk:mm:ss').format(
+                                            userList[position]
+                                                .boxUser
+                                                .startDate) +
+                                        (userList[position].boxUser.endDate !=
+                                                null
+                                            ? (" - \n" +
+                                                DateFormat(
+                                                        'dd/MM/yyyy – kk:mm:ss')
+                                                    .format(userList[position]
+                                                        .boxUser
+                                                        .endDate))
+                                            : "neeen"),
+                                    textAlign: TextAlign.left))),
+                      ],
+                    )
+                  ],
+                )));
+      },
+    );
+  }
+
   ListView _sensorList(context, sensorList) {
     return new ListView.builder(
       primary: false,
       shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(), // new
+      // physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
       itemCount: sensorList.length,
       itemBuilder: (context, int position) {
-        return Padding(padding: EdgeInsets.only(top: 5.0),
-          child: Row(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
-              child: Icon(
-                Icons.settings_input_hdmi,
-                color: Theme.of(context).primaryColor,
-                size: 14,
-              ),
-            ),
-            Container(
-                child: Flexible(
-                    child: Text(sensorList[position].name,
-                        textAlign: TextAlign.left))),
-          ],
-        ));
+        return Padding(
+            padding: EdgeInsets.only(top: 5.0),
+            child: Row(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+                  child: Icon(
+                    Icons.settings_input_hdmi,
+                    color: Theme.of(context).primaryColor,
+                    size: 14,
+                  ),
+                ),
+                Container(
+                    child: Flexible(
+                        child: Text(sensorList[position].name,
+                            textAlign: TextAlign.left))),
+              ],
+            ));
       },
     );
   }

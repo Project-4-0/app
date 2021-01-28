@@ -47,7 +47,7 @@ class Box {
           .map((tagJson) => Sensor.fromJsonWithout(tagJson))
           .toList(),
       users: (json['users'] as List)
-          .map((tagJson) => User.fromJsonW(tagJson))
+          .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
           .toList(), // TODO: What about boxUsers? !!!!!
     );
   }

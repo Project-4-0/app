@@ -1,5 +1,6 @@
 import 'package:b_one_project_4_0/models/userType.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/boxUser.dart';
 
 class User {
   int id;
@@ -13,6 +14,7 @@ class User {
   int userTypeID;
   UserType userType;
   List<Box> boxes;
+  BoxUser boxUser;
 
   User(
       {this.id,
@@ -25,7 +27,8 @@ class User {
       this.city,
       this.userTypeID,
       this.userType,
-      this.boxes});
+      this.boxes,
+      this.boxUser});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -72,6 +75,22 @@ class User {
       postalCode: json['PostalCode'],
       city: json['City'],
       userTypeID: json['UserTypeID'],
+    );
+  }
+
+  
+  factory User.fromJsonWithBoxUser(Map<String, dynamic> json) {
+    return User(
+      id: json['UserID'],
+      firstName: json['FirstName'],
+      lastName: json['LastName'],
+      email: json['Email'],
+      address: json['Address'],
+      postalCode: json['PostalCode'],
+      city: json['City'],
+      userTypeID: json['UserTypeID'],
+      boxUser:
+          json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
     );
   }
 
