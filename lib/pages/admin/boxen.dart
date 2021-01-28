@@ -136,7 +136,7 @@ class _BoxenOverviewPage extends State {
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
     showModalBottomSheet(
-      // isScrollControlled:true, // Full screen height
+      isScrollControlled:true, // Full screen height
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(30),
@@ -163,11 +163,13 @@ class _BoxenOverviewPage extends State {
                           CircleAvatar(
                             radius: 50.0,
                             backgroundColor: Theme.of(context).primaryColor,
-                            child: Text(box.name,
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(box.name,
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
-                          ),
+                                    fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                          )),
                           Positioned(
                             // Marble to show active status
                             top: 0.0,

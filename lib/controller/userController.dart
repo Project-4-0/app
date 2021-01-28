@@ -22,6 +22,17 @@ class UserController {
     });
   }
 
+// Create user admin
+  static Future<User> newUser(User user) async {
+    return UserApi.newUserAdmin(user).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+
   static Future<bool> login({String email, String password}) async {
     return UserApi.loginUser(email: email, password: password)
         .then((auth) async {
@@ -116,6 +127,17 @@ class UserController {
   static Future<List<UserType>> loadUserTypes() async {
     return UserTypeApi.fetchUserTypes().then((userTypeList) {
       return userTypeList;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
+  // GET userType by name
+  static Future<UserType> loadUserTypeByName(String userTypeName) async {
+    return UserTypeApi.fetchUserTypeByName(userTypeName).then((userType) {
+      return userType;
     }).catchError((error) {
       SnackBarController()
           .show(text: error.message, title: "Server", type: "ERROR");

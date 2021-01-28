@@ -1,5 +1,5 @@
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
-import 'package:b_one_project_4_0/widgets/DropDownbOne.dart';
+// import 'package:b_one_project_4_0/widgets/DropDownbOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
@@ -215,7 +215,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         ),
                         TextFieldBOne(
                           context: context,
-                          labelText: "Email",
+                          labelText: "E-mail",
                           icon: Icon(Icons.mail_outline),
                           controller: emailController,
                         ),

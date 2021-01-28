@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           TextFieldBOne(
             context: context,
-            labelText: "Email",
+            labelText: "E-mail",
             icon: Icon(Icons.mail_outline),
             controller: emailController,
           ),

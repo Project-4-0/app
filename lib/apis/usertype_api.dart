@@ -18,9 +18,19 @@ class UserTypeApi {
     }
   }
 
-  // GET: One user type
+  // GET: One user type by ID
   static Future<UserType> fetchUserType(int id) async {
     final response = await http.get(url + '/userTypes/' + id.toString());
+    if (response.statusCode == 200) {
+      return UserType.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+    // GET: One user type by NAME
+  static Future<UserType> fetchUserTypeByName(String userTypeName) async {
+    final response = await http.get(url + '/userTypes/' + userTypeName);
     if (response.statusCode == 200) {
       return UserType.fromJson(jsonDecode(response.body));
     } else {

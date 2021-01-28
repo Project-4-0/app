@@ -6,6 +6,7 @@ class User {
   String firstName;
   String lastName;
   String email;
+  String password;
   String address;
   String postalCode;
   String city;
@@ -18,6 +19,7 @@ class User {
       this.firstName,
       this.lastName,
       this.email,
+      this.password,
       this.address,
       this.postalCode,
       this.city,
@@ -78,10 +80,22 @@ class User {
         'FirstName': firstName,
         'LastName': lastName,
         'Email': email,
+        'Password': password,
         'Address': address,
         'PostalCode': postalCode,
         'City': city,
         'UserTypeID': userTypeID,
         'UserType': userType,
+      };
+
+  Map<String, dynamic> toJsonWithout() => {
+        'UserID': id,
+        'FirstName': firstName,
+        'LastName': lastName,
+        'Email': email,
+        'Password': password,
+        'Address': address,
+        'PostalCode': postalCode,
+        'City': city,
       };
 }

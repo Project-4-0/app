@@ -1,4 +1,3 @@
-
 import 'package:b_one_project_4_0/models/userRegistration.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -30,16 +29,16 @@ class UserApi {
     }
   }
 
-    // GET: One users
+  // GET: One users
   static Future<User> fetchUserWithBox(int id) async {
-    final response = await http.get(url + '/users/' + id.toString() + '/with_boxes');
+    final response =
+        await http.get(url + '/users/' + id.toString() + '/with_boxes');
     if (response.statusCode == 200) {
       return User.fromJsonWithBoxes(jsonDecode(response.body));
     } else {
       throw Exception(response.body);
     }
   }
-
 
   // static Future<User> fetchUserByEmail(String email) async {
   //   final response = await http.get(url + '/users?email=' + email);
@@ -65,8 +64,31 @@ class UserApi {
     }
   }
 
+// POST: create new user
+  static Future<User> newUserAdmin(User user) async {
+    final http.Response response = await http.post(
+      url + '/users',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user),
+    );
+    if (response.statusCode == 201) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
   static Future<User> updateUser(User user) async {
-    print(user.firstName); print(user.lastName); print(user.id); print(user.email); print(user.address); print(user.postalCode); print(user.city); print(user.userTypeID);
+    print(user.firstName);
+    print(user.lastName);
+    print(user.id);
+    print(user.email);
+    print(user.address);
+    print(user.postalCode);
+    print(user.city);
+    print(user.userTypeID);
     final http.Response response = await http.put(
       url + '/users',
       headers: <String, String>{

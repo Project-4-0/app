@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
         TextFieldBOne(
           controller: passwordController,
           context: context,
-          labelText: "wachtwoord",
+          labelText: "Wachtwoord",
           keyboardType: TextInputType.visiblePassword,
           icon: Icon(Icons.lock),
         ),
