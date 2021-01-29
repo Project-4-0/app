@@ -1,6 +1,14 @@
+
+import 'dart:async';
+
+import 'package:b_one_project_4_0/controller/measurementController.dart';
+import 'package:b_one_project_4_0/models/filterMeasurement.dart';
+import 'package:b_one_project_4_0/models/measurementGraphics.dart';
+import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
+
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
-import 'package:b_one_project_4_0/widgets/TimeSeriesChart.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
@@ -8,8 +16,14 @@ import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+
+import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
+import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
+
 import 'package:b_one_project_4_0/models/user.dart';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -17,19 +31,65 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+
+  //liveUpdate Timer
+  Timer liveUpdateTimer;
+
   List<Box> boxList = List<Box>();
+  MeasurementGraphics measurementGraphicsLicht;
+  MeasurementGraphics measurementGraphicsGeleidbaarheid;
+
+  //filter box
+  FilterMeasurement filterMeasurement = new FilterMeasurement();
+
   int count = 0;
   User user;
 
   @override
   void initState() {
     super.initState();
-    _getUser();
+    //TODO is het nodig om al de boxen te laden?
+    // _getBoxen();
+    liveUpdateTimer =
+        Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
+    _loadAllGraphics();
   }
 
-  void _getUser() {
-    // Get the current logged in user
-    UserController.loadUserWithBoxes().then((result) {
+  @override
+  void dispose() {
+    liveUpdateTimer?.cancel();
+    super.dispose();
+  }
+
+  void _loadAllGraphics() {
+    _getMeasurementGraphicLicht();
+    _getMeasurementGraphicGeleidbaarheid();
+  }
+
+  void _getMeasurementGraphicLicht() {
+    MeasurementController.loadMeasurementsGraphics("Licht", filterMeasurement)
+        .then((measurementGraphicsLicht) {
+      //get licht measurements
+      setState(() {
+        this.measurementGraphicsLicht = measurementGraphicsLicht;
+      });
+    });
+  }
+
+  void _getMeasurementGraphicGeleidbaarheid() {
+    MeasurementController.loadMeasurementsGraphics(
+            "Geleidbaarheid", filterMeasurement)
+        .then((measurementGraphicsGeleidbaarheid) {
+      //get geleidbaarheid measurements
+      setState(() {
+        this.measurementGraphicsGeleidbaarheid =
+            measurementGraphicsGeleidbaarheid;
+      });
+    });
+  }
+
+  void _getBoxen() {
+    BoxApi.fetchBoxen().then((result) {
       setState(() {
         if (result.boxes != null) {
           boxList = result.boxes;
@@ -86,37 +146,17 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.grey.shade900,
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        // Light sensor
-                        SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          child: TimeSeriesChart.withSampleData(
-                            title: "Lichthoeveelheid",
-                            animate: true,
-                            unit: "%",
-                            lineColor: Colors.green,
-                            meassureAxisValues: [0, 25, 50, 75, 100],
-                          ),
+                        StackAreacLineChartBone(
+                          measurementGraphics: this.measurementGraphicsLicht,
+                          title: "Licht",
                         ),
-                        // Temp sensor
                         SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                          child: TimeSeriesChart.withSampleData(
-                              title: "Temperatuur",
-                              animate: true,
-                              unit: "°C",
-                              lineColor: Colors.red,
-                              meassureAxisValues: [
-                                -20,
-                                -10,
-                                0,
-                                10,
-                                20,
-                                30,
-                                40
-                              ]),
+                          height: 40,
+                        ),
+                        StackAreacLineChartBone(
+                          measurementGraphics:
+                              this.measurementGraphicsGeleidbaarheid,
+                          title: "Geleidbaarheid",
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         Text("Satellietbeelden:",
@@ -142,6 +182,40 @@ class _DashboardPageState extends State<DashboardPage> {
       bottomNavigationBar: BottomAppBarBOne(),
     );
   }
+
+
+  void _filterModal(context) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return ShowModalBottomFilter(
+          endDate: this.filterMeasurement.endDate,
+          startDate: this.filterMeasurement.startDate,
+          startDateCallBack: (date) {
+            setState(() {
+              this.filterMeasurement.startDate = date;
+            });
+          },
+          endDateCallBack: (date) {
+            setState(() {
+              this.filterMeasurement.endDate = date;
+            });
+          },
+          onPressedFilter: () {
+            _loadAllGraphics();
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
 }
 
 ListView _boxItems(boxList, count) {
@@ -155,7 +229,7 @@ ListView _boxItems(boxList, count) {
       return FractionalTranslation(
           translation: Offset(0.0, 0.0),
           child: Stack(children: <Widget>[
-            BoxUserListItem(
+            BoxListItem(
               boxText: "!!!!!! needs to be replaced",
               box: boxList[position],
               onPressed: () {
@@ -189,111 +263,18 @@ void _boxModal(context, boxList, count) {
     builder: (BuildContext context) {
       return StatefulBuilder(builder: (BuildContext context,
           StateSetter setState /*You can rename this!*/) {
-        return boxList != null
-            ? Container(
-                height: 600,
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 25),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Boxen",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      _boxItems(boxList, count),
-                    ],
-                  ),
-                ),
-              )
-            : Container(
-                height: 600,
-                color: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 25),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Geen boxen gevonden voor uw account!",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                    ],
-                  ),
-                ),
-              );
-      });
-    },
-  );
-}
-
-void _filterModal(context) {
-  showModalBottomSheet(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(30),
-      ),
-    ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    backgroundColor: Colors.white,
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(builder: (BuildContext context,
-          StateSetter setState /*You can rename this!*/) {
         return Container(
           height: 600,
           color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.all(25),
+            padding: EdgeInsets.only(top: 25),
             child: Column(
               children: [
                 Text(
-                  "Filters",
+                  "Boxen",
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                Padding(padding: EdgeInsets.all(20)),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    OutlineFlatButtonBOne(
-                      text: "Begin datum",
-                      onPressed: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2222),
-                        );
-                      },
-                    ),
-                    Padding(padding: EdgeInsets.all(5)),
-                    OutlineFlatButtonBOne(
-                      text: "Eind datum",
-                      onPressed: () {
-                        showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2222),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          FlatButtonBOne(
-                            text: "Filters Toevoegen",
-                            onPressed: () {},
-                          ),
-                        ]),
-                  ),
-                )
+                _boxItems(boxList, count),
               ],
             ),
           ),

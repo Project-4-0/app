@@ -33,7 +33,7 @@ class Measurement {
       boxID: json['BoxID'],
       sensorID: json['SensorID'],
       value: json['Value'],
-      timeStamp: json['TimeStamp'],
+      timeStamp: DateTime.parse(json['TimeStamp']),
     );
   }
 
