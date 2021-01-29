@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:b_one_project_4_0/apis/user_api.dart';
+import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
+import 'package:b_one_project_4_0/pages/admin/userDetail.dart';
+import 'package:mailto/mailto.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserOverviewPage extends StatefulWidget {
   @override
@@ -11,33 +14,107 @@ class UserOverviewPage extends StatefulWidget {
 
 class _UserOverviewPage extends State {
   List<User> userList = List<User>();
-  // List userList = List();
+  List<User> originalUserList = List<User>();
+
   int count = 0;
 
   final GlobalKey<ScaffoldState> _scaffoldKeyUsers =
       new GlobalKey<ScaffoldState>();
 
+  TextEditingController searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    searchController.addListener(_searchValueChanged);
     _getUsers();
   }
 
   void _getUsers() {
-    UserApi.fetchUsers().then((result) {
-      print("Hello");
+    UserController.loadUsers().then((result) {
       setState(() {
-        userList = result;
-        count = result.length;
-        print("Count: " + count.toString());
+        originalUserList = result;
+        // Users sorted alphabetical by last name
+        originalUserList.sort((a, b) {
+          return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
+        });
+        userList = originalUserList;
+        count = userList.length;
+        print("Count users overview: " + count.toString());
       });
     });
   }
 
+  void _searchValueChanged() {
+    print("Search text: ${searchController.text}");
+    setState(() {
+      this.userList = originalUserList
+          .where((user) =>
+              user.firstName
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.lastName
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.email
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.address
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.city
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()) ||
+              user.postalCode
+                  .toLowerCase()
+                  .contains(searchController.text.toLowerCase()))
+          .toList();
+      // Users sorted alphabetical by last name
+      this.userList.sort((a, b) {
+        return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
+      });
+    });
+    print("Filtered users list length: " + userList.length.toString());
+  }
+
+  // Open mail launcher on device
+  void _launchMailto(
+      String mailaddress, String firstName, String lastName) async {
+    final mailtoLink = Mailto(
+      to: [mailaddress],
+      body: 'Geachte ' + firstName + " " + lastName + ',\n\n',
+    );
+    await launch('$mailtoLink');
+  }
+
+  // Dummy data are no real addresses!
+  static Future<void> _openGoogleMaps(
+      String address, String city, String postalcode) async {
+    String googleUrl =
+        'https://www.google.be/maps/place/$address+$postalcode+$city+Belgium/';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
 // TODO: Go to user dertail by id;
-  void _userDetail(int id) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/admin/users/1', (route) => false);
+  Future<void> _userDetail(id) async {
+    //   Navigator.pushNamedAndRemoveUntil(
+    //       context, '/admin/users/1', (route) => false);
+    if (id == null) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/admin/users/new', (route) => false);
+    } else {
+      bool result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => UserDetailPage(id)),
+      );
+      if (result == true) {
+        _getUsers();
+      }
+    }
   }
 
   @override
@@ -69,17 +146,25 @@ class _UserOverviewPage extends State {
                       onPressedRight: () {
                         // TODO: go to user detail with empty values
                         _userDetail(null);
-                        print("Pressed add user");
+                        print("Pressed add user!");
                       },
                       textRight: "Gebruiker",
                       iconRight: Icons.person_add_alt_1,
+                      controller: searchController,
                       color: Colors.grey.shade900,
                     ),
                     Padding(padding: EdgeInsets.all(10.0)),
                     Expanded(
-                      child: this.count != 0
+                      child: this.userList.length != 0
                           ? _userListItems()
-                          : Center(child: CircularProgressIndicator()),
+                          : Column(
+                              children: <Widget>[
+                                Text('Geen resultaten gevonden!'),
+                                Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              ],
+                            ),
                     ),
                   ]),
             ),
@@ -99,7 +184,7 @@ class _UserOverviewPage extends State {
       physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
       // shrinkWrap: true,
-      itemCount: count,
+      itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
         return Card(
           color: Colors.white,
@@ -137,12 +222,37 @@ class _UserOverviewPage extends State {
                           padding: EdgeInsets.all(4.0),
                         ),
                         // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
-                        Icon(Icons.mail_outline,
-                            size: 14, color: Theme.of(context).primaryColor),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on email!");
+                              _launchMailto(
+                                  this.userList[position].email.toString(),
+                                  this.userList[position].firstName,
+                                  this.userList[position].lastName);
+                            },
+                            child: Icon(Icons.mail_outline,
+                                size: 14,
+                                color: Theme.of(context).primaryColor)),
                         Padding(
                           padding: EdgeInsets.all(4.0),
                         ),
-                        Text(this.userList[position].email),
+                        SizedBox(
+                            width: 180.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                print("Tapped on email!");
+                                _launchMailto(
+                                    this.userList[position].email.toString(),
+                                    this.userList[position].firstName,
+                                    this.userList[position].lastName);
+                              },
+                              child: Text(
+                                this.userList[position].email.toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              ),
+                            )),
                       ],
                     )),
                 Align(
@@ -152,20 +262,35 @@ class _UserOverviewPage extends State {
                         Padding(
                           padding: EdgeInsets.all(4.0),
                         ),
-                        // Icon(Icons.place, size: 14, color: Colors.blue,),
-                        Icon(
-                          Icons.place,
-                          size: 14,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on location!");
+                              _openGoogleMaps(
+                                  this.userList[position].address,
+                                  this.userList[position].city,
+                                  this.userList[position].postalCode);
+                            },
+                            child: Icon(
+                              Icons.place,
+                              size: 14,
+                              color: Theme.of(context).primaryColor,
+                            )),
                         Padding(
                           padding: EdgeInsets.all(4.0),
                         ),
-                        Text(this.userList[position].address +
-                            ",\n" +
-                            this.userList[position].city +
-                            " " +
-                            this.userList[position].postalCode),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on location!");
+                              _openGoogleMaps(
+                                  this.userList[position].address,
+                                  this.userList[position].city,
+                                  this.userList[position].postalCode);
+                            },
+                            child: Text(this.userList[position].address +
+                                ",\n" +
+                                this.userList[position].city +
+                                " " +
+                                this.userList[position].postalCode))
                       ],
                     )),
               ],
@@ -176,7 +301,7 @@ class _UserOverviewPage extends State {
               tooltip: 'Open actions menu',
               onPressed: () {
                 print("Pressed trailing icon");
-                // _showMyDialog(this.userList[position]);
+                _userDetail(this.userList[position].id);
               },
             ),
             isThreeLine: true,
