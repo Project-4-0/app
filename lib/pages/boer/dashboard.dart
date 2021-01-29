@@ -172,7 +172,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 

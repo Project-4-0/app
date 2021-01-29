@@ -120,7 +120,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 

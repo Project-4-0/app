@@ -5,10 +5,10 @@ class BottomAppBarBOne extends StatelessWidget {
   const BottomAppBarBOne({
     Key key,
     // @required this.onPressedHome(),
-    // this.active,
+    @required this.active,
   }) : super(key: key);
 
-  // final String active;
+  final int active;
   // final GestureTapCallback onPressedHome;
 
   @override
@@ -32,15 +32,15 @@ class BottomAppBarBOne extends StatelessWidget {
               child: Icon(
                 Icons.home,
                 size: 30,
-                // active=="home"? (color: Theme.of(context).primaryColor) : (color: Theme.of(context).accentColor),
-                color: Theme.of(context).accentColor,
+                color: active == 1
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).accentColor,
               ),
             ),
             // Account buttton
             FlatButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, '/profile');
+                Navigator.pushNamed(context, '/profile');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(right: 60),
@@ -48,15 +48,16 @@ class BottomAppBarBOne extends StatelessWidget {
                 child: Icon(
                   Icons.account_circle,
                   size: 30,
-                  color: Theme.of(context).accentColor,
+                  color: active == 2
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).accentColor,
                 ),
               ),
             ),
             // Info button
             FlatButton(
               onPressed: () {
-                Navigator.pushNamed(
-                    context, '/info');
+                Navigator.pushNamed(context, '/info');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(left: 60),
@@ -64,7 +65,9 @@ class BottomAppBarBOne extends StatelessWidget {
                 child: Icon(
                   Icons.info,
                   size: 30,
-                  color: Theme.of(context).accentColor,
+                  color: active == 3
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).accentColor,
                 ),
               ),
             ),
@@ -77,7 +80,9 @@ class BottomAppBarBOne extends StatelessWidget {
               child: Icon(
                 Icons.exit_to_app,
                 size: 30,
-                color: Theme.of(context).accentColor,
+                color: active == 4
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).accentColor,
               ),
             ),
           ],

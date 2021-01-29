@@ -107,7 +107,7 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 }

@@ -116,7 +116,7 @@ class _InfoPageState extends State<InfoPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 3),
     );
   }
 }

@@ -153,7 +153,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 }
