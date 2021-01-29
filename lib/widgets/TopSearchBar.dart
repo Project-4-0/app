@@ -9,6 +9,7 @@ class TopSearchBar extends StatelessWidget {
     @required this.onPressedRight(),
     @required this.textRight,
     @required this.iconRight,
+    this.controller,
     this.color,
   }) : super(key: key);
 
@@ -16,6 +17,8 @@ class TopSearchBar extends StatelessWidget {
   final String textRight;
   final IconData iconRight;
   final Color color;
+
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +28,13 @@ class TopSearchBar extends StatelessWidget {
         // Searchfield
         Expanded(
             child: Padding(
-              padding: EdgeInsets.only(right: 8.0),
+                padding: EdgeInsets.only(right: 8.0),
                 child: TextFieldBOne(
-          context: context,
-          labelText: "Zoek",
-          icon: Icon(Icons.search),
-        ))),
+                  context: context,
+                  labelText: "Zoek",
+                  controller: controller,
+                  icon: Icon(Icons.search),
+                ))),
 
         IconTextLeftButton(
           text: textRight,

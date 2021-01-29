@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:intl/intl.dart';
 
-class BoxListItem extends StatelessWidget {
-  const BoxListItem({
+class BoxUserListItem extends StatelessWidget {
+  const BoxUserListItem({
     @required this.boxText,
     @required this.locationText,
     @required this.onPressed,
@@ -22,7 +22,7 @@ class BoxListItem extends StatelessWidget {
       onPressed: this.onPressed,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
         height: 80,
         width: double.infinity,
         decoration: BoxDecoration(
@@ -68,56 +68,74 @@ class BoxListItem extends StatelessWidget {
                   child: Center(
                       child: Text(box.name,
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0),
                           textAlign: TextAlign.center)),
                 )),
             SizedBox(
-              width: 15.0,
+              width: 20,
             ),
+            // Icon(
+            //   Icons.location_on,
+            //   color: Theme.of(context).accentColor,
+            // ),
+            // Text(
+            //   locationText,
+            //   style: TextStyle(color: Theme.of(context).accentColor),
+            // ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                    child: Flexible(
-                        child: Text(
-                  box.macAddress,
-                  style: TextStyle(color: Theme.of(context).accentColor),
-                  textAlign: TextAlign.left,
-                ))),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.start,
-                //   children: <Widget>[
-                //     // Icon(
-                //     //   Icons.comment,
-                //     //   color: Theme.of(context).accentColor,
-                //     // ),
-                //     Container(
-                //         child: Flexible(
-                //             child: Text(
-                //       box.macAddress,
-                //       style: TextStyle(color: Theme.of(context).accentColor),
-                //       textAlign: TextAlign.left,
-                //     ))),
-                //   ],
-                // ),
                 // Comment
-                // if (box.comment != null)
-                //   Row(
-                //     children: <Widget>[
-                //       Icon(
-                //         Icons.comment,
-                //         color: Theme.of(context).accentColor,
-                //       ),
-                //       Text(
-                //         box.comment,
-                //         style: TextStyle(color: Theme.of(context).accentColor),
-                //       ),
-                //     ],
-                //   ),
+                if (box.comment != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.comment,
+                        color: Theme.of(context).accentColor,
+                      ),
+                      Text(
+                        box.comment,
+                        style: TextStyle(color: Theme.of(context).accentColor),
+                      ),
+                    ],
+                  ),
                 SizedBox(
                   width: 5,
                 ),
+                // StartDate
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.today,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    Text(
+                      DateFormat('dd/MM/yyyy – kk:mm:ss')
+                          .format(box.boxUser.startDate),
+                      style: TextStyle(
+                          color: Theme.of(context).accentColor, fontSize: 14),
+                    ),
+                  ],
+                ),
+                // EndDate
+                if (this.box.boxUser.endDate != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.today,
+                        color: Colors.redAccent,
+                      ),
+                      Text(
+                        DateFormat('dd/MM/yyyy – kk:mm:ss')
+                            .format(box.boxUser.endDate),
+                        style: TextStyle(
+                            color: Theme.of(context).accentColor, fontSize: 14),
+                      ),
+                    ],
+                  )
               ],
             ),
           ],
