@@ -93,16 +93,19 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
     );
   }
 
-  _checkforOneGraphic() {
-    //niks
-    if (this.widget.measurementGraphics.boxes.length != 1 &&
+  // _checkforOneGraphic() {
+  //   //niks
+  //   if (this.widget.measurementGraphics.boxes.length != 1 ||
+  //       this.widget.measurementGraphics.measurementsList.length <= 0) {
+  //     return Container();
+  //   }
+  // }
+
+  _forOneGraphicTop() {
+    if (this.widget.measurementGraphics.boxes.length != 1 ||
         this.widget.measurementGraphics.measurementsList.length <= 0) {
       return Container();
     }
-  }
-
-  _forOneGraphicTop() {
-    _checkforOneGraphic();
     //get statiestiek
     List<double> result = this
         .widget
@@ -134,11 +137,11 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Min. : " + stat.min.toString(),
+              "Min. : " + stat.max.toString(),
               style: TextStyle(fontSize: 13),
             ),
             Text(
-              "Max. : " + stat.max.toString(),
+              "Max. : " + stat.min.toString(),
               style: TextStyle(fontSize: 13),
             ),
           ],
@@ -147,51 +150,7 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
     );
   }
 
-  _forOneGraphicButton() {
-    _checkforOneGraphic();
-    //get statiestiek
-    List<double> result = this
-        .widget
-        .measurementGraphics
-        .measurementsList
-        .map((e) => double.parse(e.value))
-        .toList();
-    final stats = Stats.fromSortedList(result);
-    var stat = stats.withPrecision(3);
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              "Gemiddelde: " + stat.average.toString(),
-              style: TextStyle(fontSize: 13),
-            ),
-            Text(
-              "Mediaan: " + stat.median.toString(),
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              "min: " + stat.min.toString(),
-              style: TextStyle(fontSize: 13),
-            ),
-            Text(
-              "max: " + stat.max.toString(),
-              style: TextStyle(fontSize: 13),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  _forOneGraphicButton() {}
 
   int colorCounter = 0;
   _getRadomColor() {
