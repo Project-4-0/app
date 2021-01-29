@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:b_one_project_4_0/apis/terrascope_api.dart';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
+import 'package:b_one_project_4_0/controller/terrascopeController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
+import 'package:b_one_project_4_0/models/terrascope.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
@@ -37,6 +40,9 @@ class _DashboardPageState extends State<DashboardPage> {
   MeasurementGraphics measurementGraphicsLicht;
   MeasurementGraphics measurementGraphicsGeleidbaarheid;
 
+  //Terrascope IMage
+  Terrascope terrascope = new Terrascope();
+
   //filter box
   FilterMeasurement filterMeasurement = new FilterMeasurement();
 
@@ -51,12 +57,24 @@ class _DashboardPageState extends State<DashboardPage> {
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
+
+    //get terrascope
+    _loadTerrascopeImage();
   }
 
   @override
   void dispose() {
     liveUpdateTimer?.cancel();
     super.dispose();
+  }
+
+  void _loadTerrascopeImage() {
+    //TODO Fix boxID
+    TerrascopeController.loadImage(1).then((terr) {
+      setState(() {
+        terrascope.url = terr.url;
+      });
+    });
   }
 
   void _loadAllGraphics() {
@@ -157,14 +175,18 @@ class _DashboardPageState extends State<DashboardPage> {
                           title: "Geleidbaarheid",
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        Text("Satellietbeelden:",
-                            style: TextStyle(color: Colors.grey[800])),
+                        Text(
+                          "Satellietbeeld:",
+                          style: TextStyle(fontSize: 25, color: Colors.black),
+                        ),
                         SizedBox(
-                            width: double.infinity,
-                            height: 250.0,
-                            // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                            child: Image(
-                                image: AssetImage('assets/satelite.JPG'))),
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+                          child: _loadImage(),
+                        ),
                         Padding(padding: EdgeInsets.all(15.0)),
                       ],
                     ),
@@ -178,6 +200,17 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBarBOne(),
+    );
+  }
+
+  _loadImage() {
+    if (this.terrascope.url == null) {
+      return Text("loading Image");
+    }
+
+    return Image.network(
+      this.terrascope.url,
+      alignment: Alignment.center,
     );
   }
 
