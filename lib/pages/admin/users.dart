@@ -104,8 +104,8 @@ class _UserOverviewPage extends State {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
     if (id == null) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/admin/users/new', (route) => false);
+      Navigator.pushNamed(
+          context, '/admin/users/new');
     } else {
       bool result = await Navigator.push(
         context,

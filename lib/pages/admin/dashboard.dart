@@ -53,8 +53,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                 child: DashboardButtonsOverview(
                                   text: "Gebruikers",
                                   onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/admin/users', (route) => false);
+                                    Navigator.pushNamed(
+                                        context, '/admin/users');
                                     print("Go to user overview");
                                   },
                                   icon: Icons.group,
@@ -65,8 +65,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                 child: DashboardButtonsOverview(
                                   text: "Boxen",
                                   onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/admin/boxen', (route) => false);
+                                    Navigator.pushNamed(
+                                        context, '/admin/boxen');
                                     print("Go to box overview");
                                   },
                                   icon: Icons.widgets,
@@ -86,8 +86,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                 child: DashboardButtonsOverview(
                                   text: "Koppelen",
                                   onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/connect', (route) => false);
+                                    Navigator.pushNamed(
+                                        context, '/connect');
                                     print("Go to connect box with user");
                                   },
                                   icon: Icons.link,

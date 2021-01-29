@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class BottomAppBarBOne extends StatelessWidget {
   const BottomAppBarBOne({
     Key key,
+    // @required this.onPressedHome(),
     // this.active,
   }) : super(key: key);
 
   // final String active;
+  // final GestureTapCallback onPressedHome;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class BottomAppBarBOne extends StatelessWidget {
             // Home buttton
             FlatButton(
               onPressed: () {
+                // Go to the general dashboard. This wil route you to the correct user type dashboard!
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/dashboard', (route) => false);
               },
@@ -36,8 +39,8 @@ class BottomAppBarBOne extends StatelessWidget {
             // Account buttton
             FlatButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/profile', (route) => false);
+                Navigator.pushNamed(
+                    context, '/profile');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(right: 60),
@@ -52,8 +55,8 @@ class BottomAppBarBOne extends StatelessWidget {
             // Info button
             FlatButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/info', (route) => false);
+                Navigator.pushNamed(
+                    context, '/info');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(left: 60),
@@ -103,7 +106,7 @@ class FloatingActionButtonBOne extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(context, '/info', (route) => false);
+          Navigator.pushNamed(context, '/info');
         },
       ),
     );

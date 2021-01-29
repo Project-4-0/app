@@ -3,16 +3,12 @@ import 'dart:async';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
-import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
 
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
-import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
-import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBone.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
-import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 
@@ -22,7 +18,6 @@ import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart
 import 'package:b_one_project_4_0/models/user.dart';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
