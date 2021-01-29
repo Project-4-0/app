@@ -7,6 +7,9 @@ import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
+import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/models/box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +23,14 @@ class MonteurConnectedPage extends StatefulWidget {
 
 class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   int activeStep = 0; // Initial step set to 5.
+  List<Box> boxList = List<Box>();
+  List<Box> originalBoxList = List<Box>();
+
+
+  Box selectedBox; 
+
+    TextEditingController searchBoxController = TextEditingController();
+
 
   // Must be used to control the upper bound of the activeStep variable. Please see next button below the build() method!
   int upperBound = 0;
@@ -40,6 +51,48 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     } else if (Platform.isIOS) {
       controller.resumeCamera();
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    searchBoxController.addListener(_searchBoxValueChanged);
+  }
+
+    void _searchBoxValueChanged() {
+    print("Box search text field: ${searchBoxController.text}");
+    setState(() {
+      this.boxList = originalBoxList
+          .where((box) => box.name
+              .toLowerCase()
+              .contains(searchBoxController.text.toLowerCase()))
+          .toList();
+      this.boxList.sort((a, b) {
+        return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      });
+    });
+    print("Filtered box list length: " + boxList.length.toString());
+  }
+
+
+
+
+    void _getBoxes() {
+      print("Get boxes!");
+      // Pause the camera when te mannualy search modal is opened
+            controller.pauseCamera();
+
+    BoxController.loadBoxes().then((result) {
+      setState(() {
+        originalBoxList = result;
+        originalBoxList.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        boxList = originalBoxList;
+      });
+      // Open the modal
+      _searchBoxModal(context);  
+    });
   }
 
   @override
@@ -128,7 +181,9 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   Widget nextButton() {
     return FlatButtonBOne(
       text: "Volgend",
-      onPressed: () {
+      onPressed: this.activeStep==0&&selectedBox==null ? null
+      :
+      () {
         if (activeStep < upperBound) {
           setState(() {
             activeStep++;
@@ -142,7 +197,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   Widget previousButton() {
     return FlatButtonBOne(
       text: "Terug",
-      onPressed: () {
+      onPressed: this.activeStep==0 ? null : () {
         if (activeStep > 0) {
           setState(() {
             activeStep--;
@@ -195,9 +250,34 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     child: FlatButtonBOne(
                       minWidth: double.infinity,
                       text: "Handmatig zoeken",
-                      onPressed: null,
+                      onPressed: () {
+print("Box handmatig zoeken");
+_getBoxes(); // Get all the boxes to search manually and open the search modal
+},
                     ),
                   ),
+                  if(this.selectedBox!=null)
+                  Column(
+                    children: [
+          Padding(padding: EdgeInsets.only(top: 30)),
+          Text("Geselcteerde box:"),
+                                BoxListItem(
+                boxText: "",
+                box: selectedBox,
+                onPressed: null,
+                locationText: "",
+              ),
+                         IconButton(
+          icon: Icon(Icons.delete, color: Colors.red),
+          onPressed: () {
+            print("DeleteSelectedBox!");
+                setState(() {
+this.selectedBox = null;
+    });
+          },
+        ),
+                    ]
+                  )
                 ],
               ),
             ),
@@ -334,4 +414,123 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     controller.dispose();
     super.dispose();
   }
+
+    // Detail modal of a box with all information
+  void _searchBoxModal(context) {
+print("Search box modal");
+print("Search box modal boxlist length = " + this.boxList.length.toString());
+         Future<void> future = showModalBottomSheet<void>(
+          
+            // isScrollControlled: true, // Full screen height
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Colors.white,
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return SingleChildScrollView(
+                    child: Container(
+                  // height: 900,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
+                    child: Column(
+                      children: [
+                                          Text(
+                    'Zoek box',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                        Padding(padding: EdgeInsets.all(20)),
+                                Container(height: 100.0,
+            child: Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: TextFieldBOne(
+                  context: context,
+                  labelText: "Zoek een box",
+                  textInputAction: TextInputAction.done,
+                  controller: searchBoxController,
+                  icon: Icon(Icons.search),
+                ))),
+                Text("Gevonden boxen (" + this.boxList.length.toString() + "/" + this.originalBoxList.length.toString() + "):"),
+                        Container( child: this.boxList.length != 0
+                          ? _boxListItems()
+                          : Column(
+                              children: <Widget>[
+                                Text('Geen resultaten gevonden!'),
+                                Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              ],
+                            ),
+                        ),
+                        Padding(padding: EdgeInsets.all(20)),
+                        // Values of box
+                      ],
+                    ),
+                  ),
+                ));
+              });
+            },
+
+          );
+              future.then((void value) => _closeModal(value));
+
+  }
+
+  void _closeModal(void value) {
+    print('modal closed');
+    // Resume the camera when the modal is closed
+          controller.resumeCamera();
+
+}
+
+  ListView _boxListItems() {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(), // new
+      scrollDirection: Axis.vertical,
+      // shrinkWrap: true,
+      itemCount: this.boxList.length,
+      itemBuilder: (BuildContext context, int position) {
+        return FractionalTranslation(
+            translation: Offset(0.0, 0.0),
+            child: Stack(children: <Widget>[
+              BoxListItem(
+                boxText: "",
+                box: this.boxList[position],
+                onPressed: () {
+                  print("Selected box with id: " + this.boxList[position].id.toString());
+    setState(() {
+this.selectedBox = this.boxList[position];
+    });
+    Navigator.pop(context);
+                },
+                locationText: "Geel !!!",
+              ),
+              Positioned(
+                // Marble to show active status
+                top: 10.0,
+                right: 10.0,
+                child: Icon(Icons.brightness_1,
+                    size: 15.0,
+                    color: this.boxList[position].active
+                        ? Colors.green
+                        : Colors.red),
+              )
+            ]));
+      },
+    );
+  }
+
 }

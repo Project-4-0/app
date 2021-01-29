@@ -172,7 +172,9 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 
@@ -266,7 +268,10 @@ void _boxModal(context, boxList, count) {
                   "Boxen",
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                _boxItems(boxList, count),
+                count == 0
+                    ? Center(
+                        child: Text("Geen boxen gevonden voor uw account!"))
+                    : _boxItems(boxList, count),
               ],
             ),
           ),
