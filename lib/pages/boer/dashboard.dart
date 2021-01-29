@@ -89,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _getBoxen() {
-    BoxApi.fetchBoxen().then((result) {
+    UserController.loadUserWithBoxes().then((result) {
       setState(() {
         if (result.boxes != null) {
           boxList = result.boxes;
