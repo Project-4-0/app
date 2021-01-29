@@ -151,11 +151,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         SizedBox(
                           height: 40,
                         ),
-                        // StackAreacLineChartBone(
-                        //   measurementGraphics:
-                        //       this.measurementGraphicsGeleidbaarheid,
-                        //   title: "Geleidbaarheid",
-                        // ),
+                        StackAreacLineChartBone(
+                          measurementGraphics:
+                              this.measurementGraphicsGeleidbaarheid,
+                          title: "Geleidbaarheid",
+                        ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         Text("Satellietbeelden:",
                             style: TextStyle(color: Colors.grey[800])),

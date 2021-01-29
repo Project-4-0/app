@@ -13,7 +13,9 @@ class Sensor {
         id: json['SensorID'],
         name: json['Name'],
         sensorTypeID: json['SensorTypeID'],
-        sensorType: SensorType.fromJson(json['SensorType']));
+        sensorType: json['SensorType'] == null
+            ? null
+            : SensorType.fromJson(json['SensorType']));
   }
 
   factory Sensor.fromJsonWithout(Map<String, dynamic> json) {

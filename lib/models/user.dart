@@ -58,7 +58,7 @@ class User {
       userTypeID: json['UserTypeID'],
       userType:
           json['UserType'] == null ? null : UserType.fromJson(json['UserType']),
-      boxes: (json['boxes'] as List)
+      boxes: json['boxes'] == null ? null : (json['boxes'] as List)
           .map((tagJson) => Box.fromJson(tagJson))
           .toList(),
     );

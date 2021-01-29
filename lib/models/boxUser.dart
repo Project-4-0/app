@@ -27,8 +27,8 @@ class BoxUser {
         // startDate: json['StartDate'],
         startDate: DateTime.tryParse(json['StartDate']),
         endDate: DateTime.tryParse(json['EndDate']),
-        user: User.fromJson(json['User']),
-        box: Box.fromJson(json['Box']));
+        user: json['User'] == null ? null : User.fromJson(json['User']),
+        box: json['Box'] == null ? null : Box.fromJson(json['Box']));
   }
 
   // Without extra tables included
@@ -37,7 +37,7 @@ class BoxUser {
         id: json['BoxUserID'],
         boxID: json['BoxID'],
         userID: json['UserID'],
-        startDate: DateTime.tryParse(json['StartDate']),
+        startDate: json['StartDate'] == null ? null : DateTime.tryParse(json['StartDate']),
         endDate: json['EndDate'] == null ? null : DateTime.tryParse(json['EndDate']));
   }
 

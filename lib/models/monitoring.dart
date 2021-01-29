@@ -25,7 +25,7 @@ class Monitoring {
         sdCapacity: json['SDCapacity'],
         batteryStatus: json['BatteryStatus'],
         batteryPercentage: json['BatteryPercentage'],
-        box: Box.fromJson(json['Box']));
+        box: json['Box'] == null ? null : Box.fromJson(json['Box']));
   }
 
   // Without extra tables included

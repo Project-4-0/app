@@ -24,9 +24,10 @@ class Location {
       boxUserID: json['BoxUserID'],
       latitude: json['Latitude'],
       longitude: json['Longitude'],
-      startDate: json['StartDate'],
-      endDate: json['EndDate'],
-      boxUser: BoxUser.fromJson(json['BoxUser']),
+      startDate: json['StartDate'] == null ? null : json['StartDate'],
+      endDate: json['EndDate'] == null ? null : json['EndDate'],
+      boxUser:
+          json['BoxUser'] == null ? null : BoxUser.fromJson(json['BoxUser']),
     );
   }
 
@@ -37,8 +38,8 @@ class Location {
         boxUserID: json['BoxUserID'],
         latitude: json['Latitude'],
         longitude: json['Longitude'],
-        startDate: json['StartDate'],
-        endDate: json['EndDate']);
+        startDate: json['StartDate'] == null ? null : json['StartDate'],
+        endDate: json['EndDate'] == null ? null : json['EndDate']);
   }
 
   Map<String, dynamic> toJson() => {
