@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:b_one_project_4_0/controller/measurementController.dart';
@@ -31,7 +30,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
   //liveUpdate Timer
   Timer liveUpdateTimer;
 
@@ -49,7 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     //TODO is het nodig om al de boxen te laden?
-    // _getBoxen();
+    _getBoxen();
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
@@ -89,7 +87,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _getBoxen() {
-    BoxApi.fetchBoxen().then((result) {
+    UserController.loadUserWithBoxes().then((result) {
       setState(() {
         if (result.boxes != null) {
           boxList = result.boxes;
@@ -153,11 +151,11 @@ class _DashboardPageState extends State<DashboardPage> {
                         SizedBox(
                           height: 40,
                         ),
-                        StackAreacLineChartBone(
-                          measurementGraphics:
-                              this.measurementGraphicsGeleidbaarheid,
-                          title: "Geleidbaarheid",
-                        ),
+                        // StackAreacLineChartBone(
+                        //   measurementGraphics:
+                        //       this.measurementGraphicsGeleidbaarheid,
+                        //   title: "Geleidbaarheid",
+                        // ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         Text("Satellietbeelden:",
                             style: TextStyle(color: Colors.grey[800])),
@@ -182,7 +180,6 @@ class _DashboardPageState extends State<DashboardPage> {
       bottomNavigationBar: BottomAppBarBOne(),
     );
   }
-
 
   void _filterModal(context) {
     showModalBottomSheet(
@@ -229,7 +226,7 @@ ListView _boxItems(boxList, count) {
       return FractionalTranslation(
           translation: Offset(0.0, 0.0),
           child: Stack(children: <Widget>[
-            BoxListItem(
+            BoxUserListItem(
               boxText: "!!!!!! needs to be replaced",
               box: boxList[position],
               onPressed: () {
