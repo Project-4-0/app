@@ -22,8 +22,8 @@ class Measurement {
         boxID: json['BoxID'],
         sensorID: json['SensorID'],
         value: json['Value'],
-        timeStamp: json['TimeStamp'],
-        sensorBox: SensorBox.fromJson(json['SensorBox']));
+        timeStamp: json['TimeStamp'] == null ? null : DateTime.parse(json['TimeStamp']),
+        sensorBox: json['SensorBox'] == null ? null : SensorBox.fromJson(json['SensorBox']));
   }
 
   // Without extra tables included
@@ -33,7 +33,7 @@ class Measurement {
       boxID: json['BoxID'],
       sensorID: json['SensorID'],
       value: json['Value'],
-      timeStamp: DateTime.parse(json['TimeStamp']),
+      timeStamp: json['TimeStamp'] == null ? null : DateTime.parse(json['TimeStamp']),
     );
   }
 

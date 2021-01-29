@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:b_one_project_4_0/controller/measurementController.dart';
@@ -31,7 +30,6 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-
   //liveUpdate Timer
   Timer liveUpdateTimer;
 
@@ -49,7 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     //TODO is het nodig om al de boxen te laden?
-    // _getBoxen();
+    _getBoxen();
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
@@ -183,7 +181,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-
   void _filterModal(context) {
     showModalBottomSheet(
       shape: RoundedRectangleBorder(
@@ -229,7 +226,7 @@ ListView _boxItems(boxList, count) {
       return FractionalTranslation(
           translation: Offset(0.0, 0.0),
           child: Stack(children: <Widget>[
-            BoxListItem(
+            BoxUserListItem(
               boxText: "!!!!!! needs to be replaced",
               box: boxList[position],
               onPressed: () {

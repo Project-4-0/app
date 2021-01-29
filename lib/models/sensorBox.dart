@@ -11,7 +11,7 @@ class SensorBox {
     return SensorBox(
         boxID: json['BoxID'],
         sensorID: json['SensorID'],
-        box: Box.fromJson(json['Box']));
+        box: json['Box'] == null ? null : Box.fromJson(json['Box']));
   }
 
   Map<String, dynamic> toJson() => {

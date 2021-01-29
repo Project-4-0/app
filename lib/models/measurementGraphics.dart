@@ -12,12 +12,16 @@ class MeasurementGraphics {
 
   factory MeasurementGraphics.fromJson(Map<String, dynamic> json) {
     return MeasurementGraphics(
-      measurementsList: (json['Measurements'] as List)
-          .map((tagJson) => Measurement.fromJson(tagJson))
-          .toList(),
-      boxes: (json['Boxes'] as List)
-          .map((tagJson) => Box.fromJson(tagJson))
-          .toList(),
+      measurementsList: json['Measurements'] == null
+          ? null
+          : (json['Measurements'] as List)
+              .map((tagJson) => Measurement.fromJson(tagJson))
+              .toList(),
+      boxes: json['Boxes'] == null
+          ? null
+          : (json['Boxes'] as List)
+              .map((tagJson) => Box.fromJson(tagJson))
+              .toList(),
     );
   }
 
