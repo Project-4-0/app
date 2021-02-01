@@ -1,15 +1,9 @@
 /*
-Usercontroller
+BoxController
 */
 import 'package:b_one_project_4_0/apis/box_api.dart';
-import 'package:b_one_project_4_0/apis/usertype_api.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
-import 'package:b_one_project_4_0/models/userType.dart';
-import 'package:b_one_project_4_0/models/userRegistration.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'authController.dart';
 
 class BoxController {
   // All boxes

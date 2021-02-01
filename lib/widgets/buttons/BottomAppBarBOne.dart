@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 
-//Navigation bar widget
+// Navigation bar widget
 class BottomAppBarBOne extends StatelessWidget {
   const BottomAppBarBOne({
     Key key,
-    // @required this.onPressedHome(),
     @required this.active,
   }) : super(key: key);
 
   final int active;
-  // final GestureTapCallback onPressedHome;
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
+return BottomAppBar(
       elevation: 50,
       notchMargin: 15.0,
       shape: CircularNotchedRectangle(),
@@ -111,7 +109,8 @@ class FloatingActionButtonBOne extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamed(context, '/info');
+                          Navigator.pushNamedAndRemoveUntil(
+                    context, '/info', (route) => false);
         },
       ),
     );

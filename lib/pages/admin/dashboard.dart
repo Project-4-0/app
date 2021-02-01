@@ -87,24 +87,12 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                   text: "Koppelen",
                                   onPressed: () {
                                     Navigator.pushNamed(
-                                        context, '/connect');
+                                        context, '/monteur/connected');
                                     print("Go to connect box with user");
                                   },
                                   icon: Icons.link,
                                 ),
                               ),
-                              // Padding(padding: EdgeInsets.all(5.0)),
-                              // Expanded(
-                              //   child: DashboardButtonsOverview(
-                              //     text: "Boxen",
-                              //     onPressed: () {
-                              //       Navigator.pushNamedAndRemoveUntil(
-                              //           context, '/boxen', (route) => false);
-                              //       print("Go to box overview");
-                              //     },
-                              //     icon: Icons.widgets,
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),

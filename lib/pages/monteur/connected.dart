@@ -11,8 +11,10 @@ import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/UserListItem.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
+import 'package:b_one_project_4_0/pages/monteur/newUser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +42,8 @@ bool barcodeFound;
 
     TextEditingController searchBoxController = TextEditingController();
     TextEditingController searchUserController = TextEditingController();
+
+    TextEditingController boxCommentController = TextEditingController();
 
 
   // Must be used to control the upper bound of the activeStep variable. Please see next button below the build() method!
@@ -77,6 +81,22 @@ bool barcodeFound;
       print("Get boxes!");
       // Pause the camera when te mannualy search modal is opened
             controller.pauseCamera();
+
+    BoxController.loadBoxes().then((result) {
+      setState(() {
+        originalBoxList = result;
+        originalBoxList.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        boxList = originalBoxList;
+      });
+      // Open the modal
+      _searchBoxModal(context);  
+    });
+  }
+
+    void _connectBoxUser() {
+      print("Connect the selected box with the selected user");
 
     BoxController.loadBoxes().then((result) {
       setState(() {
@@ -160,10 +180,53 @@ bool barcodeFound;
     BoxController.loadBoxWithMacAddress(macAddress).then((result) {
       setState(() {
         this.selectedBox = result;
+        this.boxCommentController.text = result.comment;
+          SnackBarController().show(
+            text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
+            title: "Box geselecteerd",
+            type: "INFO");
       });
 
     });
   }
+
+
+      void _createBoxUser() {
+      print("Create the box - user relation");
+
+    UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id).then((result) {
+          if (activeStep < upperBound && result!=null) {
+            SnackBarController().show(
+            text:  this.selectedUser.firstName + " " + this.selectedUser.lastName + " is gekoppeld met: " + this.selectedBox.name + "!",
+            title: "Koppelen",
+            type: "GOOD");
+          setState(() {
+            activeStep++;
+          });
+      }
+    });
+  }
+
+
+  Future<void> _registerNewUser() async {
+        User result = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NewUserMonteurPage()),
+      );
+      if (result!=null) {
+        print("Back from new user monteur");
+        print("Result name:" + result.firstName);
+              setState(() {
+this.selectedUser = result;
+                  SnackBarController().show(
+            text:  "De nieuwe gebruiker: \"" + this.selectedUser.firstName + " " + this.selectedUser.lastName + "\" is geselecteerd om te koppelen",
+            title: "Gebruiker geselecteerd",
+            type: "INFO");
+      });
+      }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -224,17 +287,6 @@ bool barcodeFound;
                     },
                   ),
                   header(),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      previousButton(),
-                      nextButton(),
-                    ],
-                  ),
                 ],
               ),
             ),
@@ -250,26 +302,37 @@ bool barcodeFound;
   /// Returns the next button.
   Widget nextButton() {
     return FlatButtonBOne(
-      text: "Volgend",
-      // onPressed: this.activeStep==0&&selectedBox==null ? null
-      // :
-      // () {
-      //   if (activeStep < upperBound) {
-      //     setState(() {
-      //       activeStep++;
-      //     });
-      //   }
-      // },
-            onPressed: 
+      text: "Volgende",
+      // onPressed: () => switchNextButton(),
+      onPressed: (this.activeStep==0 && this.selectedBox==null) ? null
+      : (this.activeStep==1 && this.selectedUser==null) ? null : 
       () {
-                if (activeStep == 0) {
-controller.pauseCamera();
-        }
         if (activeStep < upperBound) {
           setState(() {
             activeStep++;
           });
         }
+      },
+//             onPressed: 
+//       () {
+//                 if (activeStep == 0) {
+// controller.pauseCamera();
+//         }
+//         if (activeStep < upperBound) {
+//           setState(() {
+//             activeStep++;
+//           });
+//         }
+//       },
+    );
+  }
+
+    /// Create the userBox
+  Widget createButton() {
+    return FlatButtonBOne(
+      text: "Koppelen",
+      onPressed: () {
+        _createBoxUser();
       },
     );
   }
@@ -296,7 +359,6 @@ controller.pauseCamera();
   // Returns the header text based on the activeStep.
   Widget headerText() {
     switch (activeStep) {
-      //TODO handmatig add modal
       case 0:
         return Column(
           children: [
@@ -328,7 +390,7 @@ controller.pauseCamera();
                     ),
                   ),
                   Expanded(
-                    flex: 1,
+                    // flex: 1,
                     child: FlatButtonBOne(
                       minWidth: double.infinity,
                       text: "Handmatig zoeken",
@@ -342,7 +404,7 @@ _getBoxes(); // Get all the boxes to search manually and open the search modal
                   Column(
                     children: [
           Padding(padding: EdgeInsets.only(top: 30)),
-          Text("Geselcteerde box:"),
+          Text("Geselecteerde box:"),
                                 BoxListItem(
                 boxText: "",
                 box: selectedBox,
@@ -355,7 +417,13 @@ _getBoxes(); // Get all the boxes to search manually and open the search modal
             print("DeleteSelectedBox!");
                 setState(() {
 this.selectedBox = null;
-this.barcodeFound = false;    });
+this.boxCommentController.text = null;
+this.barcodeFound = false;    
+});
+          SnackBarController().show(
+            text:  "Selecteer een nieuwe box om te koppelen",
+            title: "Selecteer box",
+            type: "INFO");
           },
         ),
                     ]
@@ -363,6 +431,17 @@ this.barcodeFound = false;    });
                 ],
               ),
             ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      previousButton(),
+                      nextButton(),
+                    ],
+                  ),
           ],
         );
         // Gebruiker
@@ -380,9 +459,12 @@ this.barcodeFound = false;    });
               ),
               DashboardButtonsOverview(
                 minWidth: double.infinity,
-                text: "Registeren",
-                onPressed: () {},
-                icon: Icons.group,
+                text: "Registreren",
+                onPressed: () {
+                  print("Add new user");
+                  _registerNewUser();
+                },
+                icon: Icons.group_add,
               ),
               SizedBox(
                 height: 30,
@@ -397,31 +479,43 @@ this.barcodeFound = false;    });
                 },
                 icon: Icons.group,
               ),
-              SizedBox(
-                height: 30,
-              ),
               if(this.selectedUser!=null)
                 Column(
                   children: [
-          Padding(padding: EdgeInsets.only(top: 30)),
-          Text("Geselcteerde gebruiker:"),
-                                BoxListItem(
-                boxText: "",
-                box: selectedBox,
+          Padding(padding: EdgeInsets.only(top: 20)),
+          Text("Geselecteerde gebruiker:"),
+          UserListItem(
+                user: selectedUser,
+                showTrailingIcon: false,
                 onPressed: null,
-                locationText: "",
               ),
-                         IconButton(
+          IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
           onPressed: () {
-            print("DeleteSelectedBox!");
+            print("DeleteSelectedUser!");
                 setState(() {
-this.selectedBox = null;
-this.barcodeFound = false;    });
+this.selectedUser = null;
+    });
+    // !!!!!!!!!!!!!!!!!!!!!
+                      SnackBarController().show(
+            text:  "Selecteer of registreer een gerbuiker om te koppelen",
+            title: "Selecteer gebruiker",
+            type: "INFO");
           },
         ),
                     ]
-                  )
+                  ),
+                                    SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      previousButton(),
+                      nextButton(),
+                    ],
+                  ),
             ],
           ),
         );
@@ -429,35 +523,63 @@ this.barcodeFound = false;    });
       case 2:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Column(
+          child: this.selectedBox!=null&&this.selectedUser!=null ? Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
                 "Bevestigen",
                 style: Theme.of(context).textTheme.bodyText2,
-              ),
-              CardBOne(
-                child: Text("Box"),
-              ),
-              CardBOne(
-                child: Text("User"),
+                textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 30,
               ),
+              Text("Box:", textAlign: TextAlign.left),
+              BoxListItem(
+                boxText: "",
+                box: this.selectedBox,
+                onPressed: null,
+                locationText: "Geel !!!",
+              ),
+              SizedBox(
+                height: 10,
+              ),
               TextFieldBOne(
                 context: context,
-                labelText: "Opmerkingen",
+                icon: Icon(Icons.insert_comment),
+                labelText: "Opmerking:",
+                controller: boxCommentController,
                 keyboardType: TextInputType.multiline,
-                maxLength: 100,
+                maxLength: 200,
               ),
+              SizedBox(
+                height: 10,
+              ),
+              Text("Gebruiker:", textAlign: TextAlign.left),
+              UserListItem(
+                user: this.selectedUser,
+                showTrailingIcon: false,
+                onPressed: null,
+              ),
+              SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      previousButton(),
+                      createButton(),
+                    ],
+                  ),
             ],
-          ),
+          ) : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
-// Confirmation
+      // Confirmation
       case 3:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Column(
+          child: this.selectedBox!=null&&this.selectedUser!=null ? Column(
             children: [
               Text(
                 "Final",
@@ -469,17 +591,38 @@ this.barcodeFound = false;    });
                 size: 300,
               ),
               Text(
-                "De gegevens zijn succesvol opgeslagen",
+                "De gegevens zijn succesvol opgeslagen!",
                 style: TextStyle(
                   fontSize: 20,
                 ),
+              textAlign: TextAlign.center,
               ),
+              SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+Expanded(child: FlatButtonBOne(
+      text: "Dashboard",
+      onPressed: () {
+          Navigator.pushNamedAndRemoveUntil(
+                    context, '/dashboard', (route) => false);
+          setState(() {
+            activeStep = 0;
+          });
+        
+      },
+    )),
+                    ],
+                  ),
             ],
-          ),
+          ) : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
 
       default:
-        return Text("ok");
+        return Text("Er ging iets mis!");
     }
   }
 
@@ -528,6 +671,35 @@ this.barcodeFound = false;    });
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  void switchNextButton() {
+
+   switch(activeStep){
+    case 0:
+      print('Case: 0');
+      if(this.selectedBox==null){
+        return null;
+      }
+      return null;
+      break;
+    
+    case 1:
+      print('Case: 1');
+      break;
+
+    case 2 :
+      print('Case: 2');
+      break;
+
+    case 3 :
+      print('Case: 3');
+      break;
+
+    default:
+      print('Case: default');
+
+   }
   }
 
     // Detail modal of a box with all information
@@ -632,7 +804,13 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
                   print("Selected box with id: " + this.boxList[position].id.toString());
     setState(() {
 this.selectedBox = this.boxList[position];
+        this.boxCommentController.text = this.boxList[position].comment;
+
     });
+              SnackBarController().show(
+            text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
+            title: "Box geselecteerd",
+            type: "INFO");
     Navigator.pop(context);
                 },
                 locationText: "Geel !!!",
@@ -735,11 +913,16 @@ print("Search user modal userlist length = " + this.boxList.length.toString());
       itemBuilder: (BuildContext context, int position) {
 return               UserListItem(
                 user: this.userList[position],
+                showTrailingIcon: true,
                 onPressed: () {
                   print("Selected user with id: " + this.userList[position].id.toString());
     setState(() {
 this.selectedUser = this.userList[position];
     });
+                  SnackBarController().show(
+            text:  "De gebruiker: \"" + this.selectedUser.firstName + " " + this.selectedUser.lastName + "\" is geselecteerd om te koppelen",
+            title: "Gebruiker geselecteerd",
+            type: "INFO");
     Navigator.pop(context);
                 },
               );

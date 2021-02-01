@@ -8,11 +8,13 @@ class UserListItem extends StatelessWidget {
   const UserListItem({
     @required this.user,
     @required this.onPressed,
+    @required this.showTrailingIcon,
     Key key,
   }) : super(key: key);
 
   final User user;
   final GestureTapCallback onPressed;
+  final bool showTrailingIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class UserListItem extends StatelessWidget {
                           padding: EdgeInsets.all(4.0),
                         ),
                         SizedBox(
-                            width: 170.0,
+                            width: showTrailingIcon ? 170.0 : 190.0,
                             child: GestureDetector(
                               onTap: () {
                                 print("Tapped on email!");
@@ -125,11 +127,12 @@ class UserListItem extends StatelessWidget {
                     )),
               ],
             ),
-            trailing: IconButton(
+            
+            trailing: showTrailingIcon ? IconButton(
               icon: Icon(Icons.navigate_next),
               color: Theme.of(context).accentColor,
       onPressed: this.onPressed,
-            ),
+            ) : null,
             isThreeLine: true,
             // subtitle: Text(this.user.email),
             onTap: this.onPressed,
