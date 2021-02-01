@@ -411,19 +411,21 @@ _getBoxes(); // Get all the boxes to search manually and open the search modal
                 onPressed: null,
                 locationText: "",
               ),
-                         IconButton(
+          IconButton(
           icon: Icon(Icons.delete, color: Colors.red),
           onPressed: () {
             print("DeleteSelectedBox!");
-                setState(() {
-this.selectedBox = null;
-this.boxCommentController.text = null;
-this.barcodeFound = false;    
-});
-          SnackBarController().show(
-            text:  "Selecteer een nieuwe box om te koppelen",
-            title: "Selecteer box",
-            type: "INFO");
+            setState(() {
+              this.selectedBox = null;
+              this.boxCommentController.text = null;
+              this.barcodeFound = false;  
+            });
+            // controller.resumeCamera();
+            SnackBarController().show(
+              text:  "Selecteer een nieuwe box om te koppelen",
+              title: "Selecteer box",
+              type: "INFO");
+            controller.resumeCamera();
           },
         ),
                     ]
@@ -496,7 +498,6 @@ this.barcodeFound = false;
                 setState(() {
 this.selectedUser = null;
     });
-    // !!!!!!!!!!!!!!!!!!!!!
                       SnackBarController().show(
             text:  "Selecteer of registreer een gerbuiker om te koppelen",
             title: "Selecteer gebruiker",
@@ -770,19 +771,22 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
             },
 
           );
-              future.then((void value) => _closeModal(value));
+              future.then((void value) => _closeModalBox(value));
 
   }
 
-  void _closeModal(void value) {
-    print('modal closed');
+  void _closeModalBox(void value) {
+    print('BoxModal closed');
 
-    // Resume the camera when the modal is closed (on first step)
-    if(this.activeStep == 0){
+    // Resume the camera when the modal is closed (on first step) if there is no selected box
+    if(this.activeStep == 0 && this.selectedBox==null){
+      print("Resume the camera");
           controller.resumeCamera();
-
     }
+}
 
+  void _closeModalUser(void value) {
+    print('UserModal closed');
 }
 
   ListView _boxListItems() {
@@ -801,17 +805,18 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
                 boxText: "",
                 box: this.boxList[position],
                 onPressed: () {
+                  // !!!!!
                   print("Selected box with id: " + this.boxList[position].id.toString());
-    setState(() {
-this.selectedBox = this.boxList[position];
-        this.boxCommentController.text = this.boxList[position].comment;
-
-    });
-              SnackBarController().show(
-            text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
-            title: "Box geselecteerd",
-            type: "INFO");
-    Navigator.pop(context);
+                  setState(() {
+                    this.selectedBox = this.boxList[position];
+                    this.boxCommentController.text = this.boxList[position].comment;
+                  });
+                  controller.pauseCamera();
+                  Navigator.pop(context);
+                  SnackBarController().show(
+                    text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
+                    title: "Box geselecteerd",
+                    type: "INFO");
                 },
                 locationText: "Geel !!!",
               ),
@@ -899,7 +904,7 @@ print("Search user modal userlist length = " + this.boxList.length.toString());
             },
 
           );
-              future.then((void value) => _closeModal(value));
+              future.then((void value) => _closeModalUser(value));
   }
 
     ListView _userListItems() {
@@ -919,11 +924,12 @@ return               UserListItem(
     setState(() {
 this.selectedUser = this.userList[position];
     });
-                  SnackBarController().show(
+    Navigator.pop(context);
+          SnackBarController().show(
             text:  "De gebruiker: \"" + this.selectedUser.firstName + " " + this.selectedUser.lastName + "\" is geselecteerd om te koppelen",
             title: "Gebruiker geselecteerd",
             type: "INFO");
-    Navigator.pop(context);
+    
                 },
               );
       },
