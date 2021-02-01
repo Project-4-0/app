@@ -13,8 +13,8 @@ class TerrascopeController {
     return TerrascopeAPI.fetchUrl(id).then((terrascope) {
       return terrascope;
     }).catchError((error) {
-      SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+      // SnackBarController()
+      //     .show(text: error.message, title: "Server", type: "ERROR");
       return null;
     });
   }

@@ -15,7 +15,7 @@ class MeasurementController {
     var us = (await AuthController.getUser());
 
     return MeasurementApi.fetchMeasurementsGraphics(
-            11, sensorTypeName, filterMeasurement)
+            us.id, sensorTypeName, filterMeasurement)
         .then((measurementGraphics) {
       return measurementGraphics;
     }).catchError((error) {
