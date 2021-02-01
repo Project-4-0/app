@@ -45,9 +45,6 @@ class _DashboardPageState extends State<DashboardPage> {
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
-
-    //get terrascope
-    _loadTerrascopeImage();
   }
 
   @override
@@ -57,11 +54,18 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _loadTerrascopeImage() {
-    //TODO Fix boxID
-    TerrascopeController.loadImage(1).then((terr) {
-      setState(() {
-        terrascope.url = terr.url;
-      });
+    terrascope.url = null;
+    terrascope.loading = true;
+    TerrascopeController.loadImage(filterMeasurement.boxID).then((terr) {
+      if (terr == null) {
+        setState(() {
+          terrascope.loading = false;
+        });
+      } else {
+        setState(() {
+          terrascope.url = terr.url;
+        });
+      }
     });
   }
 
@@ -71,6 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
     });
 
     _loadAllGraphics();
+    _loadTerrascopeImage();
   }
 
   void _loadAllGraphics() {
@@ -106,7 +111,6 @@ class _DashboardPageState extends State<DashboardPage> {
         if (result.boxes != null) {
           boxList = result.boxes;
           count = result.boxes.length;
-          print("Count: " + count.toString());
         }
       });
     });
@@ -211,8 +215,11 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _loadImage() {
-    if (this.terrascope.url == null) {
-      return Text("loading Image");
+    if (this.terrascope.loading == false) {
+      return Text("Geen satellietbeeld gevonden");
+    }
+    if (this.terrascope.url == null && this.terrascope.loading == true) {
+      return Text("Loading Image");
     }
 
     return Image.network(
