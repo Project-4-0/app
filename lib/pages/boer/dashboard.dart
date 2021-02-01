@@ -65,6 +65,14 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
+  void _setFilterBoxen(Box box) {
+    setState(() {
+      filterMeasurement.boxID = box.id;
+    });
+
+    _loadAllGraphics();
+  }
+
   void _loadAllGraphics() {
     _getMeasurementGraphicLicht();
     _getMeasurementGraphicGeleidbaarheid();
@@ -162,20 +170,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               this.measurementGraphicsGeleidbaarheid,
                           title: "Geleidbaarheid",
                         ),
-                        Padding(padding: EdgeInsets.all(15.0)),
-                        Text(
-                          "Satellietbeeld:",
-                          style: TextStyle(fontSize: 25, color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                          child: _loadImage(),
-                        ),
-                        Padding(padding: EdgeInsets.all(15.0)),
+                        _satellietbeeld(),
                       ],
                     ),
                   ),
@@ -188,6 +183,30 @@ class _DashboardPageState extends State<DashboardPage> {
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBarBOne(),
+    );
+  }
+
+  _satellietbeeld() {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1) {
+      return Container();
+    }
+    return Column(
+      children: [
+        Padding(padding: EdgeInsets.all(15.0)),
+        Text(
+          "Satellietbeeld:",
+          style: TextStyle(fontSize: 25, color: Colors.black),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: double.infinity,
+          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
+          child: _loadImage(),
+        ),
+        Padding(padding: EdgeInsets.all(15.0)),
+      ],
     );
   }
 
@@ -234,70 +253,73 @@ class _DashboardPageState extends State<DashboardPage> {
       },
     );
   }
-}
 
-ListView _boxItems(boxList, count) {
-  return new ListView.builder(
-    primary: false,
-    shrinkWrap: true,
-    physics: const AlwaysScrollableScrollPhysics(),
-    scrollDirection: Axis.vertical,
-    itemCount: count,
-    itemBuilder: (BuildContext context, int position) {
-      return FractionalTranslation(
-          translation: Offset(0.0, 0.0),
-          child: Stack(children: <Widget>[
-            BoxUserListItem(
-              boxText: "!!!!!! needs to be replaced",
-              box: boxList[position],
-              onPressed: () {
-                print("Show only the data from one box");
-              },
-              locationText: "Geel !!!",
-            ),
-            Positioned(
-              // Marble to show active status
-              top: 10.0,
-              right: 10.0,
-              child: Icon(Icons.brightness_1,
-                  size: 15.0,
-                  color: boxList[position].active ? Colors.green : Colors.red),
-            )
-          ]));
-    },
-  );
-}
+  ListView _boxItems(boxList, count) {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(),
+      scrollDirection: Axis.vertical,
+      itemCount: count,
+      itemBuilder: (BuildContext context, int position) {
+        return FractionalTranslation(
+            translation: Offset(0.0, 0.0),
+            child: Stack(children: <Widget>[
+              BoxUserListItem(
+                boxText: "!!!!!! needs to be replaced",
+                box: boxList[position],
+                onPressed: () {
+                  _setFilterBoxen(boxList[position]);
+                  Navigator.pop(context);
+                  // print("Show only the data from one box");
+                },
+                locationText: "Geel !!!",
+              ),
+              Positioned(
+                // Marble to show active status
+                top: 10.0,
+                right: 10.0,
+                child: Icon(Icons.brightness_1,
+                    size: 15.0,
+                    color:
+                        boxList[position].active ? Colors.green : Colors.red),
+              )
+            ]));
+      },
+    );
+  }
 
-void _boxModal(context, boxList, count) {
-  showModalBottomSheet(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(
-        top: Radius.circular(30),
+  void _boxModal(context, boxList, count) {
+    showModalBottomSheet(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
       ),
-    ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    backgroundColor: Colors.white,
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(builder: (BuildContext context,
-          StateSetter setState /*You can rename this!*/) {
-        return Container(
-          height: 600,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: Column(
-              children: [
-                Text(
-                  "Boxen",
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                _boxItems(boxList, count),
-              ],
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (BuildContext context,
+            StateSetter setState /*You can rename this!*/) {
+          return Container(
+            height: 600,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.only(top: 25),
+              child: Column(
+                children: [
+                  Text(
+                    "Boxen",
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  _boxItems(boxList, count),
+                ],
+              ),
             ),
-          ),
-        );
-      });
-    },
-  );
+          );
+        });
+      },
+    );
+  }
 }
