@@ -27,6 +27,25 @@ class BoxApi {
     }
   }
 
+    // GET: One box by macAddress
+  static Future<Box> fetchBoxByMacAddress(String macAddress) async {
+          final http.Response response = await http.post(
+      url + '/boxes/macAddress',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+      'MacAddress': macAddress,
+    }),
+    );
+    if (response.statusCode == 200) {
+      return Box.fromJsonW(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+
   // GET: One box with ALL info
   static Future<Box> fetchBoxAll(int id) async {
     final response = await http.get(url + '/boxes/' + id.toString() + '/all');

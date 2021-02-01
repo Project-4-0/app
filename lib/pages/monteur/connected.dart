@@ -9,12 +9,16 @@ import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart'
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mailto/mailto.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MonteurConnectedPage extends StatefulWidget {
   @override
@@ -25,11 +29,16 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   int activeStep = 0; // Initial step set to 5.
   List<Box> boxList = List<Box>();
   List<Box> originalBoxList = List<Box>();
+    List<User> userList = List<User>();
+  List<User> originalUserList = List<User>();
 
+bool barcodeFound;
 
   Box selectedBox; 
+  User selectedUser; 
 
     TextEditingController searchBoxController = TextEditingController();
+    TextEditingController searchUserController = TextEditingController();
 
 
   // Must be used to control the upper bound of the activeStep variable. Please see next button below the build() method!
@@ -56,7 +65,28 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   @override
   void initState() {
     super.initState();
+    this.barcodeFound = false;
+    // _getUsers();
     searchBoxController.addListener(_searchBoxValueChanged);
+    searchUserController.addListener(_searchUserValueChanged);
+  }
+
+    void _getBoxes() {
+      print("Get boxes!");
+      // Pause the camera when te mannualy search modal is opened
+            controller.pauseCamera();
+
+    BoxController.loadBoxes().then((result) {
+      setState(() {
+        originalBoxList = result;
+        originalBoxList.sort((a, b) {
+          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        });
+        boxList = originalBoxList;
+      });
+      // Open the modal
+      _searchBoxModal(context);  
+    });
   }
 
     void _searchBoxValueChanged() {
@@ -74,24 +104,64 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     print("Filtered box list length: " + boxList.length.toString());
   }
 
-
-
-
-    void _getBoxes() {
-      print("Get boxes!");
+      void _getUsers() {
+      print("Get users!");
       // Pause the camera when te mannualy search modal is opened
             controller.pauseCamera();
-
-    BoxController.loadBoxes().then((result) {
+    UserController.loadUsers().then((result) {
       setState(() {
-        originalBoxList = result;
-        originalBoxList.sort((a, b) {
-          return a.name.toLowerCase().compareTo(b.name.toLowerCase());
+        originalUserList = result;
+        originalUserList.sort((a, b) {
+          return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
         });
-        boxList = originalBoxList;
+        userList = originalUserList;
       });
       // Open the modal
-      _searchBoxModal(context);  
+      _searchUserModal(context);  
+    });
+  }
+
+      void _searchUserValueChanged() {
+    print("User search text field: ${searchUserController.text}");
+    setState(() {
+      this.userList = originalUserList
+          .where((user) =>
+              user.firstName
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()) ||
+              user.lastName
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()) ||
+              user.email
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()) ||
+              user.address
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()) ||
+              user.city
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()) ||
+              user.postalCode
+                  .toLowerCase()
+                  .contains(searchUserController.text.toLowerCase()))
+          .toList();
+      // Users sorted alphabetical by last name
+      this.userList.sort((a, b) {
+        return a.lastName.toLowerCase().compareTo(b.lastName.toLowerCase());
+      });
+    });
+    print("Filtered user list length: " + userList.length.toString());
+  }
+
+      void _searchBoxByMacAddress(String macAddress) {
+      print("Search box by mac!");
+            // controller.pauseCamera();
+
+    BoxController.loadBoxWithMacAddress(macAddress).then((result) {
+      setState(() {
+        this.selectedBox = result;
+      });
+
     });
   }
 
@@ -181,8 +251,16 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   Widget nextButton() {
     return FlatButtonBOne(
       text: "Volgend",
-      onPressed: this.activeStep==0&&selectedBox==null ? null
-      :
+      // onPressed: this.activeStep==0&&selectedBox==null ? null
+      // :
+      // () {
+      //   if (activeStep < upperBound) {
+      //     setState(() {
+      //       activeStep++;
+      //     });
+      //   }
+      // },
+            onPressed: 
       () {
         if (activeStep < upperBound) {
           setState(() {
@@ -237,7 +315,8 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        if (result != null)
+                        if (result != null && this.barcodeFound)
+                        // Macaddress
                           Text(
                               'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
                         else
@@ -273,7 +352,7 @@ _getBoxes(); // Get all the boxes to search manually and open the search modal
             print("DeleteSelectedBox!");
                 setState(() {
 this.selectedBox = null;
-    });
+this.barcodeFound = false;    });
           },
         ),
                     ]
@@ -307,7 +386,11 @@ this.selectedBox = null;
               DashboardButtonsOverview(
                 minWidth: double.infinity,
                 text: "Gebruiker zoeken",
-                onPressed: () {},
+                onPressed: () {
+                  print("Search user modal");
+                  _getUsers();
+                  // _searchUserModal(context);
+                },
                 icon: Icons.group,
               ),
               SizedBox(
@@ -403,9 +486,15 @@ this.selectedBox = null;
       this.controller = controller;
     });
     controller.scannedDataStream.listen((scanData) {
+      print("Scanned Data Stream!");
       setState(() {
+            this.barcodeFound = true;
         result = scanData;
       });
+      if(this.barcodeFound && this.selectedBox==null){
+        // Search the box with the found MacAddress
+        _searchBoxByMacAddress(scanData.code);
+      }
     });
   }
 
@@ -420,7 +509,7 @@ this.selectedBox = null;
 print("Search box modal");
 print("Search box modal boxlist length = " + this.boxList.length.toString());
          Future<void> future = showModalBottomSheet<void>(
-          
+        
             // isScrollControlled: true, // Full screen height
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -532,5 +621,242 @@ this.selectedBox = this.boxList[position];
       },
     );
   }
+
+
+   // Modal to search users
+  void _searchUserModal(context) {
+print("Search user modal");
+print("Search user modal userlist length = " + this.boxList.length.toString());
+         Future<void> future = showModalBottomSheet<void>(
+          
+            // isScrollControlled: true, // Full screen height
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(30),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            backgroundColor: Colors.white,
+            context: context,
+            builder: (BuildContext context) {
+              return StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return SingleChildScrollView(
+                    child: Container(
+                  // height: 900,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
+                    child: Column(
+                      children: [
+                                          Text(
+                    'Zoek gebruiker',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                        Padding(padding: EdgeInsets.all(20)),
+                                Container(height: 100.0,
+            child: Padding(
+                padding: EdgeInsets.only(right: 8.0),
+                child: TextFieldBOne(
+                  context: context,
+                  labelText: "Zoek een gebruiker",
+                  textInputAction: TextInputAction.done,
+                  controller: searchUserController,
+                  icon: Icon(Icons.search),
+                ))),
+                Text("Gevonden gebruikers (" + this.userList.length.toString() + "/" + this.originalUserList.length.toString() + "):"),
+                        Container( child: this.userList.length != 0
+                          ? _userListItems()
+                          : Column(
+                              children: <Widget>[
+                                Text('Geen resultaten gevonden!'),
+                                Expanded(
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
+                              ],
+                            ),
+                        ),
+                        Padding(padding: EdgeInsets.all(20)),
+                        // Values of box
+                      ],
+                    ),
+                  ),
+                ));
+              });
+            },
+
+          );
+              future.then((void value) => _closeModal(value));
+  }
+
+    ListView _userListItems() {
+    return new ListView.builder(
+      primary: false,
+      shrinkWrap: true,
+      physics: const AlwaysScrollableScrollPhysics(), // new
+      scrollDirection: Axis.vertical,
+      // shrinkWrap: true,
+      itemCount: this.userList.length,
+      itemBuilder: (BuildContext context, int position) {
+        return Card(
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Show the first letter of the last name
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Text(
+                      this.userList[position].firstName.substring(0, 1) +
+                          this.userList[position].lastName.substring(0, 1),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            title: Text(
+              this.userList[position].firstName +
+                  " " +
+                  this.userList[position].lastName,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor),
+            ),
+            subtitle: Column(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(4.0),
+                        ),
+                        // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on email!");
+                              _launchMailto(
+                                  this.userList[position].email.toString(),
+                                  this.userList[position].firstName,
+                                  this.userList[position].lastName);
+                            },
+                            child: Icon(Icons.mail_outline,
+                                size: 14,
+                                color: Theme.of(context).primaryColor)),
+                        Padding(
+                          padding: EdgeInsets.all(4.0),
+                        ),
+                        SizedBox(
+                            width: 170.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                print("Tapped on email!");
+                                _launchMailto(
+                                    this.userList[position].email.toString(),
+                                    this.userList[position].firstName,
+                                    this.userList[position].lastName);
+                              },
+                              child: Text(
+                                this.userList[position].email.toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              ),
+                            )),
+                      ],
+                    )),
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(4.0),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on location!");
+                              _openGoogleMaps(
+                                  this.userList[position].address,
+                                  this.userList[position].city,
+                                  this.userList[position].postalCode);
+                            },
+                            child: Icon(
+                              Icons.place,
+                              size: 14,
+                              color: Theme.of(context).primaryColor,
+                            )),
+                        Padding(
+                          padding: EdgeInsets.all(4.0),
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on location!");
+                              _openGoogleMaps(
+                                  this.userList[position].address,
+                                  this.userList[position].city,
+                                  this.userList[position].postalCode);
+                            },
+                            child: Text(this.userList[position].address +
+                                ",\n" +
+                                this.userList[position].city +
+                                " " +
+                                this.userList[position].postalCode))
+                      ],
+                    )),
+              ],
+            ),
+            trailing: IconButton(
+              icon: Icon(Icons.navigate_next),
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                print("Select this user");
+                    setState(() {
+this.selectedUser = this.userList[position];
+      });
+              },
+            ),
+            isThreeLine: true,
+            // subtitle: Text(this.userList[position].email),
+            onTap: () {
+              debugPrint("Tapped on " + this.userList[position].id.toString());
+              print("Select this user");
+                    setState(() {
+this.selectedUser = this.userList[position];
+      });
+            },
+          ),
+        );
+      },
+    );
+  }
+
+    static Future<void> _openGoogleMaps(
+      String address, String city, String postalcode) async {
+    String googleUrl =
+        'https://www.google.be/maps/place/$address+$postalcode+$city+Belgium/';
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
+    // Open mail launcher on device
+  void _launchMailto(
+      String mailaddress, String firstName, String lastName) async {
+    final mailtoLink = Mailto(
+      to: [mailaddress],
+      body: 'Geachte ' + firstName + " " + lastName + ',\n\n',
+    );
+    await launch('$mailtoLink');
+  }
+
 
 }

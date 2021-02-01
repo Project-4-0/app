@@ -34,6 +34,17 @@ class BoxController {
     });
   }
 
+    // One box by macAddress
+  static Future<Box>loadBoxWithMacAddress(String macAddress) async {
+    return BoxApi.fetchBoxByMacAddress(macAddress).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
   // One box with all information
   static Future<Box> loadBoxAll(int id) async {
     return BoxApi.fetchBoxAll(id).then((box) {
