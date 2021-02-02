@@ -48,7 +48,6 @@ class _NewUserMonteurPageState extends State<NewUserMonteurPage> {
     // );
   }
 
-
   _saveNewUserPofile() {
     print("SaveUserProfile");
     // Set User with new values
@@ -64,7 +63,7 @@ class _NewUserMonteurPageState extends State<NewUserMonteurPage> {
     UserController.newUser(this.user).then((response) {
       if (response != null) {
         // Navigate back to the connect page
-          Navigator.pop(context, this.user);
+        Navigator.pop(context, this.user);
         SnackBarController().show(
             text: "Nieuwe gebruiker \'" +
                 response.firstName +
@@ -195,13 +194,12 @@ class _NewUserMonteurPageState extends State<NewUserMonteurPage> {
                           height: 20,
                         ),
                         FlatButtonBOne(
-                          minWidth: double.infinity,
-                          text: "Opslaan",
-onPressed: () {
-  print("Save user");
-  _saveNewUserPofile();
-}
-                        ),
+                            minWidth: double.infinity,
+                            text: "Opslaan",
+                            onPressed: () {
+                              print("Save user");
+                              _saveNewUserPofile();
+                            }),
                       ],
                     ),
             ),
@@ -210,7 +208,9 @@ onPressed: () {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 }

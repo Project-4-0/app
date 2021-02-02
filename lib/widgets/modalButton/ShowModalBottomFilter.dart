@@ -126,7 +126,7 @@ class _ShowModalBottomFilterState extends State<ShowModalBottomFilter> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 5,
+                            flex: 4,
                             child: FlatButtonBOne(
                               text: "Filters Toevoegen",
                               onPressed: widget.onPressedFilter,

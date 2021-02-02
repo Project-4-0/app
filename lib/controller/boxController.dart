@@ -28,8 +28,8 @@ class BoxController {
     });
   }
 
-    // One box by macAddress
-  static Future<Box>loadBoxWithMacAddress(String macAddress) async {
+  // One box by macAddress
+  static Future<Box> loadBoxWithMacAddress(String macAddress) async {
     return BoxApi.fetchBoxByMacAddress(macAddress).then((box) {
       return box;
     }).catchError((error) {
@@ -44,8 +44,8 @@ class BoxController {
     return BoxApi.fetchBoxAll(id).then((box) {
       return box;
     }).catchError((error) {
-      SnackBarController()
-          .show(text: "Kan box info niet ophalen!", title: "Server", type: "ERROR");
+      SnackBarController().show(
+          text: "Kan box info niet ophalen!", title: "Server", type: "ERROR");
       return null;
     });
   }
