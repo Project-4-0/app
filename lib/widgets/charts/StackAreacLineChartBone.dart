@@ -102,7 +102,10 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
   }
 
   _forOneGraphicTop() {
-    _checkforOneGraphic();
+    if (this.widget.measurementGraphics.boxes.length != 1 ||
+        this.widget.measurementGraphics.measurementsList.length <= 0) {
+      return Container();
+    }
     //get statiestiek
     List<double> result = this
         .widget
