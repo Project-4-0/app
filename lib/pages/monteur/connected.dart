@@ -61,9 +61,9 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     super.reassemble();
     print("Reassemble");
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller?.pauseCamera();
     } else if (Platform.isIOS) {
-      controller.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
@@ -79,7 +79,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   void _getBoxes() {
     print("Get boxes!");
     // Pause the camera when te mannualy search modal is opened
-    controller.pauseCamera();
+    controller?.pauseCamera();
 
     BoxController.loadBoxes().then((result) {
       setState(() {
@@ -174,7 +174,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
 
   void _searchBoxByMacAddress(String macAddress) {
     print("Search box by mac!");
-    // controller.pauseCamera();
+    // controller?.pauseCamera();
 
     BoxController.loadBoxWithMacAddress(macAddress).then((result) {
       setState(() {
@@ -326,7 +326,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
 //             onPressed:
 //       () {
 //                 if (activeStep == 0) {
-// controller.pauseCamera();
+// controller?.pauseCamera();
 //         }
 //         if (activeStep < upperBound) {
 //           setState(() {
@@ -428,15 +428,18 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                           print("DeleteSelectedBox!");
                           setState(() {
                             this.selectedBox = null;
-                            this.boxCommentController.text = null;
-                            this.barcodeFound = false;
+                            // this.boxCommentController.text = null;
+                            // this.barcodeFound = false;
                           });
-                          // controller.resumeCamera();
-                          SnackBarController().show(
-                              text: "Selecteer een nieuwe box om te koppelen",
-                              title: "Selecteer box",
-                              type: "INFO");
-                          controller.resumeCamera();
+                          // controller?.resumeCamera();
+                          // SnackBarController().show(
+                          //     text: "Selecteer een nieuwe box om te koppelen",
+                          //     title: "Selecteer box",
+                          //     type: "INFO");
+                          controller?.pauseCamera();
+                          controller?.resumeCamera();
+                          // reassemble();
+                          // dispose();
                         },
                       ),
                     ])
@@ -796,7 +799,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     // Resume the camera when the modal is closed (on first step) if there is no selected box
     if (this.activeStep == 0 && this.selectedBox == null) {
       print("Resume the camera");
-      controller.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
@@ -828,7 +831,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     this.boxCommentController.text =
                         this.boxList[position].comment;
                   });
-                  controller.pauseCamera();
+                  controller?.pauseCamera();
                   Navigator.pop(context);
                   SnackBarController().show(
                       text: "De box: \"" +
