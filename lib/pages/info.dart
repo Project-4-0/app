@@ -82,7 +82,7 @@ class _InfoPageState extends State<InfoPage> {
                                 color: Theme.of(context).primaryColor,
                               ),
                               Text(
-                                "0473 73 18 51",
+                                "+32 14 33 55 11",
                                 style: TextStyle(fontSize: 20),
                               ),
                             ],
