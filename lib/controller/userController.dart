@@ -169,8 +169,8 @@ class UserController {
   }
 
   static Future<String> endBoxSubscription(int userID, int boxID) async {
-    return UserApi.endBoxSubscription(userID, boxID).then((result) {
-      return result["message"];
+    return UserApi.endBoxSubscription(userID, boxID).then((message) {
+      return message;
     }).catchError((error) {
       SnackBarController()
           .show(text: error.message, title: "Server", type: "ERROR");

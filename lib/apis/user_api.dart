@@ -144,7 +144,7 @@ class UserApi {
     }
   }
 
-  static Future<dynamic> endBoxSubscription(int userID, int boxID) async {
+  static Future<String> endBoxSubscription(int userID, int boxID) async {
     final http.Response response = await http.post(
       url + '/users/delete_box',
       headers: <String, String>{
@@ -154,7 +154,7 @@ class UserApi {
       body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
     );
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      return jsonDecode(response.body)["message"];
     } else {
       throw Exception(response.body);
     }

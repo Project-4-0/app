@@ -111,15 +111,17 @@ class _UserDetailPageState extends State<UserDetailPage> {
     UserController.endBoxSubscription(this.user.id, boxID).then((result) {
       print("Result: " + result.toString());
       SnackBarController().show(
-          text: "Box succesvol onrkoppeld van \'" +
+          text: result=="Ontkoppeld" ?  "Box succesvol ontkoppeld van \'" +
               this.user.firstName +
               " " +
               this.user.lastName +
-              "\'",
+              "\'" : "Box ontkoppelen is mislukt.\nProbeer later eens opnieuw.",
           title: result,
-          type: "GOOD");
+          type: result=="Ontkoppeld" ? "GOOD" : "ERROR");
       // Rerender the user information
       _getUser(this.id);
+      // Clear the list duplicates will be added
+      this.userTypeNameList.clear();
       _getAllUserTypes();
     });
   }
@@ -272,6 +274,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         SizedBox(
                           height: 20,
                         ),
+                        if(userTypeNameList!=null)                     
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[

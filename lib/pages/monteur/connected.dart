@@ -613,17 +613,20 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     //     "Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.",
                     //     textAlign: TextAlign.justify,
                     //     style: TextStyle(fontWeight: FontWeight.w400)),
-                  FlatButton(
-  onPressed: () {
-    showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialogLocatie(context),
-            );
-  },
-  child: Text(
-    "Meer info over automatische locatie", style: TextStyle(color: Colors.blue, fontSize: 16,) 
-  ),
-),
+                    FlatButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildPopupDialogLocatie(context),
+                        );
+                      },
+                      child: Text("Meer info over automatische locatie",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 16,
+                          )),
+                    ),
 
                     DashboardButtonsOverview(
                       minWidth: double.infinity,
@@ -818,36 +821,36 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   }
 
   Widget _buildPopupDialogLocatie(BuildContext context) {
-  return new AlertDialog(
-    title: const Text('Automatische locatie'),
-    content: new Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-                            Text(
-                        "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(fontWeight: FontWeight.w400)),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                        "Ga op de plaats van de box staan en houd uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling te verkrijgen.",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(fontWeight: FontWeight.w400)),
-      ],
-    ),
-    actions: <Widget>[
-      new FlatButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        textColor: Theme.of(context).primaryColor,
-        child: const Text('Close'),
+    return new AlertDialog(
+      title: const Text('Automatische locatie'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+              "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontWeight: FontWeight.w400)),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+              "Ga op de plaats van de box staan en houd uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling te verkrijgen.",
+              textAlign: TextAlign.justify,
+              style: TextStyle(fontWeight: FontWeight.w400)),
+        ],
       ),
-    ],
-  );
-}
+      actions: <Widget>[
+        new FlatButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          textColor: Theme.of(context).primaryColor,
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
 
   //QRCODE CAMERA
   Widget _buildQrView(BuildContext context) {
