@@ -32,19 +32,18 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   int activeStep = 0; // Initial step set to 5.
   List<Box> boxList = List<Box>();
   List<Box> originalBoxList = List<Box>();
-    List<User> userList = List<User>();
+  List<User> userList = List<User>();
   List<User> originalUserList = List<User>();
 
-bool barcodeFound;
+  bool barcodeFound;
 
-  Box selectedBox; 
-  User selectedUser; 
+  Box selectedBox;
+  User selectedUser;
 
-    TextEditingController searchBoxController = TextEditingController();
-    TextEditingController searchUserController = TextEditingController();
+  TextEditingController searchBoxController = TextEditingController();
+  TextEditingController searchUserController = TextEditingController();
 
-    TextEditingController boxCommentController = TextEditingController();
-
+  TextEditingController boxCommentController = TextEditingController();
 
   // Must be used to control the upper bound of the activeStep variable. Please see next button below the build() method!
   int upperBound = 0;
@@ -62,9 +61,9 @@ bool barcodeFound;
     super.reassemble();
     print("Reassemble");
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller?.pauseCamera();
     } else if (Platform.isIOS) {
-      controller.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
@@ -77,10 +76,10 @@ bool barcodeFound;
     searchUserController.addListener(_searchUserValueChanged);
   }
 
-    void _getBoxes() {
-      print("Get boxes!");
-      // Pause the camera when te mannualy search modal is opened
-            controller.pauseCamera();
+  void _getBoxes() {
+    print("Get boxes!");
+    // Pause the camera when te mannualy search modal is opened
+    controller?.pauseCamera();
 
     BoxController.loadBoxes().then((result) {
       setState(() {
@@ -91,12 +90,12 @@ bool barcodeFound;
         boxList = originalBoxList;
       });
       // Open the modal
-      _searchBoxModal(context);  
+      _searchBoxModal(context);
     });
   }
 
-    void _connectBoxUser() {
-      print("Connect the selected box with the selected user");
+  void _connectBoxUser() {
+    print("Connect the selected box with the selected user");
 
     BoxController.loadBoxes().then((result) {
       setState(() {
@@ -107,11 +106,11 @@ bool barcodeFound;
         boxList = originalBoxList;
       });
       // Open the modal
-      _searchBoxModal(context);  
+      _searchBoxModal(context);
     });
   }
 
-    void _searchBoxValueChanged() {
+  void _searchBoxValueChanged() {
     print("Box search text field: ${searchBoxController.text}");
     setState(() {
       this.boxList = originalBoxList
@@ -126,8 +125,8 @@ bool barcodeFound;
     print("Filtered box list length: " + boxList.length.toString());
   }
 
-      void _getUsers() {
-      print("Get users!");
+  void _getUsers() {
+    print("Get users!");
     UserController.loadUsers().then((result) {
       setState(() {
         originalUserList = result;
@@ -137,11 +136,11 @@ bool barcodeFound;
         userList = originalUserList;
       });
       // Open the modal
-      _searchUserModal(context);  
+      _searchUserModal(context);
     });
   }
 
-      void _searchUserValueChanged() {
+  void _searchUserValueChanged() {
     print("User search text field: ${searchUserController.text}");
     setState(() {
       this.userList = originalUserList
@@ -173,60 +172,67 @@ bool barcodeFound;
     print("Filtered user list length: " + userList.length.toString());
   }
 
-      void _searchBoxByMacAddress(String macAddress) {
-      print("Search box by mac!");
-            // controller.pauseCamera();
+  void _searchBoxByMacAddress(String macAddress) {
+    print("Search box by mac!");
+    // controller?.pauseCamera();
 
     BoxController.loadBoxWithMacAddress(macAddress).then((result) {
       setState(() {
         this.selectedBox = result;
         this.boxCommentController.text = result.comment;
-          SnackBarController().show(
-            text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
+        SnackBarController().show(
+            text: "De box: \"" +
+                this.selectedBox.name +
+                "\" is geselecteerd om te koppelen",
             title: "Box geselecteerd",
             type: "INFO");
       });
-
     });
   }
 
+  void _createBoxUser() {
+    print("Create the box - user relation");
 
-      void _createBoxUser() {
-      print("Create the box - user relation");
-
-    UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id).then((result) {
-          if (activeStep < upperBound && result!=null) {
-            SnackBarController().show(
-            text:  this.selectedUser.firstName + " " + this.selectedUser.lastName + " is gekoppeld met: " + this.selectedBox.name + "!",
+    UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id)
+        .then((result) {
+      if (activeStep < upperBound && result != null) {
+        SnackBarController().show(
+            text: this.selectedUser.firstName +
+                " " +
+                this.selectedUser.lastName +
+                " is gekoppeld met: " +
+                this.selectedBox.name +
+                "!",
             title: "Koppelen",
             type: "GOOD");
-          setState(() {
-            activeStep++;
-          });
+        setState(() {
+          activeStep++;
+        });
       }
     });
   }
 
-
   Future<void> _registerNewUser() async {
-        User result = await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NewUserMonteurPage()),
-      );
-      if (result!=null) {
-        print("Back from new user monteur");
-        print("Result name:" + result.firstName);
-              setState(() {
-this.selectedUser = result;
-                  SnackBarController().show(
-            text:  "De nieuwe gebruiker: \"" + this.selectedUser.firstName + " " + this.selectedUser.lastName + "\" is geselecteerd om te koppelen",
+    User result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NewUserMonteurPage()),
+    );
+    if (result != null) {
+      print("Back from new user monteur");
+      print("Result name:" + result.firstName);
+      setState(() {
+        this.selectedUser = result;
+        SnackBarController().show(
+            text: "De nieuwe gebruiker: \"" +
+                this.selectedUser.firstName +
+                " " +
+                this.selectedUser.lastName +
+                "\" is geselecteerd om te koppelen",
             title: "Gebruiker geselecteerd",
             type: "INFO");
       });
-      }
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +301,9 @@ this.selectedUser = result;
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 
@@ -304,19 +312,21 @@ this.selectedUser = result;
     return FlatButtonBOne(
       text: "Volgende",
       // onPressed: () => switchNextButton(),
-      onPressed: (this.activeStep==0 && this.selectedBox==null) ? null
-      : (this.activeStep==1 && this.selectedUser==null) ? null : 
-      () {
-        if (activeStep < upperBound) {
-          setState(() {
-            activeStep++;
-          });
-        }
-      },
-//             onPressed: 
+      onPressed: (this.activeStep == 0 && this.selectedBox == null)
+          ? null
+          : (this.activeStep == 1 && this.selectedUser == null)
+              ? null
+              : () {
+                  if (activeStep < upperBound) {
+                    setState(() {
+                      activeStep++;
+                    });
+                  }
+                },
+//             onPressed:
 //       () {
 //                 if (activeStep == 0) {
-// controller.pauseCamera();
+// controller?.pauseCamera();
 //         }
 //         if (activeStep < upperBound) {
 //           setState(() {
@@ -327,7 +337,7 @@ this.selectedUser = result;
     );
   }
 
-    /// Create the userBox
+  /// Create the userBox
   Widget createButton() {
     return FlatButtonBOne(
       text: "Koppelen",
@@ -341,13 +351,15 @@ this.selectedUser = result;
   Widget previousButton() {
     return FlatButtonBOne(
       text: "Terug",
-      onPressed: this.activeStep==0 ? null : () {
-        if (activeStep > 0) {
-          setState(() {
-            activeStep--;
-          });
-        }
-      },
+      onPressed: this.activeStep == 0
+          ? null
+          : () {
+              if (activeStep > 0) {
+                setState(() {
+                  activeStep--;
+                });
+              }
+            },
     );
   }
 
@@ -381,7 +393,7 @@ this.selectedUser = result;
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         if (result != null && this.barcodeFound)
-                        // Macaddress
+                          // Macaddress
                           Text(
                               'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
                         else
@@ -395,58 +407,59 @@ this.selectedUser = result;
                       minWidth: double.infinity,
                       text: "Handmatig zoeken",
                       onPressed: () {
-print("Box handmatig zoeken");
-_getBoxes(); // Get all the boxes to search manually and open the search modal
-},
+                        print("Box handmatig zoeken");
+                        _getBoxes(); // Get all the boxes to search manually and open the search modal
+                      },
                     ),
                   ),
-                  if(this.selectedBox!=null)
-                  Column(
-                    children: [
-          Padding(padding: EdgeInsets.only(top: 30)),
-          Text("Geselecteerde box:"),
-                                BoxListItem(
-                boxText: "",
-                box: selectedBox,
-                onPressed: null,
-                locationText: "",
-              ),
-          IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: () {
-            print("DeleteSelectedBox!");
-            setState(() {
-              this.selectedBox = null;
-              this.boxCommentController.text = null;
-              this.barcodeFound = false;  
-            });
-            // controller.resumeCamera();
-            SnackBarController().show(
-              text:  "Selecteer een nieuwe box om te koppelen",
-              title: "Selecteer box",
-              type: "INFO");
-            controller.resumeCamera();
-          },
-        ),
-                    ]
-                  )
+                  if (this.selectedBox != null)
+                    Column(children: [
+                      Padding(padding: EdgeInsets.only(top: 30)),
+                      Text("Geselecteerde box:"),
+                      BoxListItem(
+                        boxText: "",
+                        box: selectedBox,
+                        onPressed: null,
+                        locationText: "",
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          print("DeleteSelectedBox!");
+                          setState(() {
+                            this.selectedBox = null;
+                            // this.boxCommentController.text = null;
+                            // this.barcodeFound = false;
+                          });
+                          // controller?.resumeCamera();
+                          // SnackBarController().show(
+                          //     text: "Selecteer een nieuwe box om te koppelen",
+                          //     title: "Selecteer box",
+                          //     type: "INFO");
+                          controller?.pauseCamera();
+                          controller?.resumeCamera();
+                          // reassemble();
+                          // dispose();
+                        },
+                      ),
+                    ])
                 ],
               ),
             ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      previousButton(),
-                      nextButton(),
-                    ],
-                  ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                previousButton(),
+                nextButton(),
+              ],
+            ),
           ],
         );
-        // Gebruiker
+      // Gebruiker
       case 1:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
@@ -481,42 +494,41 @@ _getBoxes(); // Get all the boxes to search manually and open the search modal
                 },
                 icon: Icons.group,
               ),
-              if(this.selectedUser!=null)
-                Column(
-                  children: [
-          Padding(padding: EdgeInsets.only(top: 20)),
-          Text("Geselecteerde gebruiker:"),
-          UserListItem(
-                user: selectedUser,
-                showTrailingIcon: false,
-                onPressed: null,
-              ),
-          IconButton(
-          icon: Icon(Icons.delete, color: Colors.red),
-          onPressed: () {
-            print("DeleteSelectedUser!");
-                setState(() {
-this.selectedUser = null;
-    });
+              if (this.selectedUser != null)
+                Column(children: [
+                  Padding(padding: EdgeInsets.only(top: 20)),
+                  Text("Geselecteerde gebruiker:"),
+                  UserListItem(
+                    user: selectedUser,
+                    showTrailingIcon: false,
+                    onPressed: null,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      print("DeleteSelectedUser!");
+                      setState(() {
+                        this.selectedUser = null;
+                      });
                       SnackBarController().show(
-            text:  "Selecteer of registreer een gerbuiker om te koppelen",
-            title: "Selecteer gebruiker",
-            type: "INFO");
-          },
-        ),
-                    ]
+                          text:
+                              "Selecteer of registreer een gerbuiker om te koppelen",
+                          title: "Selecteer gebruiker",
+                          type: "INFO");
+                    },
                   ),
-                                    SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      previousButton(),
-                      nextButton(),
-                    ],
-                  ),
+                ]),
+              SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  previousButton(),
+                  nextButton(),
+                ],
+              ),
             ],
           ),
         );
@@ -524,102 +536,106 @@ this.selectedUser = null;
       case 2:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: this.selectedBox!=null&&this.selectedUser!=null ? Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                "Bevestigen",
-                style: Theme.of(context).textTheme.bodyText2,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Text("Box:", textAlign: TextAlign.left),
-              BoxListItem(
-                boxText: "",
-                box: this.selectedBox,
-                onPressed: null,
-                locationText: "Geel !!!",
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFieldBOne(
-                context: context,
-                icon: Icon(Icons.insert_comment),
-                labelText: "Opmerking:",
-                controller: boxCommentController,
-                keyboardType: TextInputType.multiline,
-                maxLength: 200,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text("Gebruiker:", textAlign: TextAlign.left),
-              UserListItem(
-                user: this.selectedUser,
-                showTrailingIcon: false,
-                onPressed: null,
-              ),
-              SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      previousButton(),
-                      createButton(),
-                    ],
-                  ),
-            ],
-          ) : Center(child: Text("Selecteer een box en een gebruiker!")),
+          child: this.selectedBox != null && this.selectedUser != null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      "Bevestigen",
+                      style: Theme.of(context).textTheme.bodyText2,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text("Box:", textAlign: TextAlign.left),
+                    BoxListItem(
+                      boxText: "",
+                      box: this.selectedBox,
+                      onPressed: null,
+                      locationText: "Geel !!!",
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFieldBOne(
+                      context: context,
+                      icon: Icon(Icons.insert_comment),
+                      labelText: "Opmerking:",
+                      controller: boxCommentController,
+                      keyboardType: TextInputType.multiline,
+                      maxLength: 200,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text("Gebruiker:", textAlign: TextAlign.left),
+                    UserListItem(
+                      user: this.selectedUser,
+                      showTrailingIcon: false,
+                      onPressed: null,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        previousButton(),
+                        createButton(),
+                      ],
+                    ),
+                  ],
+                )
+              : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
       // Confirmation
       case 3:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: this.selectedBox!=null&&this.selectedUser!=null ? Column(
-            children: [
-              Text(
-                "Final",
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              Icon(
-                Icons.check_circle_outline,
-                color: Colors.green.shade300,
-                size: 300,
-              ),
-              Text(
-                "De gegevens zijn succesvol opgeslagen!",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-Expanded(child: FlatButtonBOne(
-      text: "Dashboard",
-      onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(
-                    context, '/dashboard', (route) => false);
-          setState(() {
-            activeStep = 0;
-          });
-        
-      },
-    )),
-                    ],
-                  ),
-            ],
-          ) : Center(child: Text("Selecteer een box en een gebruiker!")),
+          child: this.selectedBox != null && this.selectedUser != null
+              ? Column(
+                  children: [
+                    Text(
+                      "Final",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Icon(
+                      Icons.check_circle_outline,
+                      color: Colors.green.shade300,
+                      size: 300,
+                    ),
+                    Text(
+                      "De gegevens zijn succesvol opgeslagen!",
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                            child: FlatButtonBOne(
+                          text: "Dashboard",
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/dashboard', (route) => false);
+                            setState(() {
+                              activeStep = 0;
+                            });
+                          },
+                        )),
+                      ],
+                    ),
+                  ],
+                )
+              : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
 
       default:
@@ -658,10 +674,10 @@ Expanded(child: FlatButtonBOne(
     controller.scannedDataStream.listen((scanData) {
       print("Scanned Data Stream!");
       setState(() {
-            this.barcodeFound = true;
+        this.barcodeFound = true;
         result = scanData;
       });
-      if(this.barcodeFound && this.selectedBox==null){
+      if (this.barcodeFound && this.selectedBox == null) {
         // Search the box with the found MacAddress
         _searchBoxByMacAddress(scanData.code);
       }
@@ -675,61 +691,59 @@ Expanded(child: FlatButtonBOne(
   }
 
   void switchNextButton() {
-
-   switch(activeStep){
-    case 0:
-      print('Case: 0');
-      if(this.selectedBox==null){
+    switch (activeStep) {
+      case 0:
+        print('Case: 0');
+        if (this.selectedBox == null) {
+          return null;
+        }
         return null;
-      }
-      return null;
-      break;
-    
-    case 1:
-      print('Case: 1');
-      break;
+        break;
 
-    case 2 :
-      print('Case: 2');
-      break;
+      case 1:
+        print('Case: 1');
+        break;
 
-    case 3 :
-      print('Case: 3');
-      break;
+      case 2:
+        print('Case: 2');
+        break;
 
-    default:
-      print('Case: default');
+      case 3:
+        print('Case: 3');
+        break;
 
-   }
+      default:
+        print('Case: default');
+    }
   }
 
-    // Detail modal of a box with all information
+  // Detail modal of a box with all information
   void _searchBoxModal(context) {
-print("Search box modal");
-print("Search box modal boxlist length = " + this.boxList.length.toString());
-         Future<void> future = showModalBottomSheet<void>(
-        
-            // isScrollControlled: true, // Full screen height
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
-            ),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            backgroundColor: Colors.white,
-            context: context,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return SingleChildScrollView(
-                    child: Container(
-                  // height: 900,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
-                    child: Column(
-                      children: [
-                                          Text(
+    print("Search box modal");
+    print(
+        "Search box modal boxlist length = " + this.boxList.length.toString());
+    Future<void> future = showModalBottomSheet<void>(
+      // isScrollControlled: true, // Full screen height
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+              child: Container(
+            // height: 900,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
+              child: Column(
+                children: [
+                  Text(
                     'Zoek box',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
@@ -738,56 +752,60 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
                       fontFamily: 'Poppins',
                     ),
                   ),
-                        Padding(padding: EdgeInsets.all(20)),
-                                Container(height: 80.0,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextFieldBOne(
-                  context: context,
-                  labelText: "Zoek een box",
-                  textInputAction: TextInputAction.done,
-                  controller: searchBoxController,
-                  icon: Icon(Icons.search),
-                ))),
-                Text("Gevonden boxen (" + this.boxList.length.toString() + "/" + this.originalBoxList.length.toString() + "):"),
-                        Container( child: this.boxList.length != 0
-                          ? _boxListItems()
-                          : Column(
-                              children: <Widget>[
-                                Text('Geen resultaten gevonden!'),
-                                Expanded(
-                                    child: Center(
-                                        child: CircularProgressIndicator())),
-                              ],
-                            ),
-                        ),
-                        Padding(padding: EdgeInsets.all(20)),
-                        // Values of box
-                      ],
-                    ),
+                  Padding(padding: EdgeInsets.all(20)),
+                  Container(
+                      height: 80.0,
+                      child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextFieldBOne(
+                            context: context,
+                            labelText: "Zoek een box",
+                            textInputAction: TextInputAction.done,
+                            controller: searchBoxController,
+                            icon: Icon(Icons.search),
+                          ))),
+                  Text("Gevonden boxen (" +
+                      this.boxList.length.toString() +
+                      "/" +
+                      this.originalBoxList.length.toString() +
+                      "):"),
+                  Container(
+                    child: this.boxList.length != 0
+                        ? _boxListItems()
+                        : Column(
+                            children: <Widget>[
+                              Text('Geen resultaten gevonden!'),
+                              Expanded(
+                                  child: Center(
+                                      child: CircularProgressIndicator())),
+                            ],
+                          ),
                   ),
-                ));
-              });
-            },
-
-          );
-              future.then((void value) => _closeModalBox(value));
-
+                  Padding(padding: EdgeInsets.all(20)),
+                  // Values of box
+                ],
+              ),
+            ),
+          ));
+        });
+      },
+    );
+    future.then((void value) => _closeModalBox(value));
   }
 
   void _closeModalBox(void value) {
     print('BoxModal closed');
 
     // Resume the camera when the modal is closed (on first step) if there is no selected box
-    if(this.activeStep == 0 && this.selectedBox==null){
+    if (this.activeStep == 0 && this.selectedBox == null) {
       print("Resume the camera");
-          controller.resumeCamera();
+      controller?.resumeCamera();
     }
-}
+  }
 
   void _closeModalUser(void value) {
     print('UserModal closed');
-}
+  }
 
   ListView _boxListItems() {
     return new ListView.builder(
@@ -806,17 +824,21 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
                 box: this.boxList[position],
                 onPressed: () {
                   // !!!!!
-                  print("Selected box with id: " + this.boxList[position].id.toString());
+                  print("Selected box with id: " +
+                      this.boxList[position].id.toString());
                   setState(() {
                     this.selectedBox = this.boxList[position];
-                    this.boxCommentController.text = this.boxList[position].comment;
+                    this.boxCommentController.text =
+                        this.boxList[position].comment;
                   });
-                  controller.pauseCamera();
+                  controller?.pauseCamera();
                   Navigator.pop(context);
                   SnackBarController().show(
-                    text:  "De box: \"" + this.selectedBox.name + "\" is geselecteerd om te koppelen",
-                    title: "Box geselecteerd",
-                    type: "INFO");
+                      text: "De box: \"" +
+                          this.selectedBox.name +
+                          "\" is geselecteerd om te koppelen",
+                      title: "Box geselecteerd",
+                      type: "INFO");
                 },
                 locationText: "Geel !!!",
               ),
@@ -835,34 +857,33 @@ print("Search box modal boxlist length = " + this.boxList.length.toString());
     );
   }
 
-
-   // Modal to search users
+  // Modal to search users
   void _searchUserModal(context) {
-print("Search user modal");
-print("Search user modal userlist length = " + this.boxList.length.toString());
-         Future<void> future = showModalBottomSheet<void>(
-          
-            // isScrollControlled: true, // Full screen height
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(30),
-              ),
-            ),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            backgroundColor: Colors.white,
-            context: context,
-            builder: (BuildContext context) {
-              return StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                return SingleChildScrollView(
-                    child: Container(
-                  // height: 900,
-                  color: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 5.0),
-                    child: Column(
-                      children: [
-                                          Text(
+    print("Search user modal");
+    print("Search user modal userlist length = " +
+        this.boxList.length.toString());
+    Future<void> future = showModalBottomSheet<void>(
+      // isScrollControlled: true, // Full screen height
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+              child: Container(
+            // height: 900,
+            color: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 5.0),
+              child: Column(
+                children: [
+                  Text(
                     'Zoek gebruiker',
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
@@ -871,43 +892,48 @@ print("Search user modal userlist length = " + this.boxList.length.toString());
                       fontFamily: 'Poppins',
                     ),
                   ),
-                        Padding(padding: EdgeInsets.all(10)),
-                                Container(height: 80.0,
-            child: Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: TextFieldBOne(
-                  context: context,
-                  labelText: "Zoek een gebruiker",
-                  textInputAction: TextInputAction.done,
-                  controller: searchUserController,
-                  icon: Icon(Icons.search),
-                ))),
-                Text("Gevonden gebruikers (" + this.userList.length.toString() + "/" + this.originalUserList.length.toString() + "):"),
-                        Container( child: this.userList.length != 0
-                          ? _userListItems()
-                          : Column(
-                              children: <Widget>[
-                                Text('Geen resultaten gevonden!'),
-                                Expanded(
-                                    child: Center(
-                                        child: CircularProgressIndicator())),
-                              ],
-                            ),
-                        ),
-                        Padding(padding: EdgeInsets.all(20)),
-                        // Values of box
-                      ],
-                    ),
+                  Padding(padding: EdgeInsets.all(10)),
+                  Container(
+                      height: 80.0,
+                      child: Padding(
+                          padding: EdgeInsets.only(right: 8.0),
+                          child: TextFieldBOne(
+                            context: context,
+                            labelText: "Zoek een gebruiker",
+                            textInputAction: TextInputAction.done,
+                            controller: searchUserController,
+                            icon: Icon(Icons.search),
+                          ))),
+                  Text("Gevonden gebruikers (" +
+                      this.userList.length.toString() +
+                      "/" +
+                      this.originalUserList.length.toString() +
+                      "):"),
+                  Container(
+                    child: this.userList.length != 0
+                        ? _userListItems()
+                        : Column(
+                            children: <Widget>[
+                              Text('Geen resultaten gevonden!'),
+                              Expanded(
+                                  child: Center(
+                                      child: CircularProgressIndicator())),
+                            ],
+                          ),
                   ),
-                ));
-              });
-            },
-
-          );
-              future.then((void value) => _closeModalUser(value));
+                  Padding(padding: EdgeInsets.all(20)),
+                  // Values of box
+                ],
+              ),
+            ),
+          ));
+        });
+      },
+    );
+    future.then((void value) => _closeModalUser(value));
   }
 
-    ListView _userListItems() {
+  ListView _userListItems() {
     return new ListView.builder(
       primary: false,
       shrinkWrap: true,
@@ -916,27 +942,27 @@ print("Search user modal userlist length = " + this.boxList.length.toString());
       // shrinkWrap: true,
       itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
-return               UserListItem(
-                user: this.userList[position],
-                showTrailingIcon: true,
-                onPressed: () {
-                  print("Selected user with id: " + this.userList[position].id.toString());
-    setState(() {
-this.selectedUser = this.userList[position];
-    });
-    Navigator.pop(context);
-          SnackBarController().show(
-            text:  "De gebruiker: \"" + this.selectedUser.firstName + " " + this.selectedUser.lastName + "\" is geselecteerd om te koppelen",
-            title: "Gebruiker geselecteerd",
-            type: "INFO");
-    
-                },
-              );
+        return UserListItem(
+          user: this.userList[position],
+          showTrailingIcon: true,
+          onPressed: () {
+            print("Selected user with id: " +
+                this.userList[position].id.toString());
+            setState(() {
+              this.selectedUser = this.userList[position];
+            });
+            Navigator.pop(context);
+            SnackBarController().show(
+                text: "De gebruiker: \"" +
+                    this.selectedUser.firstName +
+                    " " +
+                    this.selectedUser.lastName +
+                    "\" is geselecteerd om te koppelen",
+                title: "Gebruiker geselecteerd",
+                type: "INFO");
+          },
+        );
       },
     );
   }
-
-
-
-
 }
