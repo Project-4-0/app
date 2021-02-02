@@ -428,18 +428,15 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                           print("DeleteSelectedBox!");
                           setState(() {
                             this.selectedBox = null;
-                            // this.boxCommentController.text = null;
-                            // this.barcodeFound = false;
+                            this.boxCommentController.text = null;
+                            this.barcodeFound = false;
                           });
-                          // controller?.resumeCamera();
-                          // SnackBarController().show(
-                          //     text: "Selecteer een nieuwe box om te koppelen",
-                          //     title: "Selecteer box",
-                          //     type: "INFO");
+                          SnackBarController().show(
+                              text: "Selecteer een nieuwe box om te koppelen",
+                              title: "Selecteer box",
+                              type: "INFO");
                           controller?.pauseCamera();
                           controller?.resumeCamera();
-                          // reassemble();
-                          // dispose();
                         },
                       ),
                     ])
