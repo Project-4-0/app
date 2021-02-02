@@ -34,7 +34,7 @@ class UserApi {
     final response =
         await http.get(url + '/users/' + id.toString() + '/with_boxes');
     if (response.statusCode == 200) {
-      return User.fromJsonWithBoxes(jsonDecode(response.body));
+      return User.fromJsonWithBoxes(jsonDecode(response.body)["user"]);
     } else {
       throw Exception(response.body);
     }
@@ -122,16 +122,39 @@ class UserApi {
   }
 
   // POST: Add boxUser
-  static Future<User> addBoxUser(int userID, int boxID) async {
+  static Future<User> addBoxUser(
+      int userID, int boxID, double latitude, double longitude) async {
     final http.Response response = await http.post(
       url + '/users/add_box',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
+      // TODO: Check if string type is ok to send !!!!!!
+      body: jsonEncode(<String, String>{
+        "UserID": userID.toString(),
+        "BoxID": boxID.toString(),
+        "Latitude": latitude.toString(),
+        "Longitude": longitude.toString()
+      }),
     );
     if (response.statusCode == 200) {
       return User.fromJsonWithBoxes(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  static Future<String> endBoxSubscription(int userID, int boxID) async {
+    final http.Response response = await http.post(
+      url + '/users/delete_box',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      // TODO: Check if string type is ok to send !!!!!!
+      body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)["message"];
     } else {
       throw Exception(response.body);
     }

@@ -30,7 +30,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
   List<Box> boxesList;
   List<String> userTypeNameList = [];
 
-  MultiSelectController controller = new MultiSelectController();
+  // MultiSelectController controller = new MultiSelectController();
 
   String dropdownValue = 'One';
 
@@ -68,6 +68,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
   void _getUser(int userID) {
     print("Get user with id: " + id.toString());
     UserController.loadUserByIdWithBoxes(userID).then((result) {
+      print(result.firstName);
       setState(() {
         print("Show info over: " + result.firstName);
         print("Show info over usertype: " + result.userType.userTypeName);
@@ -78,30 +79,52 @@ class _UserDetailPageState extends State<UserDetailPage> {
         this.boxesList = result.boxes;
 
         // Set controllers
-        firstnameController.text = result.firstName;
-        lastnameController.text = result.lastName;
-        emailController.text = result.email;
-        addressController.text = result.address;
-        postalcodeController.text = result.postalCode;
-        cityController.text = result.city;
+        this.firstnameController.text = result.firstName;
+        this.lastnameController.text = result.lastName;
+        this.emailController.text = result.email;
+        this.addressController.text = result.address;
+        this.postalcodeController.text = result.postalCode;
+        this.cityController.text = result.city;
 
-        controller.disableEditingWhenNoneSelected = true;
-        controller.set(this.user.boxes.length);
+        // this.controller.disableEditingWhenNoneSelected = true;
+        // controller.set(this.user.boxes.length);
       });
     });
   }
 
-  void _getAllUserTypes() {
+  Future<void> _getAllUserTypes() async {
     print("Get all userTypes");
-    UserController.loadUserTypes().then((result) {
+    await UserController.loadUserTypes().then((result) {
       setState(() {
         print("Number of userTypes: " + result.length.toString());
         this.userTypeList = result;
         for (UserType userType in result) {
-          // print("UsertypeName: " + userType.userTypeName);
+          print("UsertypeName: " + userType.userTypeName);
           this.userTypeNameList.add(userType.userTypeName);
         }
       });
+    });
+  }
+
+  void _endBoxSubscription(int boxID) {
+    print("End the box subscription of this user");
+    UserController.endBoxSubscription(this.user.id, boxID).then((result) {
+      print("Result: " + result.toString());
+      SnackBarController().show(
+          text: result == "Ontkoppeld"
+              ? "Box succesvol ontkoppeld van \'" +
+                  this.user.firstName +
+                  " " +
+                  this.user.lastName +
+                  "\'"
+              : "Box ontkoppelen is mislukt.\nProbeer later eens opnieuw.",
+          title: result,
+          type: result == "Ontkoppeld" ? "GOOD" : "ERROR");
+      // Rerender the user information
+      _getUser(this.id);
+      // Clear the list duplicates will be added
+      this.userTypeNameList.clear();
+      _getAllUserTypes();
     });
   }
 
@@ -253,51 +276,57 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text('Type gebruiker: ', textAlign: TextAlign.left),
-                            DropdownButton<String>(
-                              value: this.user.userType.userTypeName,
-                              icon: Icon(Icons.arrow_downward,
-                                  color: Theme.of(context).primaryColor),
-                              iconSize: 24,
-                              elevation: 16,
-                              dropdownColor: Colors.white,
-                              underline: Container(
-                                height: 2,
-                                color: Theme.of(context).primaryColor,
+                        if (userTypeNameList != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text('Type gebruiker: ',
+                                  textAlign: TextAlign.left),
+                              DropdownButton<String>(
+                                value: this.user.userType.userTypeName,
+                                icon: Icon(Icons.arrow_downward,
+                                    color: Theme.of(context).primaryColor),
+                                iconSize: 24,
+                                elevation: 16,
+                                dropdownColor: Colors.white,
+                                underline: Container(
+                                  height: 2,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onChanged: (String newUserTypeValue) {
+                                  print("UserType changed. Now: " +
+                                      newUserTypeValue);
+                                  setState(() {
+                                    this.user.userType.userTypeName =
+                                        newUserTypeValue;
+                                  });
+                                },
+                                items: this.userTypeNameList != null &&
+                                        this.userTypeNameList.isNotEmpty
+                                    ? this
+                                        .userTypeNameList
+                                        .map<DropdownMenuItem<String>>(
+                                            (userTypeName) {
+                                        return DropdownMenuItem<String>(
+                                          value: userTypeName,
+                                          child: Text(userTypeName),
+                                        );
+                                      }).toList()
+                                    : <String>[
+                                        'Admin',
+                                        'Boer',
+                                        'Monteur',
+                                        '...'
+                                      ].map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                               ),
-                              onChanged: (String newUserTypeValue) {
-                                print("UserType changed. Now: " +
-                                    newUserTypeValue);
-                                setState(() {
-                                  this.user.userType.userTypeName =
-                                      newUserTypeValue;
-                                });
-                              },
-                              items: this.userTypeNameList != null &&
-                                      this.userTypeNameList.isNotEmpty
-                                  ? this
-                                      .userTypeNameList
-                                      .map<DropdownMenuItem<String>>(
-                                          (userTypeName) {
-                                      return DropdownMenuItem<String>(
-                                        value: userTypeName,
-                                        child: Text(userTypeName),
-                                      );
-                                    }).toList()
-                                  : <String>['Admin', 'Boer', 'Monteur', '...']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         SizedBox(
                           height: 20,
                         ),
@@ -320,13 +349,17 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                       translation: Offset(0.0, 0.0),
                                       child: Stack(children: <Widget>[
                                         BoxUserListItem(
-                                          boxText:
-                                              "!!!!!! needs to be replaced",
                                           box: this.user.boxes[position],
                                           onPressed: () {
                                             print("Show box detail model");
                                           },
-                                          locationText: "Geel !!!",
+                                          onPressedDelete: () {
+                                            print(
+                                                "Delete subscribtion of user on this box");
+                                            _endBoxSubscription(
+                                                this.user.boxes[position].id);
+                                          },
+                                          delete: true,
                                         ),
                                         Positioned(
                                           // Marble to show active status

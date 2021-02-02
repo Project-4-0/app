@@ -23,11 +23,14 @@ class OutlineFlatButtonBOne extends StatelessWidget {
         onPressed: onPressed,
         shape: ContinuousRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Theme.of(context).primaryColor),
+          side: BorderSide(
+              color: onPressed != null
+                  ? Theme.of(context).primaryColor
+                  : Theme.of(context).accentColor),
         ),
         minWidth: 160,
         height: 40,
-        disabledColor: Theme.of(context).accentColor,
+        disabledColor: Colors.white,
         disabledTextColor: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +38,9 @@ class OutlineFlatButtonBOne extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: onPressed != null
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).accentColor,
               ),
             ),
             if (icon != null) Padding(padding: EdgeInsets.all(5.0)),

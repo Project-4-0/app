@@ -116,6 +116,7 @@ class UserController {
   static Future<User> loadUserByIdWithBoxes(int id) async {
     print("Load user with with boxes: " + id.toString());
     return UserApi.fetchUserWithBox(id).then((user) {
+      print("first name" + user.firstName.toString());
       return user;
     }).catchError((error) {
       SnackBarController()
@@ -157,9 +158,20 @@ class UserController {
     });
   }
 
-  static Future<User> addBoxUser(int userID, int boxID) async {
-    return UserApi.addBoxUser(userID, boxID).then((user) {
+  static Future<User> addBoxUser(
+      int userID, int boxID, double latitude, double longitude) async {
+    return UserApi.addBoxUser(userID, boxID, latitude, longitude).then((user) {
       return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  }
+
+  static Future<String> endBoxSubscription(int userID, int boxID) async {
+    return UserApi.endBoxSubscription(userID, boxID).then((message) {
+      return message;
     }).catchError((error) {
       SnackBarController()
           .show(text: error.message, title: "Server", type: "ERROR");

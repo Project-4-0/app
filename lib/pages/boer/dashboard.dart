@@ -218,18 +218,19 @@ class _DashboardPageState extends State<DashboardPage> {
 
   _loadImage() {
     if (this.terrascope.loading == false) {
-      return Text("Geen satellietbeeld gevonden");
+      return Center(child: Text("Geen satellietbeeld gevonden"));
     }
     if (this.terrascope.url == null && this.terrascope.loading == true) {
-      return Column(
-        children: [
-          Text("Afbeelding laden"),
-          SizedBox(
-            height: 20.0,
-          ),
-          CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),)
-            ]
-            );
+      return Column(children: [
+        Text("Afbeelding laden"),
+        SizedBox(
+          height: 20.0,
+        ),
+        CircularProgressIndicator(
+          valueColor:
+              new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),
+        )
+      ]);
     }
 
     return Image.network(
@@ -283,14 +284,13 @@ class _DashboardPageState extends State<DashboardPage> {
             translation: Offset(0.0, 0.0),
             child: Stack(children: <Widget>[
               BoxUserListItem(
-                boxText: "!!!!!! needs to be replaced",
                 box: boxList[position],
                 onPressed: () {
                   _setFilterBoxen(boxList[position]);
                   Navigator.pop(context);
                   // print("Show only the data from one box");
                 },
-                locationText: "Geel !!!",
+                delete: false,
               ),
               Positioned(
                 // Marble to show active status
@@ -320,24 +320,24 @@ class _DashboardPageState extends State<DashboardPage> {
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter setState /*You can rename this!*/) {
             return SingleChildScrollView(
-            child: Container(
-                // height: 600,
-                color: Colors.white,
-                child: Padding(
-                    padding: EdgeInsets.only(top: 25),
-                    child: Column(children: [
-                      Text(
-                        "Boxen",
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                      Container(
-                        child: boxList == null
-                            ? Center(
-                                child: Text(
-                                    "Geen boxen gevonden voor uw account!"))
-                            : _boxItems(boxList, count),
-                      )
-                    ]))));
+                child: Container(
+                    // height: 600,
+                    color: Colors.white,
+                    child: Padding(
+                        padding: EdgeInsets.only(top: 25),
+                        child: Column(children: [
+                          Text(
+                            "Boxen",
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                          Container(
+                            child: boxList == null
+                                ? Center(
+                                    child: Text(
+                                        "Geen boxen gevonden voor uw account!"))
+                                : _boxItems(boxList, count),
+                          )
+                        ]))));
           });
         });
   }
