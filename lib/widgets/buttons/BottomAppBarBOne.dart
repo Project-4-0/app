@@ -11,7 +11,7 @@ class BottomAppBarBOne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-return BottomAppBar(
+    return BottomAppBar(
       elevation: 50,
       notchMargin: 15.0,
       shape: CircularNotchedRectangle(),
@@ -109,8 +109,7 @@ class FloatingActionButtonBOne extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                    context, '/info', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, '/info', (route) => false);
         },
       ),
     );

@@ -60,7 +60,9 @@ class _TestPageState extends State<TestPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 }

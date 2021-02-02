@@ -300,37 +300,34 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _boxModal(context, boxList, count) {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(30),
+          ),
         ),
-      ),
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    backgroundColor: Colors.white,
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(builder: (BuildContext context,
-          StateSetter setState /*You can rename this!*/) {
-        return Container(
-          height: 600,
-          color: Colors.white,
-          child: Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: Column(
-              children: [
-                Text(
-                  "Boxen",
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                count == 0
-                    ? Center(
-                        child: Text("Geen boxen gevonden voor uw account!"))
-                    : _boxItems(boxList, count),
-              ])));
-          }
-      );
-    }
-    );
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setState /*You can rename this!*/) {
+            return Container(
+                height: 600,
+                color: Colors.white,
+                child: Padding(
+                    padding: EdgeInsets.only(top: 25),
+                    child: Column(children: [
+                      Text(
+                        "Boxen",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      count == 0
+                          ? Center(
+                              child:
+                                  Text("Geen boxen gevonden voor uw account!"))
+                          : _boxItems(boxList, count),
+                    ])));
+          });
+        });
   }
-
 }

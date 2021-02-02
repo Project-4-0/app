@@ -278,7 +278,9 @@ class _NewUserPageState extends State<NewUserPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 }

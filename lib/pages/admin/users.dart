@@ -103,8 +103,7 @@ class _UserOverviewPage extends State {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
     if (id == null) {
-      Navigator.pushNamed(
-          context, '/admin/users/new');
+      Navigator.pushNamed(context, '/admin/users/new');
     } else {
       bool result = await Navigator.push(
         context,
@@ -172,7 +171,9 @@ class _UserOverviewPage extends State {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(active: 1,),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 
@@ -315,5 +316,4 @@ class _UserOverviewPage extends State {
       },
     );
   }
-
 }

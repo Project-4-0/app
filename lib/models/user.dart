@@ -58,9 +58,11 @@ class User {
       userTypeID: json['UserTypeID'],
       userType:
           json['UserType'] == null ? null : UserType.fromJson(json['UserType']),
-      boxes: json['boxes'] == null ? null : (json['boxes'] as List)
-          .map((tagJson) => Box.fromJson(tagJson))
-          .toList(),
+      boxes: json['boxes'] == null
+          ? null
+          : (json['boxes'] as List)
+              .map((tagJson) => Box.fromJson(tagJson))
+              .toList(),
     );
   }
 
@@ -78,7 +80,6 @@ class User {
     );
   }
 
-  
   factory User.fromJsonWithBoxUser(Map<String, dynamic> json) {
     return User(
       id: json['UserID'],
