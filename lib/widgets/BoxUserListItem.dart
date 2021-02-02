@@ -60,7 +60,7 @@ class BoxUserListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                                // StartDate
+                // StartDate
                 Row(
                   children: <Widget>[
                     Icon(

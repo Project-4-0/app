@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -15,8 +14,8 @@ class LocationMap extends StatefulWidget {
 }
 
 class _LocationMap extends State<LocationMap> {
-double lat;
-double lng;
+  double lat;
+  double lng;
   _LocationMap(this.lat, this.lng);
 
   LocationData _currentLocation;
@@ -70,7 +69,6 @@ double lng;
 
                 // If Live Update is enabled, move map center to the current location
                 if (_liveUpdate) {
-
                   _mapController.move(
                       LatLng(_currentLocation.latitude,
                           _currentLocation.longitude),
@@ -104,19 +102,19 @@ double lng;
     LatLng currentLatLng = LatLng(this.lat, this.lng);
 
     var markers = <Marker>[
-        // Current location marker
-        Marker(
-          width: 80.0,
-          height: 80.0,
-          point: currentLatLng,
-          builder: (ctx) => new Container(
-            child: Icon(
-              Icons.my_location,
-              color:  Theme.of(context).accentColor,
-              size: 30.0,
-            ),
+      // Current location marker
+      Marker(
+        width: 80.0,
+        height: 80.0,
+        point: currentLatLng,
+        builder: (ctx) => new Container(
+          child: Icon(
+            Icons.my_location,
+            color: Theme.of(context).accentColor,
+            size: 30.0,
           ),
         ),
+      ),
     ];
 
     return Scaffold(
@@ -126,6 +124,17 @@ double lng;
             ? Center(child: CircularProgressIndicator())
             : Column(
                 children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 0, bottom: 5.0),
+                    child: Text(
+                        currentLatLng.latitude.toString() +
+                            " - " +
+                            currentLatLng.longitude.toString(),
+                        style: TextStyle(
+                          color: Theme.of(context).accentColor,
+                          fontSize: 12,
+                        )),
+                  ),
                   Flexible(
                     child: FlutterMap(
                       mapController: _mapController,

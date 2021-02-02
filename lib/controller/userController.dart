@@ -156,8 +156,9 @@ class UserController {
     });
   }
 
-  static Future<User> addBoxUser(int userID, int boxID) async {
-    return UserApi.addBoxUser(userID, boxID).then((user) {
+  static Future<User> addBoxUser(
+      int userID, int boxID, double latitude, double longitude) async {
+    return UserApi.addBoxUser(userID, boxID, latitude, longitude).then((user) {
       return user;
     }).catchError((error) {
       SnackBarController()

@@ -13,7 +13,6 @@ import 'package:b_one_project_4_0/widgets/location_map.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
-import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/pages/monteur/newUser.dart';
@@ -116,15 +115,25 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     });
   }
 
-void _getUserLocation() async {
-        var position = await GeolocatorPlatform.instance
-            .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  void _getUserLocation() async {
+    var position = await GeolocatorPlatform.instance
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(position.latitude.toString());
-        setState(() {
-          this.userPositionLat = position.latitude;
-          this.userPositionLng = position.longitude;
-        });
-      }
+    setState(() {
+      this.userPositionLat = position.latitude;
+      this.userPositionLng = position.longitude;
+    });
+    if (this.userPositionLat != null && this.userPositionLng != null) {
+      SnackBarController().show(
+          text: "Uw huidige locatie is: \'" +
+              this.userPositionLat.toString() +
+              " - " +
+              this.userPositionLat.toString() +
+              "\'.\nDeze locatie representeert de locatie van de box.",
+          title: "Huidige locatie",
+          type: "INFO");
+    }
+  }
 
   void _searchBoxValueChanged() {
     print("Box search text field: ${searchBoxController.text}");
@@ -207,9 +216,22 @@ void _getUserLocation() async {
   }
 
   void _createBoxUser() {
-    print("Create the box - user relation");
+    print(
+        "Create the box - user relation & update the box if the comment is changed");
 
-    UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id)
+    // Update the box if the comment is changed
+    if (this.boxCommentController.text != this.selectedBox.comment) {
+      print("The comment of the box is changed");
+      this.selectedBox.comment = this.boxCommentController.text;
+      BoxController.updateBox(this.selectedBox).then((result) {
+        if (result != null) {
+          print("The comment of the box is updated");
+        }
+      });
+    }
+    // TODO: check the lat and lng
+    UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id,
+            this.userPositionLat, this.userPositionLng)
         .then((result) {
       if (activeStep < upperBound && result != null) {
         SnackBarController().show(
@@ -335,13 +357,17 @@ void _getUserLocation() async {
           ? null
           : (this.activeStep == 1 && this.selectedUser == null)
               ? null
-              : () {
-                  if (activeStep < upperBound) {
-                    setState(() {
-                      activeStep++;
-                    });
-                  }
-                },
+              : (this.activeStep == 2 &&
+                      this.userPositionLat == null &&
+                      this.userPositionLng == null)
+                  ? null
+                  : () {
+                      if (activeStep < upperBound) {
+                        setState(() {
+                          activeStep++;
+                        });
+                      }
+                    },
 //             onPressed:
 //       () {
 //                 if (activeStep == 0) {
@@ -548,13 +574,12 @@ void _getUserLocation() async {
             ],
           ),
         );
-        // Location
-        case 2: 
+      // Location
+      case 2:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          // child: this.selectedBox != null && this.selectedUser != null
-              // ? 
-              child: Column(
+          child: this.selectedBox != null && this.selectedUser != null
+              ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
@@ -562,33 +587,68 @@ void _getUserLocation() async {
                       style: Theme.of(context).textTheme.bodyText2,
                       textAlign: TextAlign.center,
                     ),
+                    // If the user location is unknown
+                    if (this.userPositionLat == null &&
+                        this.userPositionLng == null)
+                      Column(children: [
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                            "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontWeight: FontWeight.w400)),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.",
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(fontWeight: FontWeight.w400)),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        DashboardButtonsOverview(
+                          minWidth: double.infinity,
+                          text: "Locatie toevoegen",
+                          onPressed: () {
+                            print(
+                                "Vraag de huidige locatie van de gerbuiker op!");
+                            _getUserLocation();
+                          },
+                          icon: Icons.add_location,
+                        ),
+                      ]),
+                    // If the user location is known
+                    if (this.userPositionLat != null &&
+                        this.userPositionLng != null)
+                      Column(children: [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                            height: 250.0,
+                            child: LocationMap(
+                                this.userPositionLat, this.userPositionLng)),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            print("Delete Location!");
+                            setState(() {
+                              // Reset the locations of the user
+                              this.userPositionLat = null;
+                              this.userPositionLng = null;
+                            });
+                            SnackBarController().show(
+                                text:
+                                    "Voeg een nieuwe locatie toe om een box koppelen",
+                                title: "Locatie verwijderd",
+                                type: "INFO");
+                          },
+                        ),
+                      ]),
                     SizedBox(
-                      height: 30,
-                    ),
-                    Text("De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.", textAlign: TextAlign.justify),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text("Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.", textAlign: TextAlign.justify),
-                    SizedBox(
-                      height: 10,
-                    ),
-              DashboardButtonsOverview(
-                minWidth: double.infinity,
-                text: "Locatie toevoegen",
-                onPressed: () {
-                  print("Vraag de huidige locatie van de gerbuiker op!");
-                  _getUserLocation();
-                },
-                icon: Icons.add_location,
-              ),
-                                  SizedBox(
-                      height: 10,
-                    ),
-                    if(this.userPositionLat!=null && this.userPositionLng!=null)
-                    Container(
-                      height: 200.0,
-                      child: LocationMap(this.userPositionLat, this.userPositionLng)
+                      height: 20,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -599,14 +659,17 @@ void _getUserLocation() async {
                       ],
                     ),
                   ],
-                ),
-              // : Center(child: Text("Selecteer een box en een gebruiker!")),
+                )
+              : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
-// Overview + opmerking
+      // Overview + opmerking
       case 3:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: this.selectedBox != null && this.selectedUser != null
+          child: this.selectedBox != null &&
+                  this.selectedUser != null &&
+                  this.userPositionLat != null &&
+                  this.userPositionLng != null
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -639,6 +702,14 @@ void _getUserLocation() async {
                     SizedBox(
                       height: 10,
                     ),
+                    Text("Locatie:", textAlign: TextAlign.left),
+                    Container(
+                        height: 150.0,
+                        child: LocationMap(
+                            this.userPositionLat, this.userPositionLng)),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text("Gebruiker:", textAlign: TextAlign.left),
                     UserListItem(
                       user: this.selectedUser,
@@ -658,13 +729,17 @@ void _getUserLocation() async {
                     ),
                   ],
                 )
-              : Center(child: Text("Selecteer een box en een gebruiker!")),
+              : Center(
+                  child: Text("Selecteer een box, locatie en een gebruiker!")),
         );
       // Confirmation
       case 4:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: this.selectedBox != null && this.selectedUser != null
+          child: this.selectedBox != null &&
+                  this.selectedUser != null &&
+                  this.userPositionLat != null &&
+                  this.userPositionLng != null
               ? Column(
                   children: [
                     Text(
@@ -705,7 +780,8 @@ void _getUserLocation() async {
                     ),
                   ],
                 )
-              : Center(child: Text("Selecteer een box en een gebruiker!")),
+              : Center(
+                  child: Text("Selecteer een box, locatie en een gebruiker!")),
         );
 
       default:
@@ -780,7 +856,7 @@ void _getUserLocation() async {
             builder: (BuildContext context, StateSetter setState) {
           return SingleChildScrollView(
               child: Container(
-                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
+            padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
             // height: 900,
             color: Colors.white,
             child: Padding(
