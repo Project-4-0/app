@@ -1,3 +1,5 @@
+import 'package:b_one_project_4_0/controller/kpiController.dart';
+import 'package:b_one_project_4_0/models/kpi.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
@@ -10,6 +12,22 @@ class AdminDashboardPage extends StatefulWidget {
 }
 
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
+  Kpi kpi;
+
+  @override
+  void initState() {
+    super.initState();
+    _getKPI();
+  }
+
+  void _getKPI() {
+    KpiController.loadCount().then((kpi) {
+      setState(() {
+        this.kpi = kpi;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,40 +114,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                             ],
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(15.0)),
-                        // Light sensor
-                        SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          child: TimeSeriesChart.withSampleData(
-                            title: "Lichthoeveelheid gem.",
-                            animate: true,
-                            unit: "%",
-                            lineColor: Colors.green,
-                            meassureAxisValues: [0, 25, 50, 75, 100],
-                          ),
-                        ),
-                        // Temp sensor
-                        SizedBox(
-                          width: double.infinity,
-                          height: 250.0,
-                          // child: TimeSeriesChart(title: "Luchtvochtigheid", animate: true),
-                          child: TimeSeriesChart.withSampleData(
-                              title: "Temperatuur gem.",
-                              animate: true,
-                              unit: "°C",
-                              lineColor: Colors.red,
-                              meassureAxisValues: [
-                                -20,
-                                -10,
-                                0,
-                                10,
-                                20,
-                                30,
-                                40
-                              ]),
-                        ),
-                        Padding(padding: EdgeInsets.all(15.0)),
+                        Padding(padding: EdgeInsets.all(10.0)),
+                        _loadKPI(),
                       ],
                     ),
                   ),
@@ -144,6 +130,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       bottomNavigationBar: BottomAppBarBOne(
         active: 1,
       ),
+    );
+  }
+
+  _loadKPI() {
+    if (kpi == null) {
+      return Text("loading");
+    }
+    return Column(
+      children: [
+        Text(kpi.userCount.toString()),
+        Text(kpi.boxCountActive.toString()),
+        Text(kpi.boxCountNoneActive.toString()),
+      ],
     );
   }
 }

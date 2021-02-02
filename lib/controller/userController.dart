@@ -39,6 +39,7 @@ class UserController {
       // Set authToken
       AuthController.setAuthToken(auth);
 
+// boer@example.com
       // get Users
       var user;
       try {
