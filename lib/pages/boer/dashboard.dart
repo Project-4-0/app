@@ -218,7 +218,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   _loadImage() {
     if (this.terrascope.loading == false) {
-      return Text("Geen satellietbeeld gevonden");
+      return Center(child: Text("Geen satellietbeeld gevonden"));
     }
     if (this.terrascope.url == null && this.terrascope.loading == true) {
       return Column(children: [

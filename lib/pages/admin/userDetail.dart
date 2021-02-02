@@ -111,13 +111,15 @@ class _UserDetailPageState extends State<UserDetailPage> {
     UserController.endBoxSubscription(this.user.id, boxID).then((result) {
       print("Result: " + result.toString());
       SnackBarController().show(
-          text: result=="Ontkoppeld" ?  "Box succesvol ontkoppeld van \'" +
-              this.user.firstName +
-              " " +
-              this.user.lastName +
-              "\'" : "Box ontkoppelen is mislukt.\nProbeer later eens opnieuw.",
+          text: result == "Ontkoppeld"
+              ? "Box succesvol ontkoppeld van \'" +
+                  this.user.firstName +
+                  " " +
+                  this.user.lastName +
+                  "\'"
+              : "Box ontkoppelen is mislukt.\nProbeer later eens opnieuw.",
           title: result,
-          type: result=="Ontkoppeld" ? "GOOD" : "ERROR");
+          type: result == "Ontkoppeld" ? "GOOD" : "ERROR");
       // Rerender the user information
       _getUser(this.id);
       // Clear the list duplicates will be added
@@ -274,52 +276,57 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        if(userTypeNameList!=null)                     
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text('Type gebruiker: ', textAlign: TextAlign.left),
-                            DropdownButton<String>(
-                              value: this.user.userType.userTypeName,
-                              icon: Icon(Icons.arrow_downward,
-                                  color: Theme.of(context).primaryColor),
-                              iconSize: 24,
-                              elevation: 16,
-                              dropdownColor: Colors.white,
-                              underline: Container(
-                                height: 2,
-                                color: Theme.of(context).primaryColor,
+                        if (userTypeNameList != null)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text('Type gebruiker: ',
+                                  textAlign: TextAlign.left),
+                              DropdownButton<String>(
+                                value: this.user.userType.userTypeName,
+                                icon: Icon(Icons.arrow_downward,
+                                    color: Theme.of(context).primaryColor),
+                                iconSize: 24,
+                                elevation: 16,
+                                dropdownColor: Colors.white,
+                                underline: Container(
+                                  height: 2,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onChanged: (String newUserTypeValue) {
+                                  print("UserType changed. Now: " +
+                                      newUserTypeValue);
+                                  setState(() {
+                                    this.user.userType.userTypeName =
+                                        newUserTypeValue;
+                                  });
+                                },
+                                items: this.userTypeNameList != null &&
+                                        this.userTypeNameList.isNotEmpty
+                                    ? this
+                                        .userTypeNameList
+                                        .map<DropdownMenuItem<String>>(
+                                            (userTypeName) {
+                                        return DropdownMenuItem<String>(
+                                          value: userTypeName,
+                                          child: Text(userTypeName),
+                                        );
+                                      }).toList()
+                                    : <String>[
+                                        'Admin',
+                                        'Boer',
+                                        'Monteur',
+                                        '...'
+                                      ].map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                               ),
-                              onChanged: (String newUserTypeValue) {
-                                print("UserType changed. Now: " +
-                                    newUserTypeValue);
-                                setState(() {
-                                  this.user.userType.userTypeName =
-                                      newUserTypeValue;
-                                });
-                              },
-                              items: this.userTypeNameList != null &&
-                                      this.userTypeNameList.isNotEmpty
-                                  ? this
-                                      .userTypeNameList
-                                      .map<DropdownMenuItem<String>>(
-                                          (userTypeName) {
-                                      return DropdownMenuItem<String>(
-                                        value: userTypeName,
-                                        child: Text(userTypeName),
-                                      );
-                                    }).toList()
-                                  : <String>['Admin', 'Boer', 'Monteur', '...']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         SizedBox(
                           height: 20,
                         ),

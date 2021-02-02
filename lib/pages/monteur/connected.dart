@@ -921,10 +921,11 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
               child: Container(
             padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
             // height: 900,
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Padding(
               padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
               child: Column(
+                // mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'Zoek box',
@@ -1066,7 +1067,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
           return SingleChildScrollView(
               child: Container(
             // height: 900,
-            color: Colors.white,
+            color: Theme.of(context).scaffoldBackgroundColor,
             child: Padding(
               padding: EdgeInsets.fromLTRB(10.0, 25.0, 10.0, 5.0),
               child: Column(
