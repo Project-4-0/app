@@ -144,7 +144,7 @@ class UserApi {
     }
   }
 
-  static Future<String> endBoxSubscription(int userID, int boxID) async {
+  static Future<dynamic> endBoxSubscription(int userID, int boxID) async {
     final http.Response response = await http.post(
       url + '/users/delete_box',
       headers: <String, String>{

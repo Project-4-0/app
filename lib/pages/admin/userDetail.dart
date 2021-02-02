@@ -92,7 +92,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
     });
   }
 
-  Future<void> _getAllUserTypes() async{
+  Future<void> _getAllUserTypes() async {
     print("Get all userTypes");
     await UserController.loadUserTypes().then((result) {
       setState(() {
@@ -109,13 +109,18 @@ class _UserDetailPageState extends State<UserDetailPage> {
   void _endBoxSubscription(int boxID) {
     print("End the box subscription of this user");
     UserController.endBoxSubscription(this.user.id, boxID).then((result) {
-        SnackBarController().show(
-            text: "Box succesvol onrkoppeld van \'" + this.user.firstName + " " + this.user.lastName + "\'",
-            title: result,
-            type: "GOOD");
-            // Rerender the user information
-            _getUser(this.id);
-            _getAllUserTypes();
+      print("Result: " + result.toString());
+      SnackBarController().show(
+          text: "Box succesvol onrkoppeld van \'" +
+              this.user.firstName +
+              " " +
+              this.user.lastName +
+              "\'",
+          title: result,
+          type: "GOOD");
+      // Rerender the user information
+      _getUser(this.id);
+      _getAllUserTypes();
     });
   }
 

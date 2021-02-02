@@ -7,6 +7,7 @@ import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
+import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/UserListItem.dart';
 import 'package:b_one_project_4_0/widgets/location_map.dart';
@@ -44,6 +45,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
 
   TextEditingController searchBoxController = TextEditingController();
   TextEditingController searchUserController = TextEditingController();
+
+  // Location controllers
+  TextEditingController latController = TextEditingController();
+  TextEditingController lngController = TextEditingController();
 
   TextEditingController boxCommentController = TextEditingController();
 
@@ -577,91 +582,114 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
       // Location
       case 2:
         return Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: this.selectedBox != null && this.selectedUser != null
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      "Locatie",
-                      style: Theme.of(context).textTheme.bodyText2,
-                      textAlign: TextAlign.center,
-                    ),
-                    // If the user location is unknown
-                    if (this.userPositionLat == null &&
-                        this.userPositionLng == null)
-                      Column(children: [
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                            "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(fontWeight: FontWeight.w400)),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                            "Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.",
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(fontWeight: FontWeight.w400)),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        DashboardButtonsOverview(
-                          minWidth: double.infinity,
-                          text: "Locatie toevoegen",
-                          onPressed: () {
-                            print(
-                                "Vraag de huidige locatie van de gerbuiker op!");
-                            _getUserLocation();
-                          },
-                          icon: Icons.add_location,
-                        ),
-                      ]),
-                    // If the user location is known
-                    if (this.userPositionLat != null &&
-                        this.userPositionLng != null)
-                      Column(children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Container(
-                            height: 250.0,
-                            child: LocationMap(
-                                this.userPositionLat, this.userPositionLng)),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            print("Delete Location!");
-                            setState(() {
-                              // Reset the locations of the user
-                              this.userPositionLat = null;
-                              this.userPositionLng = null;
-                            });
-                            SnackBarController().show(
-                                text:
-                                    "Voeg een nieuwe locatie toe om een box koppelen",
-                                title: "Locatie verwijderd",
-                                type: "INFO");
-                          },
-                        ),
-                      ]),
+            padding: const EdgeInsets.only(top: 30),
+            // child: this.selectedBox != null && this.selectedUser != null
+            child:
+                // ?
+                Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  "Locatie",
+                  style: Theme.of(context).textTheme.bodyText2,
+                  textAlign: TextAlign.center,
+                ),
+                // If the user location is unknown
+                if (this.userPositionLat == null &&
+                    this.userPositionLng == null)
+                  Column(children: [
                     SizedBox(
                       height: 20,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        previousButton(),
-                        nextButton(),
-                      ],
+                    // This is shown in a popup
+                    // Text(
+                    //     "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
+                    //     textAlign: TextAlign.justify,
+                    //     style: TextStyle(fontWeight: FontWeight.w400)),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Text(
+                    //     "Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.",
+                    //     textAlign: TextAlign.justify,
+                    //     style: TextStyle(fontWeight: FontWeight.w400)),
+                  FlatButton(
+  onPressed: () {
+    showDialog(
+              context: context,
+              builder: (BuildContext context) => _buildPopupDialogLocatie(context),
+            );
+  },
+  child: Text(
+    "Meer info over automatische locatie", style: TextStyle(color: Colors.blue, fontSize: 16,) 
+  ),
+),
+
+                    DashboardButtonsOverview(
+                      minWidth: double.infinity,
+                      text: "Automatisch toevoegen",
+                      onPressed: () {
+                        print("Vraag de huidige locatie van de gerbuiker op!");
+                        _getUserLocation();
+                      },
+                      icon: Icons.add_location,
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    DashboardButtonsOverview(
+                      minWidth: double.infinity,
+                      text: "Handmatig toevoegen",
+                      onPressed: () {
+                        print("Handmatig locatie invoeren");
+                        _addLocationMannually(context);
+                      },
+                      icon: Icons.add_location_alt,
+                    ),
+                  ]),
+                // If the user location is known
+                if (this.userPositionLat != null &&
+                    this.userPositionLng != null)
+                  Column(children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                        height: 250.0,
+                        child: LocationMap(
+                            this.userPositionLat, this.userPositionLng)),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        print("Delete Location!");
+                        setState(() {
+                          // Reset the locations of the user
+                          this.userPositionLat = null;
+                          this.userPositionLng = null;
+                        });
+                        SnackBarController().show(
+                            text:
+                                "Voeg een nieuwe locatie toe om een box koppelen",
+                            title: "Locatie verwijderd",
+                            type: "INFO");
+                      },
+                    ),
+                  ]),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    previousButton(),
+                    nextButton(),
                   ],
-                )
-              : Center(child: Text("Selecteer een box en een gebruiker!")),
-        );
+                ),
+              ],
+            )
+            // : Center(child: Text("Selecteer een box en een gebruiker!")),
+            );
       // Overview + opmerking
       case 3:
         return Padding(
@@ -788,6 +816,38 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
         return Text("Er ging iets mis!");
     }
   }
+
+  Widget _buildPopupDialogLocatie(BuildContext context) {
+  return new AlertDialog(
+    title: const Text('Automatische locatie'),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+                            Text(
+                        "De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontWeight: FontWeight.w400)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                        "Ga op de plaats van de box staan en houd uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling te verkrijgen.",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontWeight: FontWeight.w400)),
+      ],
+    ),
+    actions: <Widget>[
+      new FlatButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        textColor: Theme.of(context).primaryColor,
+        child: const Text('Close'),
+      ),
+    ],
+  );
+}
 
   //QRCODE CAMERA
   Widget _buildQrView(BuildContext context) {
@@ -924,6 +984,12 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
 
   void _closeModalUser(void value) {
     print('UserModal closed');
+  }
+
+  void _closeModalLocation(void value) {
+    // Empty the controllers after closing the modal
+    this.latController.clear();
+    this.lngController.clear();
   }
 
   ListView _boxListItems() {
@@ -1083,5 +1149,100 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
         );
       },
     );
+  }
+
+  // Detail modal of a location with all information
+  void _addLocationMannually(context) {
+    print("Add location mannually");
+    Future<void> future = showModalBottomSheet<void>(
+      isScrollControlled: true, // Full screen height
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+              child: Container(
+            padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
+            // height: 900,
+            color: Theme.of(context).scaffoldBackgroundColor,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(25.0, 25.0, 25.0, 5.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Locatie toevoegen',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(20)),
+                  TextFieldBOne(
+                      context: context,
+                      labelText: "Latitude",
+                      icon: Icon(Icons.explore),
+                      controller: latController,
+                      keyboardType: TextInputType.number),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFieldBOne(
+                    context: context,
+                    labelText: "Longtitude",
+                    icon: Icon(Icons.explore),
+                    controller: lngController,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.done,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom),
+                    child: OutlineFlatButtonBOne(
+                        text: "Opslaan",
+                        onPressed: latController.text.isEmpty &&
+                                lngController.text.isEmpty
+                            ? null
+                            : () {
+                                print("Pressed button to add location");
+                                setState(() {
+                                  this.userPositionLat =
+                                      double.parse(latController.text);
+                                  this.userPositionLng =
+                                      double.parse(lngController.text);
+                                });
+                                Navigator.pop(
+                                    context); // Close the bottom modal
+                                SnackBarController().show(
+                                    text: "Uw huidige locatie is: \'" +
+                                        this.userPositionLat.toString() +
+                                        " - " +
+                                        this.userPositionLat.toString() +
+                                        "\'.\nDeze locatie representeert de locatie van de box.",
+                                    title: "Handmatige locatie",
+                                    type: "INFO");
+                              }),
+                  ),
+                  Padding(padding: EdgeInsets.all(20)),
+                ],
+              ),
+            ),
+          ));
+        });
+      },
+    );
+    future.then((void value) => _closeModalLocation(value));
   }
 }
