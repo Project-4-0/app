@@ -34,7 +34,7 @@ class UserApi {
     final response =
         await http.get(url + '/users/' + id.toString() + '/with_boxes');
     if (response.statusCode == 200) {
-      return User.fromJsonWithBoxes(jsonDecode(response.body));
+      return User.fromJsonWithBoxes(jsonDecode(response.body)["user"]);
     } else {
       throw Exception(response.body);
     }
@@ -139,6 +139,22 @@ class UserApi {
     );
     if (response.statusCode == 200) {
       return User.fromJsonWithBoxes(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  static Future<String> endBoxSubscription(int userID, int boxID) async {
+    final http.Response response = await http.post(
+      url + '/users/delete_box',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      // TODO: Check if string type is ok to send !!!!!!
+      body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
+    );
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
     } else {
       throw Exception(response.body);
     }

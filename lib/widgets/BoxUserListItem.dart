@@ -4,17 +4,17 @@ import 'package:intl/intl.dart';
 
 class BoxUserListItem extends StatelessWidget {
   const BoxUserListItem({
-    @required this.boxText,
-    @required this.locationText,
     @required this.onPressed,
-    this.box, // TODO: Expect to get a full box object !!!
+    @required this.onPressedDelete,
+    @required this.delete,
+    @required this.box, // TODO: Expect to get a full box object !!!
     Key key,
   }) : super(key: key);
 
-  final String boxText;
   final Box box;
-  final String locationText;
   final GestureTapCallback onPressed;
+  final GestureTapCallback onPressedDelete;
+  final bool delete;
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +22,8 @@ class BoxUserListItem extends StatelessWidget {
       onPressed: this.onPressed,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(10),
-        height: 90,
+        padding: EdgeInsets.all(5),
+        // height: 90,
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
@@ -41,7 +41,7 @@ class BoxUserListItem extends StatelessWidget {
         child: Row(
           children: [
             CircleAvatar(
-                radius: 50.0,
+                radius: 40.0,
                 backgroundColor: Theme.of(context).primaryColor,
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
@@ -54,9 +54,10 @@ class BoxUserListItem extends StatelessWidget {
                           textAlign: TextAlign.center)),
                 )),
             SizedBox(
-              width: 8,
+              width: 5,
             ),
-            Column(
+            Expanded(
+                child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
@@ -64,15 +65,22 @@ class BoxUserListItem extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     Icon(
-                      Icons.today,
+                      Icons.date_range,
                       color: Theme.of(context).accentColor,
+                      size: 16,
                     ),
-                    Text(
-                      DateFormat('dd/MM/yyyy – kk:mm:ss')
-                          .format(box.boxUser.startDate),
-                      style: TextStyle(
-                          color: Theme.of(context).accentColor, fontSize: 14),
-                    ),
+                    Container(
+                        width: delete ? 150.0 : 170.0,
+                        padding: EdgeInsets.only(top: 5.0),
+                        child: Text(
+                          DateFormat('dd/MM/yyyy – kk:mm:ss')
+                              .format(box.boxUser.startDate),
+                          style: TextStyle(
+                              color: Theme.of(context).accentColor,
+                              fontSize: 14),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        )),
                   ],
                 ),
                 // Comment
@@ -80,20 +88,25 @@ class BoxUserListItem extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Container(
-                          width: 170.0,
+                          width: delete ? 150.0 : 170.0,
                           padding: EdgeInsets.only(top: 5.0),
                           child: Text(
                             box.comment,
                             style: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontSize: 10),
-                            maxLines: 2,
+                            maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                           )),
                     ],
                   ),
               ],
-            ),
+            )),
+            if (delete)
+              IconButton(
+                icon: Icon(Icons.delete, color: Colors.red),
+                onPressed: this.onPressedDelete,
+              ),
           ],
         ),
       ),

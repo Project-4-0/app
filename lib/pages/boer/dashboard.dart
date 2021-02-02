@@ -284,14 +284,13 @@ class _DashboardPageState extends State<DashboardPage> {
             translation: Offset(0.0, 0.0),
             child: Stack(children: <Widget>[
               BoxUserListItem(
-                boxText: "!!!!!! needs to be replaced",
                 box: boxList[position],
                 onPressed: () {
                   _setFilterBoxen(boxList[position]);
                   Navigator.pop(context);
                   // print("Show only the data from one box");
                 },
-                locationText: "Geel !!!",
+                delete: false,
               ),
               Positioned(
                 // Marble to show active status
