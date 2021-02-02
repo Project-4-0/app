@@ -46,11 +46,11 @@ ThemeData _buildBOneTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
       accentColor: bOneVitoAccent,
-      // primaryColor: bOneColor,
+      // primaryColor: bOneVitoColor,
       primaryColor: bOneVitoColor,
       canvasColor: Colors.transparent,
       buttonTheme: base.buttonTheme.copyWith(
-        // buttonColor: bOneColor.shade100,
+        // buttonColor: bOneVitoColor.shade100,
         buttonColor: bOneVitoColor,
         colorScheme: base.colorScheme.copyWith(
           secondary: bOneVitoColor.shade900,
@@ -82,7 +82,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
           bodyText2: base.bodyText2.copyWith(
             fontWeight: FontWeight.w500,
             fontSize: 16.0,
-            color: bOneAccent,
+            color: bOneVitoAccent,
           ),
           headline2: base.headline2.copyWith(
             fontFamily: 'Poppins',
