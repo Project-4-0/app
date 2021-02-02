@@ -9,9 +9,11 @@ import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart'
 import 'package:b_one_project_4_0/widgets/buttons/FlatButtonBOne.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/UserListItem.dart';
+import 'package:b_one_project_4_0/widgets/location_map.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
+import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/pages/monteur/newUser.dart';
@@ -22,6 +24,7 @@ import 'package:im_stepper/stepper.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MonteurConnectedPage extends StatefulWidget {
   @override
@@ -47,6 +50,9 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
 
   // Must be used to control the upper bound of the activeStep variable. Please see next button below the build() method!
   int upperBound = 0;
+
+  double userPositionLat;
+  double userPositionLng;
 
   //QRCODE
   Barcode result;
@@ -109,6 +115,16 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
       _searchBoxModal(context);
     });
   }
+
+void _getUserLocation() async {
+        var position = await GeolocatorPlatform.instance
+            .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position.latitude.toString());
+        setState(() {
+          this.userPositionLat = position.latitude;
+          this.userPositionLng = position.longitude;
+        });
+      }
 
   void _searchBoxValueChanged() {
     print("Box search text field: ${searchBoxController.text}");
@@ -270,6 +286,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         color: Colors.white,
                       ),
                       Icon(
+                        Icons.add_location,
+                        color: Colors.white,
+                      ),
+                      Icon(
                         Icons.comment,
                         color: Colors.white,
                       ),
@@ -311,7 +331,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   Widget nextButton() {
     return FlatButtonBOne(
       text: "Volgende",
-      // onPressed: () => switchNextButton(),
       onPressed: (this.activeStep == 0 && this.selectedBox == null)
           ? null
           : (this.activeStep == 1 && this.selectedUser == null)
@@ -529,8 +548,62 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
             ],
           ),
         );
+        // Location
+        case 2: 
+        return Padding(
+          padding: const EdgeInsets.only(top: 30),
+          // child: this.selectedBox != null && this.selectedUser != null
+              // ? 
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      "Locatie",
+                      style: Theme.of(context).textTheme.bodyText2,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text("De locatie van uw toestel zal gebruikt worden om de locatie van de box te bepalen.", textAlign: TextAlign.justify),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text("Ga op de plaats van de box staan en houdt uw toestel stil voor een zo nauwkeurig mogelijke locatiebepaling.", textAlign: TextAlign.justify),
+                    SizedBox(
+                      height: 10,
+                    ),
+              DashboardButtonsOverview(
+                minWidth: double.infinity,
+                text: "Locatie toevoegen",
+                onPressed: () {
+                  print("Vraag de huidige locatie van de gerbuiker op!");
+                  _getUserLocation();
+                },
+                icon: Icons.add_location,
+              ),
+                                  SizedBox(
+                      height: 10,
+                    ),
+                    if(this.userPositionLat!=null && this.userPositionLng!=null)
+                    Container(
+                      height: 200.0,
+                      child: LocationMap(this.userPositionLat, this.userPositionLng)
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        previousButton(),
+                        nextButton(),
+                      ],
+                    ),
+                  ],
+                ),
+              // : Center(child: Text("Selecteer een box en een gebruiker!")),
+        );
 // Overview + opmerking
-      case 2:
+      case 3:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
           child: this.selectedBox != null && this.selectedUser != null
@@ -588,7 +661,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
               : Center(child: Text("Selecteer een box en een gebruiker!")),
         );
       // Confirmation
-      case 3:
+      case 4:
         return Padding(
           padding: const EdgeInsets.only(top: 30),
           child: this.selectedBox != null && this.selectedUser != null
@@ -685,33 +758,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   void dispose() {
     controller.dispose();
     super.dispose();
-  }
-
-  void switchNextButton() {
-    switch (activeStep) {
-      case 0:
-        print('Case: 0');
-        if (this.selectedBox == null) {
-          return null;
-        }
-        return null;
-        break;
-
-      case 1:
-        print('Case: 1');
-        break;
-
-      case 2:
-        print('Case: 2');
-        break;
-
-      case 3:
-        print('Case: 3');
-        break;
-
-      default:
-        print('Case: default');
-    }
   }
 
   // Detail modal of a box with all information
