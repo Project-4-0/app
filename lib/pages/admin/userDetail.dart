@@ -56,10 +56,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
         postalCode: "",
         city: "",
         userTypeID: 3,
-        userType: new UserType(
-            id: 3,
-            userTypeName: "Boer"
-          ),
+        userType: new UserType(id: 3, userTypeName: "Boer"),
       );
     } else {
       _getUser(this.id); // get the user info using the api
@@ -406,7 +403,9 @@ class _UserDetailPageState extends State<UserDetailPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 

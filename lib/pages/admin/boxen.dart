@@ -119,8 +119,7 @@ class _BoxenOverviewPage extends State {
                       onPressedRight: () {
                         // TODO: go to box detail with empty values
                         print("Pressed add box");
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, '/admin/boxen/new', (route) => false);
+                        Navigator.pushNamed(context, '/admin/boxen/new');
                       },
                       textRight: "Box",
                       iconRight: Icons.business_center,
@@ -147,7 +146,9 @@ class _BoxenOverviewPage extends State {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(
+        active: 1,
+      ),
     );
   }
 

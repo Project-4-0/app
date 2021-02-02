@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-//Navigation bar widget
+// Navigation bar widget
 class BottomAppBarBOne extends StatelessWidget {
   const BottomAppBarBOne({
     Key key,
-    // this.active,
+    @required this.active,
   }) : super(key: key);
 
-  // final String active;
+  final int active;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +23,22 @@ class BottomAppBarBOne extends StatelessWidget {
             // Home buttton
             FlatButton(
               onPressed: () {
+                // Go to the general dashboard. This wil route you to the correct user type dashboard!
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/dashboard', (route) => false);
               },
               child: Icon(
                 Icons.home,
                 size: 30,
-                // active=="home"? (color: Theme.of(context).primaryColor) : (color: Theme.of(context).accentColor),
-                color: Theme.of(context).accentColor,
+                color: active == 1
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).accentColor,
               ),
             ),
             // Account buttton
             FlatButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/profile', (route) => false);
+                Navigator.pushNamed(context, '/profile');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(right: 60),
@@ -45,15 +46,16 @@ class BottomAppBarBOne extends StatelessWidget {
                 child: Icon(
                   Icons.account_circle,
                   size: 30,
-                  color: Theme.of(context).accentColor,
+                  color: active == 2
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).accentColor,
                 ),
               ),
             ),
             // Info button
             FlatButton(
               onPressed: () {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/info', (route) => false);
+                Navigator.pushNamed(context, '/info');
               },
               child: Padding(
                 // padding: const EdgeInsets.only(left: 60),
@@ -61,7 +63,9 @@ class BottomAppBarBOne extends StatelessWidget {
                 child: Icon(
                   Icons.info,
                   size: 30,
-                  color: Theme.of(context).accentColor,
+                  color: active == 3
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).accentColor,
                 ),
               ),
             ),
@@ -74,7 +78,9 @@ class BottomAppBarBOne extends StatelessWidget {
               child: Icon(
                 Icons.exit_to_app,
                 size: 30,
-                color: Theme.of(context).accentColor,
+                color: active == 4
+                    ? Theme.of(context).primaryColor
+                    : Theme.of(context).accentColor,
               ),
             ),
           ],

@@ -1,15 +1,9 @@
 /*
-Usercontroller
+BoxController
 */
 import 'package:b_one_project_4_0/apis/box_api.dart';
-import 'package:b_one_project_4_0/apis/usertype_api.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
-import 'package:b_one_project_4_0/models/userType.dart';
-import 'package:b_one_project_4_0/models/userRegistration.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'authController.dart';
 
 class BoxController {
   // All boxes
@@ -34,13 +28,24 @@ class BoxController {
     });
   }
 
+  // One box by macAddress
+  static Future<Box> loadBoxWithMacAddress(String macAddress) async {
+    return BoxApi.fetchBoxByMacAddress(macAddress).then((box) {
+      return box;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return null;
+    });
+  }
+
   // One box with all information
   static Future<Box> loadBoxAll(int id) async {
     return BoxApi.fetchBoxAll(id).then((box) {
       return box;
     }).catchError((error) {
-      SnackBarController()
-          .show(text: "Kan box info niet ophalen!", title: "Server", type: "ERROR");
+      SnackBarController().show(
+          text: "Kan box info niet ophalen!", title: "Server", type: "ERROR");
       return null;
     });
   }

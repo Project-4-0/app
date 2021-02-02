@@ -43,12 +43,16 @@ class Box {
       active: json['Active'],
       boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
-      sensors:  json['sensors'] == null ? null : (json['sensors'] as List)
-          .map((tagJson) => Sensor.fromJsonWithout(tagJson))
-          .toList(),
-      users: json['users'] == null ? null : (json['users'] as List)
-          .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
-          .toList(), // TODO: What about boxUsers? !!!!!
+      sensors: json['sensors'] == null
+          ? null
+          : (json['sensors'] as List)
+              .map((tagJson) => Sensor.fromJsonWithout(tagJson))
+              .toList(),
+      users: json['users'] == null
+          ? null
+          : (json['users'] as List)
+              .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
+              .toList(), // TODO: What about boxUsers? !!!!!
     );
   }
 

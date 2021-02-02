@@ -81,14 +81,6 @@ class UserApi {
   }
 
   static Future<User> updateUser(User user) async {
-    print(user.firstName);
-    print(user.lastName);
-    print(user.id);
-    print(user.email);
-    print(user.address);
-    print(user.postalCode);
-    print(user.city);
-    print(user.userTypeID);
     final http.Response response = await http.put(
       url + '/users',
       headers: <String, String>{
@@ -124,6 +116,22 @@ class UserApi {
     );
     if (response.statusCode == 200) {
       return Auth.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception(response.body);
+    }
+  }
+
+  // POST: Add boxUser
+  static Future<User> addBoxUser(int userID, int boxID) async {
+    final http.Response response = await http.post(
+      url + '/users/add_box',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
+    );
+    if (response.statusCode == 200) {
+      return User.fromJsonWithBoxes(jsonDecode(response.body));
     } else {
       throw Exception(response.body);
     }
