@@ -97,6 +97,7 @@ class _NewBoxPageState extends State<NewBoxPage> {
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.sentences,
+                    maxLength: 12,
                   ),
                   SizedBox(
                     height: 20,

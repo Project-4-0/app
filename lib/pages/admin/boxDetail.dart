@@ -114,6 +114,7 @@ class _BoxDetailPageState extends State<BoxDetailPage> {
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     textCapitalization: TextCapitalization.sentences,
+                    maxLength: 12,
                   ),
                   SizedBox(
                     height: 20,

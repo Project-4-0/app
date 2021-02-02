@@ -49,20 +49,13 @@ class _InfoPageState extends State<InfoPage> {
                       fontFamily: 'Poppins',
                     ),
                   ),
-                  Padding(padding: EdgeInsets.all(5.0)),
+                  Padding(padding: EdgeInsets.all(10.0)),
                   Image(
-                    image: AssetImage("assets/logo_vito_colorful.png"),
-                    height: 150,
-                  ),
-                  Text(
-                    "VITO",
-                    style: TextStyle(
-                      fontSize: 50,
-                      color: Colors.black,
-                    ),
+                    image: AssetImage("assets/vito_remote_sensing_trim.png"),
+                    width: 200.0,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(children: [
                     Expanded(
