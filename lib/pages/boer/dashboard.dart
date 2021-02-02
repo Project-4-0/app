@@ -221,7 +221,15 @@ class _DashboardPageState extends State<DashboardPage> {
       return Text("Geen satellietbeeld gevonden");
     }
     if (this.terrascope.url == null && this.terrascope.loading == true) {
-      return Text("Loading Image");
+      return Column(
+        children: [
+          Text("Afbeelding laden"),
+          SizedBox(
+            height: 20.0,
+          ),
+          CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor),)
+            ]
+            );
     }
 
     return Image.network(
@@ -267,7 +275,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return new ListView.builder(
       primary: false,
       shrinkWrap: true,
-      physics: const AlwaysScrollableScrollPhysics(),
+      physics: AlwaysScrollableScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemCount: count,
       itemBuilder: (BuildContext context, int position) {
@@ -311,8 +319,9 @@ class _DashboardPageState extends State<DashboardPage> {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter setState /*You can rename this!*/) {
-            return Container(
-                height: 600,
+            return SingleChildScrollView(
+            child: Container(
+                // height: 600,
                 color: Colors.white,
                 child: Padding(
                     padding: EdgeInsets.only(top: 25),
@@ -321,12 +330,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         "Boxen",
                         style: Theme.of(context).textTheme.headline4,
                       ),
-                      count == 0
-                          ? Center(
-                              child:
-                                  Text("Geen boxen gevonden voor uw account!"))
-                          : _boxItems(boxList, count),
-                    ])));
+                      Container(
+                        child: boxList == null
+                            ? Center(
+                                child: Text(
+                                    "Geen boxen gevonden voor uw account!"))
+                            : _boxItems(boxList, count),
+                      )
+                    ]))));
           });
         });
   }

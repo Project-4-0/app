@@ -734,6 +734,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
             builder: (BuildContext context, StateSetter setState) {
           return SingleChildScrollView(
               child: Container(
+                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 5.0),
             // height: 900,
             color: Colors.white,
             child: Padding(
@@ -779,7 +780,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                           ),
                   ),
                   Padding(padding: EdgeInsets.all(20)),
-                  // Values of box
                 ],
               ),
             ),

@@ -75,6 +75,8 @@ flutter:
   assets:
     - .env
     - assets/
+    - assets/vito_remote_sensing.png
+    - assets/vito_remote_sensing_trim.png
     - assets/satelite.JPG
     - assets/connect.gif
     - assets/ArnoVangoetsenhoven.png
