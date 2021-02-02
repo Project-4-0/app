@@ -7,20 +7,15 @@ import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/models/userType.dart';
 
-class NewUserPage extends StatefulWidget {
-  NewUserPage();
+class NewUserMonteurPage extends StatefulWidget {
+  NewUserMonteurPage();
 
   @override
-  _NewUserPageState createState() => _NewUserPageState();
+  _NewUserMonteurPageState createState() => _NewUserMonteurPageState();
 }
 
-class _NewUserPageState extends State<NewUserPage> {
+class _NewUserMonteurPageState extends State<NewUserMonteurPage> {
   User user;
-
-  List<UserType> userTypeList;
-  List<String> userTypeNameList = [];
-
-  String dropdownValue;
 
   TextEditingController firstnameController = TextEditingController();
   TextEditingController lastnameController = TextEditingController();
@@ -33,9 +28,6 @@ class _NewUserPageState extends State<NewUserPage> {
   @override
   void initState() {
     super.initState();
-
-    dropdownValue = "Boer";
-
     user = new User(
       firstName: "",
       lastName: "",
@@ -43,24 +35,19 @@ class _NewUserPageState extends State<NewUserPage> {
       address: "",
       postalCode: "",
       city: "",
-      userTypeID: 3,
+      userTypeID: 3, // Monteur can only make new boeren
     );
-
-    _getAllUserTypes();
+    //     user = new User(
+    //   firstName: "Jill",
+    //   lastName: "Van Rethij",
+    //   email: "jilleke123gmail.com",
+    //   address: "Rodekruisstraat 95B",
+    //   postalCode: "2260",
+    //   city: "Westerlo",
+    //   userTypeID: 3, // Monteur can only make new boeren
+    // );
   }
 
-  void _getAllUserTypes() {
-    print("Get all userTypes");
-    UserController.loadUserTypes().then((result) {
-      setState(() {
-        print("Number of userTypes: " + result.length.toString());
-        this.userTypeList = result;
-        for (UserType userType in result) {
-          this.userTypeNameList.add(userType.userTypeName);
-        }
-      });
-    });
-  }
 
   _saveNewUserPofile() {
     print("SaveUserProfile");
@@ -76,6 +63,8 @@ class _NewUserPageState extends State<NewUserPage> {
 
     UserController.newUser(this.user).then((response) {
       if (response != null) {
+        // Navigate back to the connect page
+          Navigator.pop(context, this.user);
         SnackBarController().show(
             text: "Nieuwe gebruiker \'" +
                 response.firstName +
@@ -201,63 +190,6 @@ class _NewUserPageState extends State<NewUserPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            Text('Type gebruiker: ', textAlign: TextAlign.left),
-                            DropdownButton<String>(
-                              // value: this.user.userType.userTypeName,
-                              value: this.dropdownValue,
-                              icon: Icon(Icons.arrow_downward,
-                                  color: Theme.of(context).primaryColor),
-                              iconSize: 24,
-                              elevation: 16,
-                              dropdownColor: Colors.white,
-                              underline: Container(
-                                height: 2,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onChanged: (String newUserTypeValue) {
-                                print(
-                                    "New dropdown value: " + newUserTypeValue);
-                                setState(() {
-                                  this.dropdownValue =
-                                      newUserTypeValue.toString();
-                                });
-                                // Get the user type id by the slected name of the dropdown
-                                UserController.loadUserTypeByName(
-                                        this.dropdownValue)
-                                    .then((userType) {
-                                  this.user.userTypeID = userType.id;
-                                  print("New UserTypeID: " +
-                                      userType.id.toString());
-                                });
-                              },
-                              items: this.userTypeNameList != null &&
-                                      this.userTypeNameList.isNotEmpty
-                                  ? this
-                                      .userTypeNameList
-                                      .map<DropdownMenuItem<String>>(
-                                          (userTypeName) {
-                                      return DropdownMenuItem<String>(
-                                        value: userTypeName,
-                                        child: Text(userTypeName),
-                                      );
-                                    }).toList()
-                                  : <String>['Admin', 'Boer', 'Monteur', '...']
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
                         // TODO: Create list of available boxes
                         SizedBox(
                           height: 20,
@@ -265,10 +197,10 @@ class _NewUserPageState extends State<NewUserPage> {
                         FlatButtonBOne(
                           minWidth: double.infinity,
                           text: "Opslaan",
-                          onPressed: () {
-                            print("Save user");
-                            _saveNewUserPofile();
-                          },
+onPressed: () {
+  print("Save user");
+  _saveNewUserPofile();
+}
                         ),
                       ],
                     ),

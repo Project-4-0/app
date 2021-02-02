@@ -76,6 +76,13 @@ flutter:
     - .env
     - assets/
     - assets/satelite.JPG
+    - assets/connect.gif
+    - assets/ArnoVangoetsenhoven.png
+    - assets/JariNeyens.png
+    - assets/RobertBlaga.png
+    - assets/RubenLuyten.png
+    - assets/SenneVanPelt.png
+    - assets/YouriVanLaer.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -155,4 +155,16 @@ class UserController {
       return null;
     });
   }
+
+    static Future<User> addBoxUser(int userID, int boxID) async {
+    return UserApi.addBoxUser(userID, boxID).then((user) {
+      return user;
+    }).catchError((error) {
+      SnackBarController()
+          .show(text: error.message, title: "Server", type: "ERROR");
+      return false;
+    });
+  
+  }
+
 }

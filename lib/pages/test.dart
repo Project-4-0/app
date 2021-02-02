@@ -1,4 +1,4 @@
-import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
+import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 
 ///FOR DESIGN NEW ELEMENTS!!!
 
@@ -60,7 +60,7 @@ class _TestPageState extends State<TestPage> {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 }

@@ -16,44 +16,63 @@ MaterialColor bOneColor = const MaterialColor(
   },
 );
 
+MaterialColor bOneVitoColor = const MaterialColor(
+  0xFF81bb26, // Green color from VITO
+  const <int, Color>{
+    50: const Color.fromRGBO(129, 187, 38, .1),
+    100: const Color.fromRGBO(129, 187, 38, .2),
+    200: const Color.fromRGBO(129, 187, 38, .3),
+    300: const Color.fromRGBO(129, 187, 38, .4),
+    400: const Color.fromRGBO(129, 187, 38, .5),
+    500: const Color.fromRGBO(129, 187, 38, .6),
+    600: const Color.fromRGBO(129, 187, 38, .7),
+    700: const Color.fromRGBO(129, 187, 38, .8),
+    800: const Color.fromRGBO(129, 187, 38, .9),
+    900: const Color.fromRGBO(129, 187, 38, 1),
+  },
+);
+
 const bOneErrorRed = Color(0xFFC5032B);
 const bOneBackgroundWhite = Color(0xFFF0F0F0);
 const bOneCMT = Color(0xFFF88604);
 
 const bOneAccentBlue = Color(0xFF33A3DC); // Blue color from VITO
 const bOneAccent = Color(0xFF9EA0A9); // Gray color
+const bOneVitoAccent = Color(0xFF323031); // Gray color from vito
 
 final ThemeData bOneTheme = _buildBOneTheme();
 
 ThemeData _buildBOneTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-      accentColor: bOneAccent,
-      primaryColor: bOneColor,
+      accentColor: bOneVitoAccent,
+      // primaryColor: bOneColor,
+      primaryColor: bOneVitoColor,
       canvasColor: Colors.transparent,
       buttonTheme: base.buttonTheme.copyWith(
-        buttonColor: bOneColor.shade100,
+        // buttonColor: bOneColor.shade100,
+        buttonColor: bOneVitoColor,
         colorScheme: base.colorScheme.copyWith(
-          secondary: bOneColor.shade900,
+          secondary: bOneVitoColor.shade900,
         ),
         textTheme: ButtonTextTheme.accent,
       ),
       buttonBarTheme: base.buttonBarTheme.copyWith(
         buttonTextTheme: ButtonTextTheme.accent,
       ),
-      buttonColor: bOneColor,
+      buttonColor: bOneVitoColor,
       scaffoldBackgroundColor: bOneBackgroundWhite,
-      // textSelectionColor: bOneColor.shade100,
+      // textSelectionColor: bOneVitoColor.shade100,
       errorColor: bOneErrorRed,
       textTheme: _buildBOneTextTheme(base.textTheme),
       primaryTextTheme: _buildBOneTextTheme(base.primaryTextTheme),
       accentTextTheme: _buildBOneTextTheme(base.accentTextTheme),
-      primaryColorLight: bOneColor.shade200,
+      primaryColorLight: bOneVitoColor.shade200,
       indicatorColor: bOneCMT,
-      primaryIconTheme: IconThemeData(color: bOneAccent),
-      iconTheme: IconThemeData(color: bOneAccent),
+      primaryIconTheme: IconThemeData(color: bOneVitoAccent),
+      iconTheme: IconThemeData(color: bOneVitoAccent),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        foregroundColor: bOneAccent,
+        foregroundColor: bOneVitoAccent,
       ));
 }
 
@@ -68,7 +87,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
           headline2: base.headline2.copyWith(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w700,
-            color: bOneColor.shade900,
+            color: bOneVitoColor.shade900,
           ),
           headline5: base.headline5.copyWith(
             fontWeight: FontWeight.w500,
@@ -91,7 +110,7 @@ TextTheme _buildBOneTextTheme(TextTheme base) {
           ))
       .apply(
           // fontFamily: 'Poppins',
-          // displayColor: bOneColor.shade900,
-          // bodyColor: bOneColor.shade900,
+          // displayColor: bOneVitoColor.shade900,
+          // bodyColor: bOneVitoColor.shade900,
           );
 }

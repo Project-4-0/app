@@ -87,7 +87,6 @@ class _UserOverviewPage extends State {
     await launch('$mailtoLink');
   }
 
-  // Dummy data are no real addresses!
   static Future<void> _openGoogleMaps(
       String address, String city, String postalcode) async {
     String googleUrl =
@@ -104,8 +103,8 @@ class _UserOverviewPage extends State {
     //   Navigator.pushNamedAndRemoveUntil(
     //       context, '/admin/users/1', (route) => false);
     if (id == null) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/admin/users/new', (route) => false);
+      Navigator.pushNamed(
+          context, '/admin/users/new');
     } else {
       bool result = await Navigator.push(
         context,
@@ -173,7 +172,7 @@ class _UserOverviewPage extends State {
       ),
       floatingActionButton: FloatingActionButtonBOne(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomAppBarBOne(),
+      bottomNavigationBar: BottomAppBarBOne(active: 1,),
     );
   }
 
@@ -237,7 +236,7 @@ class _UserOverviewPage extends State {
                           padding: EdgeInsets.all(4.0),
                         ),
                         SizedBox(
-                            width: 180.0,
+                            width: 170.0,
                             child: GestureDetector(
                               onTap: () {
                                 print("Tapped on email!");
@@ -316,4 +315,5 @@ class _UserOverviewPage extends State {
       },
     );
   }
+
 }

@@ -22,7 +22,7 @@ class BoxListItem extends StatelessWidget {
       onPressed: this.onPressed,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(5),
+        // padding: EdgeInsets.all(5),
         height: 80,
         width: double.infinity,
         decoration: BoxDecoration(
