@@ -196,7 +196,6 @@ class _UserOverviewPage extends State {
       // shrinkWrap: true,
       itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
-
         return UserListItem(
           user: this.userList[position],
           showTrailingIcon: true,
