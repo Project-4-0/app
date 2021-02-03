@@ -13,8 +13,20 @@ class Weather {
   double windDeg;
   double clouds;
 
-
-  Weather({this.weatherMain, this.weatherDescription, this.weatherIcon, this.temp, this.feels_like, this.temp_min, this.temp_max, this.pressure, this.humidity, this.visibility, this.windSpeed, this.windDeg, this.clouds});
+  Weather(
+      {this.weatherMain,
+      this.weatherDescription,
+      this.weatherIcon,
+      this.temp,
+      this.feels_like,
+      this.temp_min,
+      this.temp_max,
+      this.pressure,
+      this.humidity,
+      this.visibility,
+      this.windSpeed,
+      this.windDeg,
+      this.clouds});
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
@@ -31,7 +43,6 @@ class Weather {
       // windSpeed: json['boxCountNoneActive'],
       // windDeg: json['boxCountNoneActive'],
       // clouds: json['boxCountNoneActive'],
-
     );
   }
 }

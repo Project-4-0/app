@@ -180,7 +180,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
                         _openweather(),
-                        Padding(padding: EdgeInsets.all(15.0)),                      
+                        Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
                           title: "Licht",
