@@ -169,27 +169,34 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
     print("User search text field: ${searchUserController.text}");
     setState(() {
       this.userList = originalUserList
-          .where((user) =>
-              user.firstName
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) ||
-              user.lastName
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) ||
-              user.email
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) 
-              //     ||
-              // user?.address
-              //     .toLowerCase()
-              //     .contains(searchUserController.text.toLowerCase()) ||
-              // user?.city
-              //     .toLowerCase()
-              //     .contains(searchUserController.text.toLowerCase()) ||
-              // user?.postalCode
-              //     .toLowerCase()
-              //     .contains(searchUserController.text.toLowerCase())
-                  )
+          .where((user) => user.address == null
+              ? (user.firstName
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.lastName
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.email
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()))
+              : (user.firstName
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.lastName
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.email
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.address
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.city
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase()) ||
+                  user.postalCode
+                      .toLowerCase()
+                      .contains(searchUserController.text.toLowerCase())))
           .toList();
       // Users sorted alphabetical by last name
       this.userList.sort((a, b) {
@@ -951,7 +958,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         ? _boxListItems()
                         : Column(
                             children: <Widget>[
-                              Text('Geen resultaten gevonden!'),
                               Text(
                                 'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
                                 textAlign: TextAlign.center,
