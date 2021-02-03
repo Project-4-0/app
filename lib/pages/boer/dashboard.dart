@@ -308,6 +308,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _boxModal(context, boxList, count) {
     showModalBottomSheet(
+                  isScrollControlled: true, // Full screen height
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(30),
@@ -325,7 +326,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     color: Colors.white,
                     child: Padding(
                         padding: EdgeInsets.only(top: 25),
-                        child: Column(children: [
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                           Text(
                             "Boxen",
                             style: Theme.of(context).textTheme.headline4,

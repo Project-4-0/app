@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-// Default Textield button Gshop
+// Default Textield button B One
 class TextFieldBOne extends StatelessWidget {
   const TextFieldBOne({
     Key key,

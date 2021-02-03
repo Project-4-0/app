@@ -3,6 +3,7 @@ import 'package:b_one_project_4_0/models/kpi.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/DashboardButtonsOverview.dart';
+import 'package:b_one_project_4_0/widgets/charts/Kpi.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboardPage extends StatefulWidget {
@@ -16,15 +17,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   void initState() {
     super.initState();
-    _getKPI();
-  }
-
-  void _getKPI() {
-    KpiController.loadCount().then((kpi) {
-      setState(() {
-        this.kpi = kpi;
-      });
-    });
   }
 
   @override
@@ -113,8 +105,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                             ],
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(10.0)),
-                        _loadKPI(),
+                        KPI(),
                       ],
                     ),
                   ),
@@ -132,16 +123,4 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     );
   }
 
-  _loadKPI() {
-    if (kpi == null) {
-      return Text("loading");
-    }
-    return Column(
-      children: [
-        Text(kpi.userCount.toString()),
-        Text(kpi.boxCountActive.toString()),
-        Text(kpi.boxCountNoneActive.toString()),
-      ],
-    );
-  }
 }
