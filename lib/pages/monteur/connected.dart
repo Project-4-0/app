@@ -950,8 +950,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         : Column(
                             children: <Widget>[
                               Text('Geen resultaten gevonden!'),
-                              Text('Geen resultaten gevonden!\nProbeer een andere zoekterm.', textAlign: TextAlign.center,),
-
+                              Text(
+                                'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                   ),
@@ -1092,8 +1094,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         : Column(
                             children: <Widget>[
                               Text('Geen resultaten gevonden!'),
-                              Text('Geen resultaten gevonden!\nProbeer een andere zoekterm.', textAlign: TextAlign.center,),
-
+                              Text(
+                                'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                   ),

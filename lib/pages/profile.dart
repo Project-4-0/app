@@ -47,7 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   _setUserProfile() {
-    //set User
+    // set User
     this._user.firstName = firstnameController.text;
     this._user.lastName = lastnameController.text;
     this._user.email = emailController.text;
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
     UserController.setUser(this._user).then((response) {
       if (response) {
         SnackBarController().show(
-            text: "Wijzigingen zijn succesvol opgeslagen",
+            text: "Wijzigingen zijn succesvol opgeslagen!",
             title: "Update",
             type: "GOOD");
       }

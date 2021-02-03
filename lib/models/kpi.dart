@@ -1,8 +1,7 @@
-
 class Kpi {
   int userCount;
-    int boxCountActive;
-      int boxCountNoneActive;
+  int boxCountActive;
+  int boxCountNoneActive;
 
   Kpi({this.userCount, this.boxCountActive, this.boxCountNoneActive});
 

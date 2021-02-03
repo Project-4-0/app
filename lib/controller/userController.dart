@@ -39,22 +39,21 @@ class UserController {
       // Set authToken
       AuthController.setAuthToken(auth);
 
-// boer@example.com
       // get Users
       var user;
       try {
         user = await UserApi.fetchUser(auth.userID);
         AuthController.setUser(user);
       } catch (e) {
-        SnackBarController()
-            .show(text: "UserID not found", title: "backend", type: "ERROR");
+        SnackBarController().show(
+            text: "Gebruikder niet gevonden", title: "Backend", type: "ERROR");
         debugPrint(e);
       }
 
       return true;
     }).catchError((error) {
       SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+          .show(text: error.message["message"], title: "Server", type: "ERROR");
       return false;
     });
   }
@@ -65,7 +64,7 @@ class UserController {
       return user;
     }).catchError((error) {
       SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+          .show(text: error.message["message"], title: "Server", type: "ERROR");
       return null;
     });
   }
@@ -82,7 +81,6 @@ class UserController {
   }
 
   static Future<bool> setUser(User user) async {
-    print("User is here");
     return UserApi.updateUser(user).then((user) {
       return true;
     }).catchError((error) {
@@ -108,7 +106,7 @@ class UserController {
       return user;
     }).catchError((error) {
       SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+          .show(text: error.message["message"], title: "Server", type: "ERROR");
       return null;
     });
   }

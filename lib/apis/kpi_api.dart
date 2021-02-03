@@ -15,6 +15,4 @@ class KpiApi {
       throw Exception(response.body);
     }
   }
-
-  
 }

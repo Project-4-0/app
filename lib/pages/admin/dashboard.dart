@@ -1,6 +1,7 @@
 import 'package:b_one_project_4_0/models/kpi.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/pages/admin/boxData.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
@@ -19,7 +20,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   List<Box> boxList = List<Box>();
   List<Box> originalBoxList = List<Box>();
-
 
   TextEditingController searchBoxController = TextEditingController();
 
@@ -247,12 +247,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   //           ))),
                   // ),
 
-
-                    Text("Gevonden boxen (" +
-                        this.boxList.length.toString() +
-                        "/" +
-                        this.originalBoxList.length.toString() +
-                        "):"),
+                  Text("Gevonden boxen (" +
+                      this.boxList.length.toString() +
+                      "/" +
+                      this.originalBoxList.length.toString() +
+                      "):"),
                   Container(
                     child: this.boxList.length != 0
                         ? _boxListItems()
@@ -261,7 +260,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                               SizedBox(
                                 height: 30.0,
                               ),
-                              Text('Geen resultaten gevonden!\nProbeer een andere zoekterm.', textAlign: TextAlign.center,),
+                              Text(
+                                'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                   ),
@@ -307,9 +309,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 onPressed: () {
                   print("Selected box with id: " +
                       this.boxList[position].id.toString());
-                  setState(() {
-                    //
-                  });
+                  // Navigate to the data display for an admin
+                  _boxDataPage(context, this.boxList[position]);
                 },
               ),
               Positioned(
@@ -325,5 +326,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             ]));
       },
     );
+  }
+
+  Future<void> _boxDataPage(context, Box box) async {
+    bool result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BoxDataPage(box)),
+    );
+    if (result == true) {
+      _getBoxes();
+    }
   }
 }

@@ -92,44 +92,44 @@ class _BoxDetailPageState extends State<BoxDetailPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  if(this.box!=null)
-                  Column(children: [
-                    // Mac address of box needs to be givin if the box is manually inserted in db
-                    TextFieldBOne(
-                      context: context,
-                      labelText: "MAC-adres",
-                      icon: Icon(Icons.dialpad),
-                      controller: macAddressController,
-                      keyboardType: TextInputType.datetime,
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFieldBOne(
-                      context: context,
-                      labelText: "Naam",
-                      icon: Icon(Icons.business_center),
-                      controller: nameController,
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
-                      maxLength: 12,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextFieldBOne(
-                      context: context,
-                      labelText: "Opmerking",
-                      icon: Icon(Icons.comment),
-                      controller: commentController,
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.sentences,
-                    ),
-                  ]),
+                  if (this.box != null)
+                    Column(children: [
+                      // Mac address of box needs to be givin if the box is manually inserted in db
+                      TextFieldBOne(
+                        context: context,
+                        labelText: "MAC-adres",
+                        icon: Icon(Icons.dialpad),
+                        controller: macAddressController,
+                        keyboardType: TextInputType.datetime,
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFieldBOne(
+                        context: context,
+                        labelText: "Naam",
+                        icon: Icon(Icons.business_center),
+                        controller: nameController,
+                        keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
+                        maxLength: 12,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFieldBOne(
+                        context: context,
+                        labelText: "Opmerking",
+                        icon: Icon(Icons.comment),
+                        controller: commentController,
+                        keyboardType: TextInputType.multiline,
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
+                    ]),
                   SizedBox(
                     height: 20,
                   ),
