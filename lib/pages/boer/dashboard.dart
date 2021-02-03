@@ -10,6 +10,7 @@ import 'package:b_one_project_4_0/models/terrascope.dart';
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
+import 'package:b_one_project_4_0/widgets/WeatherInfo.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
@@ -165,6 +166,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(10.0)),
+
                         TopBarButtons(
                           onPressedLeft: () {
                             _filterModal(context);
@@ -178,8 +180,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           iconRight: Icons.business_center,
                           color: Colors.grey.shade900,
                         ),
+
                         Padding(padding: EdgeInsets.all(15.0)),
-                        _openweather(),
+                        WeatherInfo(
+                            1), // TODO: set box id !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,

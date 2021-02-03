@@ -6,11 +6,11 @@ import 'dart:convert';
 class WeatherApi {
   static String url = env['API_URL'];
 
-  // GET: All boxes
-  static Future<Weather> getWeatherInfo() async {
-    final response = await http.get(url + '/weather');
+  // GET: the weather info for a box his location
+  static Future<Weather> getWeatherInfo(int boxID) async {
+    final response = await http.get(url + '/weather/box/' + boxID.toString());
     if (response.statusCode == 200) {
-      return Weather.fromJson(jsonDecode(response.body));
+      return Weather.fromJson(jsonDecode(response.body)['result']);
     } else {
       throw Exception(response.body);
     }
