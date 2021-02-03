@@ -3,6 +3,7 @@ import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
+import 'package:b_one_project_4_0/widgets/UserListItem.dart';
 import 'package:b_one_project_4_0/pages/admin/userDetail.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -49,25 +50,34 @@ class _UserOverviewPage extends State {
     print("Search text: ${searchController.text}");
     setState(() {
       this.userList = originalUserList
-          .where((user) =>
-              user.firstName
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              user.lastName
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              user.email
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              user.address
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              user.city
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()) ||
-              user.postalCode
-                  .toLowerCase()
-                  .contains(searchController.text.toLowerCase()))
+          .where((user) => user.address == null
+              ? (user.firstName
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.lastName
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.email
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()))
+              : (user.firstName
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.lastName
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.email
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.address
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.city
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase()) ||
+                  user.postalCode
+                      .toLowerCase()
+                      .contains(searchController.text.toLowerCase())))
           .toList();
       // Users sorted alphabetical by last name
       this.userList.sort((a, b) {
@@ -186,135 +196,13 @@ class _UserOverviewPage extends State {
       // shrinkWrap: true,
       itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
-        return Card(
-          shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(10.0),
-  ),
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Show the first letter of the last name
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: Text(
-                      this.userList[position].firstName.substring(0, 1) +
-                          this.userList[position].lastName.substring(0, 1),
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-            title: Text(
-              this.userList[position].firstName +
-                  " " +
-                  this.userList[position].lastName,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor),
-            ),
-            subtitle: Column(
-              children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
-                        GestureDetector(
-                            onTap: () {
-                              print("Tapped on email!");
-                              _launchMailto(
-                                  this.userList[position].email.toString(),
-                                  this.userList[position].firstName,
-                                  this.userList[position].lastName);
-                            },
-                            child: Icon(Icons.mail_outline,
-                                size: 14,
-                                color: Theme.of(context).primaryColor)),
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        SizedBox(
-                            width: 170.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                print("Tapped on email!");
-                                _launchMailto(
-                                    this.userList[position].email.toString(),
-                                    this.userList[position].firstName,
-                                    this.userList[position].lastName);
-                              },
-                              child: Text(
-                                this.userList[position].email.toString(),
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                              ),
-                            )),
-                      ],
-                    )),
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              print("Tapped on location!");
-                              _openGoogleMaps(
-                                  this.userList[position].address,
-                                  this.userList[position].city,
-                                  this.userList[position].postalCode);
-                            },
-                            child: Icon(
-                              Icons.place,
-                              size: 14,
-                              color: Theme.of(context).primaryColor,
-                            )),
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              print("Tapped on location!");
-                              _openGoogleMaps(
-                                  this.userList[position].address,
-                                  this.userList[position].city,
-                                  this.userList[position].postalCode);
-                            },
-                            child: Text(this.userList[position].address +
-                                ",\n" +
-                                this.userList[position].city +
-                                " " +
-                                this.userList[position].postalCode))
-                      ],
-                    )),
-              ],
-            ),
-            trailing: IconButton(
-              icon: Icon(Icons.navigate_next),
-              color: Theme.of(context).accentColor,
-              tooltip: 'Open actions menu',
-              onPressed: () {
-                print("Pressed trailing icon");
-                _userDetail(this.userList[position].id);
-              },
-            ),
-            isThreeLine: true,
-            // subtitle: Text(this.userList[position].email),
-            onTap: () {
-              debugPrint("Tapped on " + this.userList[position].id.toString());
-              print("Navigate to detail");
-              _userDetail(this.userList[position].id);
-            },
-          ),
+        return UserListItem(
+          user: this.userList[position],
+          showTrailingIcon: true,
+          onPressed: () {
+            print("Pressed trailing icon");
+            _userDetail(this.userList[position].id);
+          },
         );
       },
     );
