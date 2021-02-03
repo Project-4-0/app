@@ -4,27 +4,33 @@ class Monitoring {
   int id;
   int boxID;
   String sdCapacity;
-  bool batteryStatus;
-  double batteryPercentage;
-  DateTime endDate;
+  String amountSatellite;
+  String batteryPercentage;
+  String temperature;
+  DateTime timeStamp;
   Box box;
 
   Monitoring(
       {this.id,
       this.boxID,
       this.sdCapacity,
-      this.batteryStatus,
+      this.amountSatellite,
       this.batteryPercentage,
-      this.endDate,
+      this.temperature,
+      this.timeStamp,
       this.box});
 
   factory Monitoring.fromJson(Map<String, dynamic> json) {
     return Monitoring(
         id: json['MonitoringID'],
         boxID: json['BoxID'],
-        sdCapacity: json['SDCapacity'],
-        batteryStatus: json['BatteryStatus'],
-        batteryPercentage: json['BatteryPercentage'],
+        sdCapacity: json['SdCapacity'] == null ? "" :json['SdCapacity'],
+        amountSatellite: json['AmountSatellite'] == "" ? null :json['AmountSatellite'],
+        batteryPercentage: json['BatteryPercentage'] == "" ? null : json['BatteryPercentage'],
+        temperature: json['Temperature'] == null ? "" : json['Temperature'],
+        timeStamp: json['TimeStamp'] == null
+            ? null
+            : DateTime.parse(json['TimeStamp']),
         box: json['Box'] == null ? null : Box.fromJson(json['Box']));
   }
 
@@ -32,17 +38,21 @@ class Monitoring {
   factory Monitoring.fromJsonW(Map<String, dynamic> json) {
     return Monitoring(
       id: json['MonitoringID'],
-      boxID: json['BoxID'],
-      sdCapacity: json['SDCapacity'],
-      batteryStatus: json['BatteryStatus'],
-      batteryPercentage: json['BatteryPercentage'],
+        boxID: json['BoxID'],
+        sdCapacity: json['SdCapacity'],
+        amountSatellite: json['AmountSatellite'],
+        batteryPercentage: json['BatteryPercentage'],
+        temperature: json['Temperature'],
+        timeStamp: json['TimeStamp'] == null
+            ? null
+            : DateTime.parse(json['TimeStamp']),
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'BoxID': boxID,
-        'SDCapacity': sdCapacity,
-        'BatteryStatus': batteryStatus,
-        'BatteryPercentage': batteryPercentage,
-      };
+  // Map<String, dynamic> toJson() => {
+  //       'BoxID': boxID,
+  //       'SDCapacity': sdCapacity,
+  //       'BatteryStatus': batteryStatus,
+  //       'BatteryPercentage': batteryPercentage,
+  //     };
 }

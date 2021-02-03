@@ -1,4 +1,5 @@
 import 'package:b_one_project_4_0/models/boxUser.dart';
+import 'package:b_one_project_4_0/models/monitoring.dart';
 import 'package:b_one_project_4_0/models/sensor.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 
@@ -11,6 +12,7 @@ class Box {
   BoxUser boxUser;
   List<Sensor> sensors;
   List<User> users;
+  List<Monitoring> monitoring;
 
   Box(
       {this.id,
@@ -20,7 +22,8 @@ class Box {
       this.active,
       this.boxUser,
       this.sensors,
-      this.users});
+      this.users,
+      this.monitoring});
 
   factory Box.fromJson(Map<String, dynamic> json) {
     return Box(
@@ -31,6 +34,11 @@ class Box {
       active: json['Active'],
       boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
+      monitoring: json['monitoring'] == null
+          ? null
+          : (json['monitoring'] as List)
+              .map((tagJson) => Monitoring.fromJson(tagJson))
+              .toList(),
     );
   }
 
@@ -53,6 +61,11 @@ class Box {
           : (json['users'] as List)
               .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
               .toList(), // TODO: What about boxUsers? !!!!!
+      monitoring: json['monitoring'] == null
+          ? null
+          : (json['monitoring'] as List)
+              .map((tagJson) => Monitoring.fromJson(tagJson))
+              .toList(),
     );
   }
 
