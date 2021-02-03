@@ -117,7 +117,7 @@ class UserApi {
     if (response.statusCode == 200) {
       return Auth.fromJson(jsonDecode(response.body));
     } else {
-      throw Exception(response.body);
+      throw Exception(jsonDecode(response.body));
     }
   }
 

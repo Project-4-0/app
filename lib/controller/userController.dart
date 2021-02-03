@@ -54,7 +54,7 @@ class UserController {
       return true;
     }).catchError((error) {
       SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+          .show(text: error.message["message"], title: "Server", type: "ERROR");
       return false;
     });
   }
@@ -129,7 +129,7 @@ class UserController {
     return UserApi.updateUser(user).then((user) {
       // print("Number of users in controller: " + user.firstName);
       return user;
-    }).catchError((error) {
+    }).catchError((error) {     
       SnackBarController()
           .show(text: error.message, title: "Server", type: "ERROR");
       return null;
