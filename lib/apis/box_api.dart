@@ -11,7 +11,7 @@ class BoxApi {
     final response = await http.get(url + '/boxes');
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((box) => new Box.fromJsonW(box)).toList();
+      return jsonResponse.map((box) => new Box.fromJson(box)).toList();
     } else {
       throw Exception(response.body);
     }

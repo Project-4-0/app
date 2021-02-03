@@ -1,3 +1,4 @@
+import 'package:b_one_project_4_0/models/monitoring.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
@@ -174,14 +175,26 @@ class _BoxenOverviewPage extends State {
               ),
               Positioned(
                 // Marble to show active status
-                top: 10.0,
+                top: 5,
                 right: 10.0,
                 child: Icon(Icons.brightness_1,
-                    size: 15.0,
+                    size: 20.0,
                     color: this.boxList[position].active
                         ? Colors.green
                         : Colors.red),
-              )
+              ),
+              Positioned(
+                // Marble to show active status
+                top: 70.0,
+                right: 20.0,
+                child: Text(
+                  DateFormat('dd-MM-yyyy')
+                      .format(this.boxList[position].monitoring[0].timeStamp),
+                  style: TextStyle(
+                    color: Colors.grey.shade400,
+                  ),
+                ),
+              ),
             ]));
       },
     );
@@ -190,9 +203,10 @@ class _BoxenOverviewPage extends State {
   // Detail modal of a box with all information
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
-
     box != null
         ? showModalBottomSheet(
+            isScrollControlled: true,
+            // enableDrag: true,
             // isScrollControlled: true, // Full screen height
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -261,7 +275,7 @@ class _BoxenOverviewPage extends State {
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "In gebruik door:",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 20),
                             ),
                             Container(
                               child: _userList(context, box.users),
@@ -271,16 +285,23 @@ class _BoxenOverviewPage extends State {
                             if (box.comment != null)
                               Text(
                                 "Opmerking:\n" + box.comment,
-                                style: TextStyle(fontSize: 18),
+                                style: TextStyle(fontSize: 20),
                               ),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "Sensors:",
-                              style: TextStyle(fontSize: 18),
+                              style: TextStyle(fontSize: 20),
                             ),
                             Container(
                               child: _sensorList(context, box.sensors),
                             ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            Text(
+                              "Monitoring:",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Padding(padding: EdgeInsets.all(5)),
+                            _monitoring(box.monitoring[0]),
                             Padding(padding: EdgeInsets.all(5)),
                             OutlineFlatButtonBOne(
                               text: "Wijzigen",
@@ -344,6 +365,47 @@ class _BoxenOverviewPage extends State {
           );
   }
 
+  _monitoring(Monitoring monitoring) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+      Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.sd_card, size: 40, color: Colors.grey.shade500),      
+            Text(monitoring.sdCapacity == "" ? "Geen" : monitoring.sdCapacity)
+          ],
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.battery_alert, size: 40, color: Colors.grey.shade500),      
+            Text(monitoring.batteryPercentage == "" ? "Geen" : monitoring.batteryPercentage)
+          ],
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.thermostat_outlined, size: 40, color: Colors.grey.shade500),      
+            Text(monitoring.temperature == "" ? "Geen" : monitoring.temperature)
+
+          ],
+        ),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.history, size: 40, color: Colors.grey.shade500),      
+            Text(DateFormat('dd/MM/yyyy \n kk:mm:ss').format(monitoring.timeStamp),
+            ),
+
+           
+
+          ],
+        ),
+      ],      
+    );
+  }
+
   ListView _userList(context, List<User> userList) {
     return new ListView.builder(
       primary: false,
@@ -352,86 +414,229 @@ class _BoxenOverviewPage extends State {
       scrollDirection: Axis.vertical,
       itemCount: userList.length,
       itemBuilder: (context, int position) {
-        return Padding(
-            padding: EdgeInsets.only(top: 5.0),
-            child: GestureDetector(
-                onTap: () {
-                  print("Tapped on user");
-                },
-                child: Column(
-                  children: [
-                    Row(
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          color: Colors.white,
+          elevation: 2.0,
+          child: ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                // Show the first letter of the last name
+                CircleAvatar(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Text(
+                      userList[position].firstName.substring(0, 1) +
+                          userList[position].lastName.substring(0, 1),
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            title: Text(
+              userList[position].firstName + " " + userList[position].lastName,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor),
+            ),
+            subtitle: Column(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
-                          child: Icon(
-                            Icons.perm_identity,
-                            color: Theme.of(context).primaryColor,
-                            size: 14,
-                          ),
+                          padding: EdgeInsets.all(4.0),
                         ),
-                        Container(
-                            child: Flexible(
-                                child: Text(
-                                    userList[position].firstName +
-                                        " " +
-                                        userList[position].lastName +
-                                        ":",
-                                    textAlign: TextAlign.left))),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
+                        // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
+                        GestureDetector(
+                            onTap: () {
+                              print("Tapped on email!");
+                              // _launchMailto(
+                              //     this.userList[position].email.toString(),
+                              //     this.userList[position].firstName,
+                              //     this.userList[position].lastName);
+                            },
+                            child: Icon(Icons.mail_outline,
+                                size: 14,
+                                color: Theme.of(context).primaryColor)),
                         Padding(
-                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+                          padding: EdgeInsets.all(4.0),
+                        ),
+                        SizedBox(
+                            width: 170.0,
+                            child: GestureDetector(
+                              onTap: () {
+                                print("Tapped on email!");
+                                // _launchMailto(
+                                //     this.userList[position].email.toString(),
+                                //     this.userList[position].firstName,
+                                //     this.userList[position].lastName);
+                              },
+                              child: Text(
+                                userList[position].email.toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              ),
+                            )),
+                      ],
+                    )),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped on location!");
+                            // _openGoogleMaps(
+                            //     this.userList[position].address,
+                            //     this.userList[position].city,
+                            //     this.userList[position].postalCode);
+                          },
                           child: Icon(
                             Icons.place,
-                            color: Theme.of(context).primaryColor,
                             size: 14,
-                          ),
-                        ),
-                        Container(
-                            child: Flexible(
-                                child: Text(
-                                    userList[position].address +
-                                        ",\n " +
-                                        userList[position].postalCode +
-                                        " " +
-                                        userList[position].city,
-                                    textAlign: TextAlign.left))),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
-                          child: Icon(
-                            Icons.today,
                             color: Theme.of(context).primaryColor,
-                            size: 14,
-                          ),
-                        ),
-                        Container(
-                            child: Flexible(
-                                child: Text(
-                                    DateFormat('dd/MM/yyyy – kk:mm:ss').format(
-                                            userList[position]
-                                                .boxUser
-                                                .startDate) +
-                                        (userList[position].boxUser.endDate !=
-                                                null
-                                            ? (" - \n" +
-                                                DateFormat(
-                                                        'dd/MM/yyyy – kk:mm:ss')
-                                                    .format(userList[position]
-                                                        .boxUser
-                                                        .endDate))
-                                            : ""),
-                                    textAlign: TextAlign.left))),
-                      ],
-                    )
-                  ],
-                )));
+                          )),
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped on location!");
+                            // _openGoogleMaps(
+                            //     this.userList[position].address,
+                            //     this.userList[position].city,
+                            //     this.userList[position].postalCode);
+                          },
+                          child: Text(userList[position].address +
+                              ",\n" +
+                              userList[position].city +
+                              " " +
+                              userList[position].postalCode)),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    "Start: " +
+                        DateFormat('dd/MM/yyyy – kk:mm:ss')
+                            .format(userList[position].boxUser.startDate),
+                  ),
+                ),
+              ],
+            ),
+            // trailing: IconButton(
+            //   icon: Icon(Icons.navigate_next),
+            //   color: Theme.of(context).accentColor,
+            //   tooltip: 'Open actions menu',
+            //   onPressed: () {
+            //     print("Pressed trailing icon");
+            //     // _userDetail(this.userList[position].id);
+            //   },
+            // ),
+            // isThreeLine: true,
+            // // subtitle: Text(this.userList[position].email),
+            // onTap: () {
+            //   // debugPrint("Tapped on " + this.userList[position].id.toString());
+            //   print("Navigate to detail");
+            //   // _userDetail(this.userList[position].id);
+            // },
+          ),
+        );
+
+        // return Padding(
+        //     padding: EdgeInsets.only(top: 5.0),
+        //     child: GestureDetector(
+        //         onTap: () {
+        //           print("Tapped on user");
+        //         },
+        //         child: Column(
+        //           children: [
+        //             Row(
+        //               children: <Widget>[
+        //                 Padding(
+        //                   padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+        //                   child: Icon(
+        //                     Icons.perm_identity,
+        //                     color: Theme.of(context).primaryColor,
+        //                     size: 14,
+        //                   ),
+        //                 ),
+        //                 Container(
+        //                     child: Flexible(
+        //                         child: Text(
+        //                             userList[position].firstName +
+        //                                 " " +
+        //                                 userList[position].lastName +
+        //                                 ":",
+        //                             textAlign: TextAlign.left,
+        //                             ),
+        //                             ),
+        //                             ),
+        //               ],
+        //             ),
+        //             Row(
+        //               children: <Widget>[
+        //                 Padding(
+        //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+        //                   child: Icon(
+        //                     Icons.place,
+        //                     color: Theme.of(context).primaryColor,
+        //                     size: 14,
+        //                   ),
+        //                 ),
+        //                 Container(
+        //                     child: Flexible(
+        //                         child: Text(
+        //                             userList[position].address +
+        //                                 ",\n " +
+        //                                 userList[position].postalCode +
+        //                                 " " +
+        //                                 userList[position].city,
+        //                             textAlign: TextAlign.left))),
+        //               ],
+        //             ),
+        //             Row(
+        //               children: <Widget>[
+        //                 Padding(
+        //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+        //                   child: Icon(
+        //                     Icons.today,
+        //                     color: Theme.of(context).primaryColor,
+        //                     size: 14,
+        //                   ),
+        //                 ),
+        //                 Container(
+        //                     child: Flexible(
+        //                         child: Text(
+        //                             DateFormat('dd/MM/yyyy – kk:mm:ss').format(
+        //                                     userList[position]
+        //                                         .boxUser
+        //                                         .startDate) +
+        //                                 (userList[position].boxUser.endDate !=
+        //                                         null
+        //                                     ? (" - \n" +
+        //                                         DateFormat(
+        //                                                 'dd/MM/yyyy – kk:mm:ss')
+        //                                             .format(userList[position]
+        //                                                 .boxUser
+        //                                                 .endDate))
+        //                                     : ""),
+        //                             textAlign: TextAlign.left))),
+        //               ],
+        //             )
+        //           ],
+        //         ),
+        //         ),
+        //         );
       },
     );
   }

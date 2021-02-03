@@ -187,6 +187,9 @@ class _UserOverviewPage extends State {
       itemCount: this.userList.length,
       itemBuilder: (BuildContext context, int position) {
         return Card(
+          shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10.0),
+  ),
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
