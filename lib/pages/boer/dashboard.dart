@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:b_one_project_4_0/apis/predict_api.dart';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
+import 'package:b_one_project_4_0/controller/predictController.dart';
 import 'package:b_one_project_4_0/controller/terrascopeController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
+import 'package:b_one_project_4_0/models/predict.dart';
 import 'package:b_one_project_4_0/models/terrascope.dart';
 import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
@@ -34,6 +37,9 @@ class _DashboardPageState extends State<DashboardPage> {
   //filter box
   FilterMeasurement filterMeasurement = new FilterMeasurement();
 
+  //predictions
+  List<Predict> predict = List<Predict>();
+
   int count = 0;
   User user;
 
@@ -45,6 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
+    //prediction
   }
 
   @override
@@ -76,6 +83,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     _loadAllGraphics();
     _loadTerrascopeImage();
+    _getPrediciton();
   }
 
   void _loadAllGraphics() {
@@ -112,6 +120,15 @@ class _DashboardPageState extends State<DashboardPage> {
           boxList = result.boxes;
           count = result.boxes.length;
         }
+      });
+    });
+  }
+
+  void _getPrediciton() {
+    PredictController.fetchPredictByBoxID(this.filterMeasurement.boxID)
+        .then((predict) {
+      setState(() {
+        this.predict = predict;
       });
     });
   }
@@ -172,7 +189,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         StackAreacLineChartBone(
                           measurementGraphics:
                               this.measurementGraphicsGeleidbaarheid,
-                          title: "Geleidbaarheid",
+                          title: "BodemVochtigheid",
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        _predictions(),
+                        SizedBox(
+                          height: 40,
                         ),
                         _satellietbeeld(),
                       ],
@@ -190,6 +214,13 @@ class _DashboardPageState extends State<DashboardPage> {
         active: 1,
       ),
     );
+  }
+
+  _predictions() {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1) {
+      return Container();
+    }
+    return Text("ok");
   }
 
   _satellietbeeld() {
