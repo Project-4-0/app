@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/models/box.dart';
-import 'package:intl/intl.dart';
 
 class BoxListItem extends StatelessWidget {
   const BoxListItem({

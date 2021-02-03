@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/models/user.dart';
-import 'package:intl/intl.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
 

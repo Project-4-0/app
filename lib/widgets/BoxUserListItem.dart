@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class BoxUserListItem extends StatelessWidget {
   const BoxUserListItem({
     @required this.onPressed,
-    @required this.onPressedDelete,
+    this.onPressedDelete,
     @required this.delete,
     @required this.box, // TODO: Expect to get a full box object !!!
     Key key,

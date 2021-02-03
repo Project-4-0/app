@@ -1,4 +1,3 @@
-import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 
 ///FOR DESIGN NEW ELEMENTS!!!
 

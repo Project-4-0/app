@@ -1,7 +1,4 @@
-import 'dart:ffi';
 import 'dart:io';
-
-import 'package:b_one_project_4_0/widgets/CardBOne.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/TextFieldBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
@@ -22,8 +19,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:mailto/mailto.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MonteurConnectedPage extends StatefulWidget {
