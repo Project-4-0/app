@@ -264,6 +264,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                 'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
                                 textAlign: TextAlign.center,
                               ),
+                              // Chip(
+//   avatar: CircleAvatar(
+//     backgroundColor: Colors.grey.shade800,
+//     child: Text('AB'),
+//   ),
+//   label: Text('Aaron Burr'),
+// )
                             ],
                           ),
                   ),

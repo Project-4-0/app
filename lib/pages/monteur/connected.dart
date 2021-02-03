@@ -178,16 +178,18 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                   .contains(searchUserController.text.toLowerCase()) ||
               user.email
                   .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) ||
-              user.address
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) ||
-              user.city
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()) ||
-              user.postalCode
-                  .toLowerCase()
-                  .contains(searchUserController.text.toLowerCase()))
+                  .contains(searchUserController.text.toLowerCase()) 
+              //     ||
+              // user?.address
+              //     .toLowerCase()
+              //     .contains(searchUserController.text.toLowerCase()) ||
+              // user?.city
+              //     .toLowerCase()
+              //     .contains(searchUserController.text.toLowerCase()) ||
+              // user?.postalCode
+              //     .toLowerCase()
+              //     .contains(searchUserController.text.toLowerCase())
+                  )
           .toList();
       // Users sorted alphabetical by last name
       this.userList.sort((a, b) {
