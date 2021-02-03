@@ -462,10 +462,8 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                       Padding(padding: EdgeInsets.only(top: 30)),
                       Text("Geselecteerde box:"),
                       BoxListItem(
-                        boxText: "",
                         box: selectedBox,
                         onPressed: null,
-                        locationText: "",
                       ),
                       IconButton(
                         icon: Icon(Icons.delete, color: Colors.red),
@@ -709,10 +707,8 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                     ),
                     Text("Box:", textAlign: TextAlign.left),
                     BoxListItem(
-                      boxText: "",
                       box: this.selectedBox,
                       onPressed: null,
-                      locationText: "Geel !!!",
                     ),
                     SizedBox(
                       height: 10,
@@ -954,9 +950,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         : Column(
                             children: <Widget>[
                               Text('Geen resultaten gevonden!'),
-                              Expanded(
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              Text(
+                                'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                   ),
@@ -1004,7 +1001,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
             translation: Offset(0.0, 0.0),
             child: Stack(children: <Widget>[
               BoxListItem(
-                boxText: "",
                 box: this.boxList[position],
                 onPressed: () {
                   // !!!!!
@@ -1024,7 +1020,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                       title: "Box geselecteerd",
                       type: "INFO");
                 },
-                locationText: "Geel !!!",
               ),
               Positioned(
                 // Marble to show active status
@@ -1099,9 +1094,10 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                         : Column(
                             children: <Widget>[
                               Text('Geen resultaten gevonden!'),
-                              Expanded(
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                              Text(
+                                'Geen resultaten gevonden!\nProbeer een andere zoekterm.',
+                                textAlign: TextAlign.center,
+                              ),
                             ],
                           ),
                   ),

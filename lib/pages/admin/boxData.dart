@@ -1,29 +1,34 @@
 import 'dart:async';
-import 'package:b_one_project_4_0/apis/predict_api.dart';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
-import 'package:b_one_project_4_0/controller/predictController.dart';
 import 'package:b_one_project_4_0/controller/terrascopeController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
-import 'package:b_one_project_4_0/models/predict.dart';
 import 'package:b_one_project_4_0/models/terrascope.dart';
-import 'package:b_one_project_4_0/widgets/BoxUserListItem.dart';
+import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
+import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
 import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatefulWidget {
+class BoxDataPage extends StatefulWidget {
+  final Box
+      box; // UserDetailPage has an id-parameter which contains the id of the user to show
+  BoxDataPage(this.box);
+
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  _BoxDataPageState createState() => _BoxDataPageState(box);
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _BoxDataPageState extends State<BoxDataPage> {
+  Box box; // UserDetailPageState has the same id-parameter
+  _BoxDataPageState(this.box);
+
   //liveUpdate Timer
   Timer liveUpdateTimer;
 
@@ -37,21 +42,17 @@ class _DashboardPageState extends State<DashboardPage> {
   //filter box
   FilterMeasurement filterMeasurement = new FilterMeasurement();
 
-  //predictions
-  List<Predict> predict = List<Predict>();
-
   int count = 0;
   User user;
 
   @override
   void initState() {
     super.initState();
-    //TODO is het nodig om al de boxen te laden?
-    _getBoxen();
-    liveUpdateTimer =
-        Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
-    _loadAllGraphics();
-    //prediction
+    _getBoxes();
+    // liveUpdateTimer =
+    //     Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
+    // _loadAllGraphics();
+    _setFilterBoxen(this.box);
   }
 
   @override
@@ -70,7 +71,7 @@ class _DashboardPageState extends State<DashboardPage> {
         });
       } else {
         setState(() {
-          terrascope = terr;
+          terrascope.url = terr.url;
         });
       }
     });
@@ -79,11 +80,11 @@ class _DashboardPageState extends State<DashboardPage> {
   void _setFilterBoxen(Box box) {
     setState(() {
       filterMeasurement.boxID = box.id;
+      // filterMeasurement.boxID = 1;
     });
 
     _loadAllGraphics();
     _loadTerrascopeImage();
-    _getPrediciton();
   }
 
   void _loadAllGraphics() {
@@ -92,6 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _getMeasurementGraphicLicht() {
+    ////
     MeasurementController.loadMeasurementsGraphics("Licht", filterMeasurement)
         .then((measurementGraphicsLicht) {
       //get licht measurements
@@ -113,22 +115,13 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  void _getBoxen() {
-    UserController.loadUserWithBoxes().then((result) {
+  void _getBoxes() {
+    BoxController.loadBoxes().then((result) {
       setState(() {
-        if (result.boxes != null) {
-          boxList = result.boxes;
-          count = result.boxes.length;
+        if (result != null) {
+          boxList = result;
+          count = result.length;
         }
-      });
-    });
-  }
-
-  void _getPrediciton() {
-    PredictController.fetchPredictByBoxID(this.filterMeasurement.boxID)
-        .then((predict) {
-      setState(() {
-        this.predict = predict;
       });
     });
   }
@@ -156,7 +149,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Dashboard',
+                          this.box != null ? this.box.name : 'Dashboard',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 50,
@@ -169,9 +162,11 @@ class _DashboardPageState extends State<DashboardPage> {
                           onPressedLeft: () {
                             _filterModal(context);
                           },
-                          onPressedRight: () {
-                            _boxModal(context, this.boxList, this.count);
-                          },
+                          onPressedRight: this.boxList != null
+                              ? () {
+                                  _boxModal(context, this.boxList, this.count);
+                                }
+                              : null,
                           textLeft: "Filters",
                           textRight: "Box",
                           iconLeft: Icons.filter_list,
@@ -179,8 +174,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.grey.shade900,
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
-                        _openweather(),
-                        Padding(padding: EdgeInsets.all(15.0)),                      
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
                           title: "Licht",
@@ -191,14 +184,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         StackAreacLineChartBone(
                           measurementGraphics:
                               this.measurementGraphicsGeleidbaarheid,
-                          title: "BodemVochtigheid",
-                        ),
-                        SizedBox(
-                          height: 40,
-                        ),
-                        _predictions(),
-                        SizedBox(
-                          height: 40,
+                          title: "Geleidbaarheid",
                         ),
                         _satellietbeeld(),
                       ],
@@ -216,17 +202,6 @@ class _DashboardPageState extends State<DashboardPage> {
         active: 1,
       ),
     );
-  }
-
-  _openweather() {
-    return Text("weather");
-  }
-
-  _predictions() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1) {
-      return Container();
-    }
-    return Text("ok");
   }
 
   _satellietbeeld() {
@@ -270,14 +245,9 @@ class _DashboardPageState extends State<DashboardPage> {
       ]);
     }
 
-    return Column(
-      children: [
-        Text(this.terrascope.date.toString()),
-        Image.network(
-          this.terrascope.url,
-          alignment: Alignment.center,
-        ),
-      ],
+    return Image.network(
+      this.terrascope.url,
+      alignment: Alignment.center,
     );
   }
 
@@ -325,14 +295,13 @@ class _DashboardPageState extends State<DashboardPage> {
         return FractionalTranslation(
             translation: Offset(0.0, 0.0),
             child: Stack(children: <Widget>[
-              BoxUserListItem(
+              BoxListItem(
                 box: boxList[position],
                 onPressed: () {
                   _setFilterBoxen(boxList[position]);
                   Navigator.pop(context);
                   // print("Show only the data from one box");
                 },
-                delete: false,
               ),
               Positioned(
                 // Marble to show active status
@@ -350,7 +319,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _boxModal(context, boxList, count) {
     showModalBottomSheet(
-        isScrollControlled: true, // Full screen height
+        // isScrollControlled: true, // Full screen height
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(30),
@@ -363,13 +332,16 @@ class _DashboardPageState extends State<DashboardPage> {
           return StatefulBuilder(builder: (BuildContext context,
               StateSetter setState /*You can rename this!*/) {
             return SingleChildScrollView(
+                physics: ScrollPhysics(),
                 child: Container(
                     // height: 600,
                     color: Colors.white,
-                    child: Padding(
-                        padding: EdgeInsets.only(top: 25),
-                        child:
-                            Column(mainAxisSize: MainAxisSize.min, children: [
+                    margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                    // child: Padding(
+                    //     padding: EdgeInsets.all(15),
+                    child: Column(
+                        // mainAxisSize: MainAxisSize.min,
+                        children: [
                           Text(
                             "Boxen",
                             style: Theme.of(context).textTheme.headline4,
@@ -381,7 +353,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         "Geen boxen gevonden voor uw account!"))
                                 : _boxItems(boxList, count),
                           )
-                        ]))));
+                        ])));
           });
         });
   }
