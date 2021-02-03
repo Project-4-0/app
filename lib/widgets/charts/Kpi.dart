@@ -30,7 +30,7 @@ class _KPI extends State<KPI> {
   Widget build(BuildContext context) {
     return 
          Padding(
-            padding: EdgeInsets.only(top: 40.0),
+            padding: EdgeInsets.only(top: 20.0),
             child: kpi != null ? Column(
               children: [
                 Row(

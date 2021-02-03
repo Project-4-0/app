@@ -3,16 +3,12 @@ import 'package:b_one_project_4_0/models/box.dart';
 
 class BoxListItem extends StatelessWidget {
   const BoxListItem({
-    @required this.boxText,
-    @required this.locationText,
     @required this.onPressed,
-    this.box, // TODO: Expect to get a full box object !!!
+    @required this.box, // TODO: Expect to get a full box object !!!
     Key key,
   }) : super(key: key);
 
-  final String boxText;
   final Box box;
-  final String locationText;
   final GestureTapCallback onPressed;
 
   @override
@@ -39,26 +35,6 @@ class BoxListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Container(
-            //   padding: EdgeInsets.all(20),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.all(
-            //       Radius.circular(200),
-            //     ),
-            //     color: Theme.of(context).primaryColor,
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.grey.withOpacity(0.1),
-            //         blurRadius: 5.0, // soften the shadow
-            //         spreadRadius: 1.0, //extend the shadow
-            //       )
-            //     ],
-            //   ),
-            //   child: Text(
-            //     box.name != null ? box.name : boxText,
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            // ),
             CircleAvatar(
                 radius: 50.0,
                 backgroundColor: Theme.of(context).primaryColor,

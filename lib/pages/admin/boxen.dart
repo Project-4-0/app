@@ -165,14 +165,12 @@ class _BoxenOverviewPage extends State {
             translation: Offset(0.0, 0.0),
             child: Stack(children: <Widget>[
               BoxListItem(
-                boxText: "!!!!!! needs to be replaced",
                 box: this.boxList[position],
                 onPressed: () {
                   print("Show box detail model");
                   _showBoxDetail(this.boxList[position].id);
                   // _boxDetail(context, this.boxList[position]);
                 },
-                locationText: "Geel !!!",
               ),
               Positioned(
                 // Marble to show active status
