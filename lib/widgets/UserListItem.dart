@@ -79,40 +79,43 @@ class UserListItem extends StatelessWidget {
                         )),
                   ],
                 )),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          print("Tapped on location!");
-                          _openGoogleMaps(this.user.address, this.user.city,
-                              this.user.postalCode);
-                        },
-                        child: Icon(
-                          Icons.place,
-                          size: 14,
-                          color: Theme.of(context).primaryColor,
-                        )),
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          print("Tapped on location!");
-                          _openGoogleMaps(this.user.address, this.user.city,
-                              this.user.postalCode);
-                        },
-                        child: Text(this.user.address +
-                            ",\n" +
-                            this.user.city +
-                            " " +
-                            this.user.postalCode))
-                  ],
-                )),
+            if (this.user.address != null &&
+                this.user.city != null &&
+                this.user.postalCode != null)
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped on location!");
+                            _openGoogleMaps(this.user.address, this.user.city,
+                                this.user.postalCode);
+                          },
+                          child: Icon(
+                            Icons.place,
+                            size: 14,
+                            color: Theme.of(context).primaryColor,
+                          )),
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print("Tapped on location!");
+                            _openGoogleMaps(this.user.address, this.user.city,
+                                this.user.postalCode);
+                          },
+                          child: Text(this.user.address +
+                              ",\n" +
+                              this.user.city +
+                              " " +
+                              this.user.postalCode))
+                    ],
+                  )),
           ],
         ),
 
