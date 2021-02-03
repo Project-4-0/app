@@ -18,6 +18,9 @@ class UserListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
       color: Colors.white,
       elevation: 2.0,
       child: ListTile(
