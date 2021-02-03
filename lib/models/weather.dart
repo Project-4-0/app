@@ -3,35 +3,50 @@ class Weather {
   String weatherDescription;
   String weatherIcon;
   double temp;
-  double feels_like;
-  double temp_min;
-  double temp_max;
-  double pressure;
-  double humidity;
-  double visibility;
+  double feelsLike;
+  double tempMin;
+  double tempMax;
+  int pressure;
+  int humidity;
+  int visibility;
   double windSpeed;
-  double windDeg;
-  double clouds;
+  int windDeg;
+  int clouds;
+  String cityName;
 
-
-  Weather({this.weatherMain, this.weatherDescription, this.weatherIcon, this.temp, this.feels_like, this.temp_min, this.temp_max, this.pressure, this.humidity, this.visibility, this.windSpeed, this.windDeg, this.clouds});
+  Weather({
+    this.weatherMain,
+    this.weatherDescription,
+    this.weatherIcon,
+    this.temp,
+    this.feelsLike,
+    this.tempMin,
+    this.tempMax,
+    this.pressure,
+    this.humidity,
+    this.visibility,
+    this.windSpeed,
+    this.windDeg,
+    this.clouds,
+    this.cityName,
+  });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      weatherMain: json['weather']['main'],
-      weatherDescription: json['weather']['description'],
-      weatherIcon: json['weather']['icon'],
+      weatherMain: json['weather'][0]['main'],
+      weatherDescription: json['weather'][0]['description'],
+      weatherIcon: json['weather'][0]['icon'],
       temp: json['main']['temp'],
-      // feels_like: json['boxCountNoneActive'],
-      // temp_min: json['boxCountActive'],
-      // temp_max: json['boxCountNoneActive'],
-      // pressure: json['boxCountActive'],
-      // humidity: json['boxCountNoneActive'],
-      // visibility: json['boxCountActive'],
-      // windSpeed: json['boxCountNoneActive'],
-      // windDeg: json['boxCountNoneActive'],
-      // clouds: json['boxCountNoneActive'],
-
+      feelsLike: json['main']['feels_like'],
+      tempMin: json['main']['temp_min'],
+      tempMax: json['main']['temp_max'],
+      pressure: json['main']['pressure'],
+      humidity: json['main']['humidity'],
+      visibility: json['visibility'],
+      windSpeed: json['wind']['speed'],
+      windDeg: json['wind']['deg'],
+      clouds: json['clouds']['all'],
+      cityName: json['name'],
     );
   }
 }
