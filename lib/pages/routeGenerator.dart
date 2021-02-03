@@ -1,4 +1,3 @@
-import 'package:b_one_project_4_0/controller/authController.dart';
 import 'package:b_one_project_4_0/pages/authLading/dashboard.dart';
 import 'package:b_one_project_4_0/pages/info.dart';
 import 'package:b_one_project_4_0/pages/login.dart';

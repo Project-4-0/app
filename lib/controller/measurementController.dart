@@ -4,7 +4,6 @@ Measurementcontroller
 import 'package:b_one_project_4_0/apis/measurement_api.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/filterMeasurement.dart';
-import 'package:b_one_project_4_0/models/measurement.dart';
 import 'package:b_one_project_4_0/models/measurementGraphics.dart';
 import 'authController.dart';
 

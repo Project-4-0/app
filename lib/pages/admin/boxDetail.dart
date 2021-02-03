@@ -6,7 +6,6 @@ import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:flutter/material.dart';
-import 'package:share/share.dart';
 
 class BoxDetailPage extends StatefulWidget {
   final int

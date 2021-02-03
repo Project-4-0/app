@@ -28,7 +28,7 @@ class _ShowModalBottomFilterState extends State<ShowModalBottomFilter> {
   DateTime _startDate;
   DateTime _endDate;
 
-  _ShowModalBottomFilterState() {}
+  _ShowModalBottomFilterState();
 
   @override
   void initState() {

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/snackbarController.dart';
 import 'package:b_one_project_4_0/models/user.dart';
-import 'package:b_one_project_4_0/models/userType.dart';
 
 class NewUserMonteurPage extends StatefulWidget {
   NewUserMonteurPage();
