@@ -16,6 +16,7 @@ class BoxController {
       return null;
     });
   }
+  // 51.14608209946503, 5.002915324972558
 
   // One box
   static Future<Box> loadBox(int id) async {
