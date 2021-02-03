@@ -70,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
         });
       } else {
         setState(() {
-          terrascope.url = terr.url;
+          terrascope = terr;
         });
       }
     });
@@ -179,6 +179,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           color: Colors.grey.shade900,
                         ),
                         Padding(padding: EdgeInsets.all(15.0)),
+                        _openweather(),
+                        Padding(padding: EdgeInsets.all(15.0)),                      
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
                           title: "Licht",
@@ -214,6 +216,10 @@ class _DashboardPageState extends State<DashboardPage> {
         active: 1,
       ),
     );
+  }
+
+  _openweather() {
+    return Text("weather");
   }
 
   _predictions() {
@@ -264,9 +270,14 @@ class _DashboardPageState extends State<DashboardPage> {
       ]);
     }
 
-    return Image.network(
-      this.terrascope.url,
-      alignment: Alignment.center,
+    return Column(
+      children: [
+        Text(this.terrascope.date.toString()),
+        Image.network(
+          this.terrascope.url,
+          alignment: Alignment.center,
+        ),
+      ],
     );
   }
 
