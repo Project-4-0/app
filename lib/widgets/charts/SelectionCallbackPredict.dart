@@ -54,8 +54,6 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
   Widget build(BuildContext context) {
     // The children consist of a Chart and Text widgets below to hold the info.
 
-    
-
     final children = <Widget>[
       Text(
         this.widget.title,

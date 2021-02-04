@@ -46,7 +46,8 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
                         // First row of dashboard buttons
                         Container(
                           width: double.infinity,
-                          child: Row(
+                          child: IntrinsicHeight(
+                              child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
@@ -73,7 +74,7 @@ class _MonteurDashboardPageState extends State<MonteurDashboardPage> {
                                 ),
                               ),
                             ],
-                          ),
+                          )),
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         // Seccond row of dashboard buttons

@@ -89,9 +89,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButtonBOne(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // bottomNavigationBar: BottomAppBarBOne(),
     );
   }
 
@@ -107,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
           labelText: "E-mail",
           icon: Icon(Icons.person_outline),
           keyboardType: TextInputType.emailAddress,
+          textCapitalization: TextCapitalization.none,
         ),
         SizedBox(
           height: 20,
@@ -116,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
           context: context,
           labelText: "Wachtwoord",
           keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
           icon: Icon(Icons.lock),
         ),
         SizedBox(
