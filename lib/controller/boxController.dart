@@ -34,8 +34,8 @@ class BoxController {
     return BoxApi.fetchBoxByMacAddress(macAddress).then((box) {
       return box;
     }).catchError((error) {
-      SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+      // SnackBarController()
+      //     .show(text: error.message, title: "Server", type: "ERROR");
       return null;
     });
   }

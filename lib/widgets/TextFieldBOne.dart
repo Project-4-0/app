@@ -33,10 +33,7 @@ class TextFieldBOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      //                         onChanged: (text) {
-      //   print("First text field: $text");
-      // },
-      maxLines: null,
+      maxLines: obscureText ? 1 : null,
       obscureText: obscureText,
       maxLength: maxLength,
       onSaved: onSave,
