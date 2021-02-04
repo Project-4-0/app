@@ -32,6 +32,8 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Box> boxList = List<Box>();
   MeasurementGraphics measurementGraphicsLicht;
   MeasurementGraphics measurementGraphicsBodemVochtigheid;
+  MeasurementGraphics measurementGraphicsTemp;
+
 
   //Terrascope IMage
   Terrascope terrascope = new Terrascope();
@@ -91,6 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
   void _loadAllGraphics() {
     _getMeasurementGraphicLicht();
     _getMeasurementGraphicBodemVochtigheid();
+    _getMeasurementGraphicTemp();
   }
 
   void _getMeasurementGraphicLicht() {
@@ -105,12 +108,23 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _getMeasurementGraphicBodemVochtigheid() {
     MeasurementController.loadMeasurementsGraphics(
-            "Vochtigheid", filterMeasurement)
+            "Bodemvochtigheid", filterMeasurement)
         .then((measurementGraphicsBodemVochtigheid) {
       //get geleidbaarheid measurements
       setState(() {
         this.measurementGraphicsBodemVochtigheid =
             measurementGraphicsBodemVochtigheid;
+      });
+    });
+  }
+
+  void _getMeasurementGraphicTemp() {
+    MeasurementController.loadMeasurementsGraphics(
+            "Temperatuur", filterMeasurement)
+        .then((measurementGraphicsTemp) {
+      setState(() {
+        this.measurementGraphicsTemp =
+            measurementGraphicsTemp;
       });
     });
   }
@@ -198,6 +212,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         SizedBox(
                           height: 40,
                         ),
+                        StackAreacLineChartBone(
+                          measurementGraphics:
+                              this.measurementGraphicsTemp,
+                          title: "Temp",
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
                         _predictionsView(),
                         SizedBox(
                           height: 40,
@@ -228,10 +250,14 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _predictionsView() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1 || this.predict == null ) {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 ||
+        this.predict == null) {
       return Container();
     }
-    return SelectionCallbackPredict(predictList: this.predict,title: "Predict",);
+    return SelectionCallbackPredict(
+      predictList: this.predict,
+      title: "Predict",
+    );
   }
 
   _satellietbeeldView() {
