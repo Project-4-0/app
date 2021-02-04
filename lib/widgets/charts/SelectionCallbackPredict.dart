@@ -54,8 +54,6 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
   Widget build(BuildContext context) {
     // The children consist of a Chart and Text widgets below to hold the info.
 
-    
-
     final children = <Widget>[
       Text(
         this.widget.title,
@@ -68,7 +66,7 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
 
     children.add(Text("Geen gegevens beschikbaar"));
 
-   if (this.widget.predictList.isEmpty) {
+    if (this.widget.predictList.isEmpty) {
       return new Column(children: children);
     }
     children.add(_forOneGraphicTop());

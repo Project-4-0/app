@@ -34,6 +34,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   List<User> originalUserList = List<User>();
 
   bool barcodeFound;
+  bool reScanCode;
 
   Box selectedBox;
   User selectedUser;
@@ -76,6 +77,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   void initState() {
     super.initState();
     this.barcodeFound = false;
+    this.reScanCode = true;
     // _getUsers();
     searchBoxController.addListener(_searchBoxValueChanged);
     searchUserController.addListener(_searchUserValueChanged);
@@ -207,20 +209,49 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
   }
 
   void _searchBoxByMacAddress(String macAddress) {
+    setState(() {
+      // Pause the found to send no more requests
+      this.barcodeFound = false;
+    });
+
     print("Search box by mac!");
-    // controller?.pauseCamera();
 
     BoxController.loadBoxWithMacAddress(macAddress).then((result) {
-      setState(() {
-        this.selectedBox = result;
-        this.boxCommentController.text = result.comment;
+      if (result != null) {
+        setState(() {
+          this.selectedBox = result; // There is a box found
+          this.boxCommentController.text = result.comment;
+        });
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          setState(() {
+            this.barcodeFound = true; // there is indeed a barcode found
+          });
+        });
         SnackBarController().show(
             text: "De box: \"" +
                 this.selectedBox.name +
                 "\" is geselecteerd om te koppelen",
             title: "Box geselecteerd",
             type: "INFO");
-      });
+      } else {
+// There is no box found for the qr code
+        setState(() {
+          this.selectedBox = null;
+          this.boxCommentController.text = null;
+          this.barcodeFound = false;
+        });
+        SnackBarController().show(
+            text: "Geen box gevonden die overeenkomt met de gescande qr-code",
+            title: "Niet gevonden",
+            type: "ERROR");
+        Future.delayed(const Duration(milliseconds: 4000), () {
+          print("This should be delayed");
+          setState(() {
+            this.reScanCode = true;
+            this.result = null;
+          });
+        });
+      }
     });
   }
 
@@ -448,8 +479,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                       children: [
                         if (result != null && this.barcodeFound)
                           // Macaddress
-                          Text(
-                              'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
+                          Text('QR-Code: ${result.code}')
                         else
                           Text('Scan de QR code'),
                       ],
@@ -886,7 +916,13 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
         this.barcodeFound = true;
         result = scanData;
       });
-      if (this.barcodeFound && this.selectedBox == null) {
+      // If the qr code found smething and the selected box is still empty
+      if (this.barcodeFound && this.selectedBox == null && this.reScanCode) {
+        setState(() {
+          // Pause the found to send no more requests
+          this.barcodeFound = false;
+          this.reScanCode = false;
+        });
         // Search the box with the found MacAddress
         _searchBoxByMacAddress(scanData.code);
       }

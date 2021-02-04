@@ -299,9 +299,15 @@ class _BoxenOverviewPage extends State {
                             Container(
                               child: _userList(context, box.users),
                             ),
-                            if (box.comment != null && box.comment!="" && box.comment!=" " && box.comment.isNotEmpty)
+                            if (box.comment != null &&
+                                box.comment != "" &&
+                                box.comment != " " &&
+                                box.comment.isNotEmpty)
                               Padding(padding: EdgeInsets.all(5)),
-                            if (box.comment != null && box.comment!="" && box.comment!=" " && box.comment.isNotEmpty)
+                            if (box.comment != null &&
+                                box.comment != "" &&
+                                box.comment != " " &&
+                                box.comment.isNotEmpty)
                               Text(
                                 "Opmerking:\n" + box.comment,
                                 style: TextStyle(fontSize: 20),

@@ -22,7 +22,8 @@ class Predict {
           ? null
           : new DateFormat("yyyy-MM-dd").parse(json['datum']),
       // boxID: int.parse(json['boxID']),
-      bodemvochtigheid: num.parse(num.parse(json['bodemvochtigheid']).toStringAsFixed(2)),
+      bodemvochtigheid:
+          num.parse(num.parse(json['bodemvochtigheid']).toStringAsFixed(2)),
       predictedatum: json['predictedatum'] == null
           ? null
           : new DateFormat("yyyy-MM-dd").parse(json['predictedatum']),
