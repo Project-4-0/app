@@ -53,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage> {
     //TODO is het nodig om al de boxen te laden?
     _getBoxen();
     liveUpdateTimer =
-        Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());
+        Timer.periodic(Duration(seconds: 10), (Timer t) => _loadAllGraphics());
     _loadAllGraphics();
     //prediction
   }
