@@ -132,18 +132,51 @@ class _WeatherInfo extends State<WeatherInfo> {
                               margin: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 5.0),
                             ),
 
-                            Text("Wind: " +
-                                this.weather.windSpeed.toString() +
-                                "m/s" +
-                                " - " +
-                                this.weather.windDeg.toString() +
-                                "°"),
-                            Text("Luchtdruk: " +
-                                this.weather.pressure.toString() +
-                                "hPa"),
-                            Text("Vochtigheid: " +
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.waves, // Icon from parent
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                                SizedBox(width: 10,),
+                                // "Wind: " +
+                                Text(
+                                    this.weather.windSpeed.toString() +
+                                    "m/s" +
+                                    " - " +
+                                    this.weather.windDeg.toString() +
+                                    "°"),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                 Icon(
+                                  Icons.speed, // Icon from parent
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                                SizedBox(width: 10,),
+                                // "Luchtdruk: " +
+                                Text(
+                                    this.weather.pressure.toString() +
+                                    "hPa"),
+                              ],
+                            ),
+                              Row(children: [ 
+                                Icon(
+                                  Icons.opacity, // Icon from parent
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                                SizedBox(width: 10,),
+                                // "Vochtigheid: " +
+                                Text(
                                 this.weather.humidity.toString() +
-                                "%"),
+                                "%", ),
+                                ],
+                              ),
+                           
 
                             // Text(this.weather.tempMin.toString() + "°C"),
                             // Text("min"),
