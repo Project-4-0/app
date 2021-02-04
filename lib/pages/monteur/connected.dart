@@ -502,8 +502,8 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                previousButton(),
-                nextButton(),
+                // previousButton(),
+                Spacer(), nextButton(),
               ],
             ),
           ],
