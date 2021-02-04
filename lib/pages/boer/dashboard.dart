@@ -241,10 +241,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _weatherView() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1) {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 || this.filterMeasurement.boxID == null) {
       return Container();
     }
-    return WeatherInfo(this.measurementGraphicsLicht?.boxes[0].id);
+    return new WeatherInfo(this.filterMeasurement.boxID);
   }
 
   _predictionsView() {
@@ -301,8 +301,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Column(
       children: [
-        Text(new DateFormat("dd-MM-yyyy").format(this.terrascope.date).toString() ),
-        SizedBox(height: 20,),
+        Text(new DateFormat("dd-MM-yyyy")
+            .format(this.terrascope.date)
+            .toString()),
+        SizedBox(
+          height: 20,
+        ),
         Image.network(
           this.terrascope.url,
           alignment: Alignment.center,

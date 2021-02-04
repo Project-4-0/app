@@ -66,9 +66,8 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
       ),
     ];
 
-    children.add(Text("Geen gegevens beschikbaar"));
-
    if (this.widget.predictList.isEmpty) {
+     children.add(Text("Geen gegevens beschikbaar"));
       return new Column(children: children);
     }
     children.add(_forOneGraphicTop());
