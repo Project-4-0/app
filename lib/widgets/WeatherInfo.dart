@@ -31,17 +31,18 @@ class _WeatherInfo extends State<WeatherInfo> {
       var now = new DateTime.now();
       var formatter = new DateFormat('EEE - d MMM');
       String formattedDate = formatter.format(now);
-      print(formattedDate); // 2016-01-25
+      // print(formattedDate); // 2016-01-25
       setState(() {
         this.weather = weather;
         this.date = formattedDate;
       });
-      print(this.weather.cityName);
+      // print(this.weather.cityName);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // _getWeather(boxID);
     return Padding(
         padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 20.0),
         child: weather != null
@@ -139,10 +140,11 @@ class _WeatherInfo extends State<WeatherInfo> {
                                   color: Colors.white,
                                   size: 25,
                                 ),
-                                SizedBox(width: 10,),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 // "Wind: " +
-                                Text(
-                                    this.weather.windSpeed.toString() +
+                                Text(this.weather.windSpeed.toString() +
                                     "m/s" +
                                     " - " +
                                     this.weather.windDeg.toString() +
@@ -151,32 +153,34 @@ class _WeatherInfo extends State<WeatherInfo> {
                             ),
                             Row(
                               children: [
-                                 Icon(
+                                Icon(
                                   Icons.speed, // Icon from parent
                                   color: Colors.white,
                                   size: 25,
                                 ),
-                                SizedBox(width: 10,),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 // "Luchtdruk: " +
-                                Text(
-                                    this.weather.pressure.toString() +
-                                    "hPa"),
+                                Text(this.weather.pressure.toString() + "hPa"),
                               ],
                             ),
-                              Row(children: [ 
+                            Row(
+                              children: [
                                 Icon(
                                   Icons.opacity, // Icon from parent
                                   color: Colors.white,
                                   size: 25,
                                 ),
-                                SizedBox(width: 10,),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 // "Vochtigheid: " +
                                 Text(
-                                this.weather.humidity.toString() +
-                                "%", ),
-                                ],
-                              ),
-                           
+                                  this.weather.humidity.toString() + "%",
+                                ),
+                              ],
+                            ),
 
                             // Text(this.weather.tempMin.toString() + "°C"),
                             // Text("min"),
