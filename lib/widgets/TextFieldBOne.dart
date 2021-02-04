@@ -36,7 +36,7 @@ class TextFieldBOne extends StatelessWidget {
       //                         onChanged: (text) {
       //   print("First text field: $text");
       // },
-      maxLines: null,
+      maxLines: obscureText ? 1 : null,
       obscureText: obscureText,
       maxLength: maxLength,
       onSaved: onSave,
