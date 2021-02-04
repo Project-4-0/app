@@ -21,8 +21,8 @@
         <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="b_one_project_4_0"
-        android:icon="@mipmap/ic_launcher">
+        android:label="B One"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

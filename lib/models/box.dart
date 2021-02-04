@@ -26,6 +26,7 @@ class Box {
       this.monitoring});
 
   factory Box.fromJson(Map<String, dynamic> json) {
+    print("monitoring length: " + json['monitoring']?.length.toString());
     return Box(
       id: json['BoxID'],
       macAddress: json['MacAddress'],
@@ -34,8 +35,8 @@ class Box {
       active: json['Active'],
       boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
-      monitoring: json['monitoring'] == null
-          ? null
+      monitoring: json['monitoring']?.length == 0
+          ? []
           : (json['monitoring'] as List)
               .map((tagJson) => Monitoring.fromJson(tagJson))
               .toList(),

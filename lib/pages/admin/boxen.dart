@@ -2,12 +2,15 @@ import 'package:b_one_project_4_0/models/monitoring.dart';
 import 'package:b_one_project_4_0/widgets/buttons/OutlineFlatButtonBOne.dart';
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
+import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
+import 'package:b_one_project_4_0/models/location.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/pages/admin/boxDetail.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
 import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
+import 'package:b_one_project_4_0/widgets/UserListItem.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +21,7 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:esys_flutter_share/esys_flutter_share.dart';
+import 'package:b_one_project_4_0/widgets/location_map.dart';
 
 class BoxenOverviewPage extends StatefulWidget {
   @override
@@ -30,6 +34,9 @@ class _BoxenOverviewPage extends State {
   Box boxAll;
   // List boxList = List();
   int count = 0;
+
+  double boxLat;
+  double boxLng;
 
   GlobalKey globalKey = new GlobalKey();
 
@@ -72,6 +79,21 @@ class _BoxenOverviewPage extends State {
   }
 
   void _showBoxDetail(int id) {
+    // Get the location of the box
+    LocationController.getLocationOfBox(id).then((result) {
+      if (result != null) {
+        print("Lat: " +
+            result.latitude.toString() +
+            " Lng: " +
+            result.longitude.toString());
+
+        setState(() {
+          this.boxLat = result.latitude;
+          this.boxLng = result.longitude;
+        });
+      }
+    });
+
     // Get all the box info to show the details
     BoxController.loadBoxAll(id).then((result) {
       setState(() {
@@ -187,13 +209,17 @@ class _BoxenOverviewPage extends State {
                 // Marble to show active status
                 top: 70.0,
                 right: 20.0,
-                child: Text(
-                  DateFormat('dd-MM-yyyy')
-                      .format(this.boxList[position].monitoring[0].timeStamp),
-                  style: TextStyle(
-                    color: Colors.grey.shade400,
-                  ),
-                ),
+                child: this.boxList[position].monitoring.length != 0
+                    ? Text(
+                        DateFormat('dd-MM-yyyy').format(this
+                            .boxList[position]
+                            .monitoring[0]
+                            .timeStamp), //// !!!!!!!!!!!!!!!!!!!!!
+                        style: TextStyle(
+                          color: Colors.grey.shade400,
+                        ),
+                      )
+                    : Text(""),
               ),
             ]));
       },
@@ -203,8 +229,8 @@ class _BoxenOverviewPage extends State {
   // Detail modal of a box with all information
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
-    box != null
-        ? showModalBottomSheet(
+    Future<void> future = box != null
+        ? showModalBottomSheet<void>(
             isScrollControlled: true,
             // enableDrag: true,
             // isScrollControlled: true, // Full screen height
@@ -292,16 +318,47 @@ class _BoxenOverviewPage extends State {
                               "Sensors:",
                               style: TextStyle(fontSize: 20),
                             ),
-                            Container(
-                              child: _sensorList(context, box.sensors),
-                            ),
+                            box.sensors != null
+                                ? Container(
+                                    child: _sensorList(context, box.sensors),
+                                  )
+                                : Text("Geen gegevens beschikbaar!",
+                                    textAlign: TextAlign.center),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "Monitoring:",
                               style: TextStyle(fontSize: 20),
                             ),
                             Padding(padding: EdgeInsets.all(5)),
-                            _monitoring(box.monitoring[0]),
+                            box.monitoring.length != 0
+                                ? _monitoring(box.monitoring[0])
+                                : Text("Geen gegevens beschikbaar!",
+                                    textAlign: TextAlign.center),
+                            Padding(padding: EdgeInsets.all(5)),
+                            Text(
+                              "Locatie:",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Padding(padding: EdgeInsets.all(5)),
+
+                            // this.boxLat != null && boxLng != null
+                            //     ? Container(
+                            //         height: 200.0,
+                            //         child:
+                            //             LocationMap(this.boxLat, this.boxLng))
+                            //     : Container(
+                            //         height: 200.0,
+                            //         child: Center(
+                            //             child: CircularProgressIndicator())),
+                            this.boxLat != null && boxLng != null
+                                ? Container(
+                                    height: 200.0,
+                                    child:
+                                        LocationMap(this.boxLat, this.boxLng))
+                                : Container(
+                                    height: 200.0,
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
                             Padding(padding: EdgeInsets.all(5)),
                             OutlineFlatButtonBOne(
                               text: "Wijzigen",
@@ -324,7 +381,6 @@ class _BoxenOverviewPage extends State {
                                 IconButton(
                                   icon: Icon(Icons.share,
                                       color: Theme.of(context).primaryColor),
-                                  tooltip: 'Increase volume by 10',
                                   onPressed: () {
                                     print("Share QR-Code");
                                     _captureAndSharePng(box.name);
@@ -341,7 +397,7 @@ class _BoxenOverviewPage extends State {
               });
             },
           )
-        : showModalBottomSheet(
+        : showModalBottomSheet<void>(
             isScrollControlled: true, // Full screen height
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -363,46 +419,55 @@ class _BoxenOverviewPage extends State {
               });
             },
           );
+    future.then((void value) => _closeModalBox(value));
+  }
+
+  void _closeModalBox(void value) {
+    print('BoxModal closed');
+    setState(() {
+      this.boxLat = null;
+      this.boxLng = null;
+    });
   }
 
   _monitoring(Monitoring monitoring) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-      Column(
+        Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.sd_card, size: 40, color: Colors.grey.shade500),      
+            Icon(Icons.sd_card, size: 40, color: Colors.grey.shade500),
             Text(monitoring.sdCapacity == "" ? "Geen" : monitoring.sdCapacity)
           ],
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.battery_alert, size: 40, color: Colors.grey.shade500),      
-            Text(monitoring.batteryPercentage == "" ? "Geen" : monitoring.batteryPercentage)
+            Icon(Icons.battery_alert, size: 40, color: Colors.grey.shade500),
+            Text(monitoring.batteryPercentage == ""
+                ? "Geen"
+                : monitoring.batteryPercentage)
           ],
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.thermostat_outlined, size: 40, color: Colors.grey.shade500),      
+            Icon(Icons.thermostat_outlined,
+                size: 40, color: Colors.grey.shade500),
             Text(monitoring.temperature == "" ? "Geen" : monitoring.temperature)
-
           ],
         ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.history, size: 40, color: Colors.grey.shade500),      
-            Text(DateFormat('dd/MM/yyyy \n kk:mm:ss').format(monitoring.timeStamp),
+            Icon(Icons.history, size: 40, color: Colors.grey.shade500),
+            Text(
+              DateFormat('dd/MM/yyyy \n kk:mm:ss').format(monitoring.timeStamp),
             ),
-
-           
-
           ],
         ),
-      ],      
+      ],
     );
   }
 
@@ -410,236 +475,257 @@ class _BoxenOverviewPage extends State {
     return new ListView.builder(
       primary: false,
       shrinkWrap: true,
-      // physics: const AlwaysScrollableScrollPhysics(), // new
+      physics: const AlwaysScrollableScrollPhysics(), // new
       scrollDirection: Axis.vertical,
+      // shrinkWrap: true,
       itemCount: userList.length,
-      itemBuilder: (context, int position) {
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                // Show the first letter of the last name
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: Text(
-                      userList[position].firstName.substring(0, 1) +
-                          userList[position].lastName.substring(0, 1),
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
-            title: Text(
-              userList[position].firstName + " " + userList[position].lastName,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor),
-            ),
-            subtitle: Column(
-              children: [
-                Align(
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
-                        GestureDetector(
-                            onTap: () {
-                              print("Tapped on email!");
-                              // _launchMailto(
-                              //     this.userList[position].email.toString(),
-                              //     this.userList[position].firstName,
-                              //     this.userList[position].lastName);
-                            },
-                            child: Icon(Icons.mail_outline,
-                                size: 14,
-                                color: Theme.of(context).primaryColor)),
-                        Padding(
-                          padding: EdgeInsets.all(4.0),
-                        ),
-                        SizedBox(
-                            width: 170.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                print("Tapped on email!");
-                                // _launchMailto(
-                                //     this.userList[position].email.toString(),
-                                //     this.userList[position].firstName,
-                                //     this.userList[position].lastName);
-                              },
-                              child: Text(
-                                userList[position].email.toString(),
-                                maxLines: 1,
-                                overflow: TextOverflow.fade,
-                                softWrap: false,
-                              ),
-                            )),
-                      ],
-                    )),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(4.0),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            print("Tapped on location!");
-                            // _openGoogleMaps(
-                            //     this.userList[position].address,
-                            //     this.userList[position].city,
-                            //     this.userList[position].postalCode);
-                          },
-                          child: Icon(
-                            Icons.place,
-                            size: 14,
-                            color: Theme.of(context).primaryColor,
-                          )),
-                      Padding(
-                        padding: EdgeInsets.all(4.0),
-                      ),
-                      GestureDetector(
-                          onTap: () {
-                            print("Tapped on location!");
-                            // _openGoogleMaps(
-                            //     this.userList[position].address,
-                            //     this.userList[position].city,
-                            //     this.userList[position].postalCode);
-                          },
-                          child: Text(userList[position].address +
-                              ",\n" +
-                              userList[position].city +
-                              " " +
-                              userList[position].postalCode)),
-                    ],
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Text(
-                    "Start: " +
-                        DateFormat('dd/MM/yyyy – kk:mm:ss')
-                            .format(userList[position].boxUser.startDate),
-                  ),
-                ),
-              ],
-            ),
-            // trailing: IconButton(
-            //   icon: Icon(Icons.navigate_next),
-            //   color: Theme.of(context).accentColor,
-            //   tooltip: 'Open actions menu',
-            //   onPressed: () {
-            //     print("Pressed trailing icon");
-            //     // _userDetail(this.userList[position].id);
-            //   },
-            // ),
-            // isThreeLine: true,
-            // // subtitle: Text(this.userList[position].email),
-            // onTap: () {
-            //   // debugPrint("Tapped on " + this.userList[position].id.toString());
-            //   print("Navigate to detail");
-            //   // _userDetail(this.userList[position].id);
-            // },
-          ),
+      itemBuilder: (BuildContext context, int position) {
+        return UserListItem(
+          user: userList[position],
+          showTrailingIcon: false,
+          onPressed: () {
+            print("Pressed trailing icon");
+            // _userDetail(userList[position].id);
+          },
         );
-
-        // return Padding(
-        //     padding: EdgeInsets.only(top: 5.0),
-        //     child: GestureDetector(
-        //         onTap: () {
-        //           print("Tapped on user");
-        //         },
-        //         child: Column(
-        //           children: [
-        //             Row(
-        //               children: <Widget>[
-        //                 Padding(
-        //                   padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
-        //                   child: Icon(
-        //                     Icons.perm_identity,
-        //                     color: Theme.of(context).primaryColor,
-        //                     size: 14,
-        //                   ),
-        //                 ),
-        //                 Container(
-        //                     child: Flexible(
-        //                         child: Text(
-        //                             userList[position].firstName +
-        //                                 " " +
-        //                                 userList[position].lastName +
-        //                                 ":",
-        //                             textAlign: TextAlign.left,
-        //                             ),
-        //                             ),
-        //                             ),
-        //               ],
-        //             ),
-        //             Row(
-        //               children: <Widget>[
-        //                 Padding(
-        //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
-        //                   child: Icon(
-        //                     Icons.place,
-        //                     color: Theme.of(context).primaryColor,
-        //                     size: 14,
-        //                   ),
-        //                 ),
-        //                 Container(
-        //                     child: Flexible(
-        //                         child: Text(
-        //                             userList[position].address +
-        //                                 ",\n " +
-        //                                 userList[position].postalCode +
-        //                                 " " +
-        //                                 userList[position].city,
-        //                             textAlign: TextAlign.left))),
-        //               ],
-        //             ),
-        //             Row(
-        //               children: <Widget>[
-        //                 Padding(
-        //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
-        //                   child: Icon(
-        //                     Icons.today,
-        //                     color: Theme.of(context).primaryColor,
-        //                     size: 14,
-        //                   ),
-        //                 ),
-        //                 Container(
-        //                     child: Flexible(
-        //                         child: Text(
-        //                             DateFormat('dd/MM/yyyy – kk:mm:ss').format(
-        //                                     userList[position]
-        //                                         .boxUser
-        //                                         .startDate) +
-        //                                 (userList[position].boxUser.endDate !=
-        //                                         null
-        //                                     ? (" - \n" +
-        //                                         DateFormat(
-        //                                                 'dd/MM/yyyy – kk:mm:ss')
-        //                                             .format(userList[position]
-        //                                                 .boxUser
-        //                                                 .endDate))
-        //                                     : ""),
-        //                             textAlign: TextAlign.left))),
-        //               ],
-        //             )
-        //           ],
-        //         ),
-        //         ),
-        //         );
       },
     );
   }
+
+  // ListView _userList(context, List<User> userList) {
+  //   return new ListView.builder(
+  //     primary: false,
+  //     shrinkWrap: true,
+  //     // physics: const AlwaysScrollableScrollPhysics(), // new
+  //     scrollDirection: Axis.vertical,
+  //     itemCount: userList.length,
+  //     itemBuilder: (context, int position) {
+  //       return Card(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(10.0),
+  //         ),
+  //         color: Colors.white,
+  //         elevation: 2.0,
+  //         child: ListTile(
+  //           leading: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: <Widget>[
+  //               // Show the first letter of the last name
+  //               CircleAvatar(
+  //                 backgroundColor: Theme.of(context).primaryColor,
+  //                 child: Text(
+  //                     userList[position].firstName.substring(0, 1) +
+  //                         userList[position].lastName.substring(0, 1),
+  //                     style: TextStyle(
+  //                         color: Colors.white, fontWeight: FontWeight.bold)),
+  //               ),
+  //             ],
+  //           ),
+  //           title: Text(
+  //             userList[position].firstName + " " + userList[position].lastName,
+  //             style: TextStyle(
+  //                 fontWeight: FontWeight.bold,
+  //                 color: Theme.of(context).primaryColor),
+  //           ),
+  //           subtitle: Column(
+  //             children: [
+  //               Align(
+  //                   alignment: Alignment.centerLeft,
+  //                   child: Row(
+  //                     children: <Widget>[
+  //                       Padding(
+  //                         padding: EdgeInsets.all(4.0),
+  //                       ),
+  //                       // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
+  //                       GestureDetector(
+  //                           onTap: () {
+  //                             print("Tapped on email!");
+  //                             // _launchMailto(
+  //                             //     this.userList[position].email.toString(),
+  //                             //     this.userList[position].firstName,
+  //                             //     this.userList[position].lastName);
+  //                           },
+  //                           child: Icon(Icons.mail_outline,
+  //                               size: 14,
+  //                               color: Theme.of(context).primaryColor)),
+  //                       Padding(
+  //                         padding: EdgeInsets.all(4.0),
+  //                       ),
+  //                       SizedBox(
+  //                           width: 170.0,
+  //                           child: GestureDetector(
+  //                             onTap: () {
+  //                               print("Tapped on email!");
+  //                               // _launchMailto(
+  //                               //     this.userList[position].email.toString(),
+  //                               //     this.userList[position].firstName,
+  //                               //     this.userList[position].lastName);
+  //                             },
+  //                             child: Text(
+  //                               userList[position].email.toString(),
+  //                               maxLines: 1,
+  //                               overflow: TextOverflow.fade,
+  //                               softWrap: false,
+  //                             ),
+  //                           )),
+  //                     ],
+  //                   )),
+  //               Align(
+  //                 alignment: Alignment.centerLeft,
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     Padding(
+  //                       padding: EdgeInsets.all(4.0),
+  //                     ),
+  //                     GestureDetector(
+  //                         onTap: () {
+  //                           print("Tapped on location!");
+  //                           // _openGoogleMaps(
+  //                           //     this.userList[position].address,
+  //                           //     this.userList[position].city,
+  //                           //     this.userList[position].postalCode);
+  //                         },
+  //                         child: Icon(
+  //                           Icons.place,
+  //                           size: 14,
+  //                           color: Theme.of(context).primaryColor,
+  //                         )),
+  //                     Padding(
+  //                       padding: EdgeInsets.all(4.0),
+  //                     ),
+  //                     GestureDetector(
+  //                         onTap: () {
+  //                           print("Tapped on location!");
+  //                           // _openGoogleMaps(
+  //                           //     this.userList[position].address,
+  //                           //     this.userList[position].city,
+  //                           //     this.userList[position].postalCode);
+  //                         },
+  //                         child: Text(userList[position].address +
+  //                             ",\n" +
+  //                             userList[position].city +
+  //                             " " +
+  //                             userList[position].postalCode)),
+  //                   ],
+  //                 ),
+  //               ),
+  //               Align(
+  //                 alignment: Alignment.bottomRight,
+  //                 child: Text(
+  //                   "Start: " +
+  //                       DateFormat('dd/MM/yyyy – kk:mm:ss')
+  //                           .format(userList[position].boxUser.startDate),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           // trailing: IconButton(
+  //           //   icon: Icon(Icons.navigate_next),
+  //           //   color: Theme.of(context).accentColor,
+  //           //   tooltip: 'Open actions menu',
+  //           //   onPressed: () {
+  //           //     print("Pressed trailing icon");
+  //           //     // _userDetail(this.userList[position].id);
+  //           //   },
+  //           // ),
+  //           // isThreeLine: true,
+  //           // // subtitle: Text(this.userList[position].email),
+  //           // onTap: () {
+  //           //   // debugPrint("Tapped on " + this.userList[position].id.toString());
+  //           //   print("Navigate to detail");
+  //           //   // _userDetail(this.userList[position].id);
+  //           // },
+  //         ),
+  //       );
+
+  //       // return Padding(
+  //       //     padding: EdgeInsets.only(top: 5.0),
+  //       //     child: GestureDetector(
+  //       //         onTap: () {
+  //       //           print("Tapped on user");
+  //       //         },
+  //       //         child: Column(
+  //       //           children: [
+  //       //             Row(
+  //       //               children: <Widget>[
+  //       //                 Padding(
+  //       //                   padding: EdgeInsets.fromLTRB(15.0, 0, 5.0, 0),
+  //       //                   child: Icon(
+  //       //                     Icons.perm_identity,
+  //       //                     color: Theme.of(context).primaryColor,
+  //       //                     size: 14,
+  //       //                   ),
+  //       //                 ),
+  //       //                 Container(
+  //       //                     child: Flexible(
+  //       //                         child: Text(
+  //       //                             userList[position].firstName +
+  //       //                                 " " +
+  //       //                                 userList[position].lastName +
+  //       //                                 ":",
+  //       //                             textAlign: TextAlign.left,
+  //       //                             ),
+  //       //                             ),
+  //       //                             ),
+  //       //               ],
+  //       //             ),
+  //       //             Row(
+  //       //               children: <Widget>[
+  //       //                 Padding(
+  //       //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+  //       //                   child: Icon(
+  //       //                     Icons.place,
+  //       //                     color: Theme.of(context).primaryColor,
+  //       //                     size: 14,
+  //       //                   ),
+  //       //                 ),
+  //       //                 Container(
+  //       //                     child: Flexible(
+  //       //                         child: Text(
+  //       //                             userList[position].address +
+  //       //                                 ",\n " +
+  //       //                                 userList[position].postalCode +
+  //       //                                 " " +
+  //       //                                 userList[position].city,
+  //       //                             textAlign: TextAlign.left))),
+  //       //               ],
+  //       //             ),
+  //       //             Row(
+  //       //               children: <Widget>[
+  //       //                 Padding(
+  //       //                   padding: EdgeInsets.fromLTRB(40.0, 0, 5.0, 0),
+  //       //                   child: Icon(
+  //       //                     Icons.today,
+  //       //                     color: Theme.of(context).primaryColor,
+  //       //                     size: 14,
+  //       //                   ),
+  //       //                 ),
+  //       //                 Container(
+  //       //                     child: Flexible(
+  //       //                         child: Text(
+  //       //                             DateFormat('dd/MM/yyyy – kk:mm:ss').format(
+  //       //                                     userList[position]
+  //       //                                         .boxUser
+  //       //                                         .startDate) +
+  //       //                                 (userList[position].boxUser.endDate !=
+  //       //                                         null
+  //       //                                     ? (" - \n" +
+  //       //                                         DateFormat(
+  //       //                                                 'dd/MM/yyyy – kk:mm:ss')
+  //       //                                             .format(userList[position]
+  //       //                                                 .boxUser
+  //       //                                                 .endDate))
+  //       //                                     : ""),
+  //       //                             textAlign: TextAlign.left))),
+  //       //               ],
+  //       //             )
+  //       //           ],
+  //       //         ),
+  //       //         ),
+  //       //         );
+  //     },
+  //   );
+  // }
 
   ListView _sensorList(context, sensorList) {
     return new ListView.builder(

@@ -24,9 +24,11 @@ class Monitoring {
     return Monitoring(
         id: json['MonitoringID'],
         boxID: json['BoxID'],
-        sdCapacity: json['SdCapacity'] == null ? "" :json['SdCapacity'],
-        amountSatellite: json['AmountSatellite'] == "" ? null :json['AmountSatellite'],
-        batteryPercentage: json['BatteryPercentage'] == "" ? null : json['BatteryPercentage'],
+        sdCapacity: json['SdCapacity'] == null ? "" : json['SdCapacity'],
+        amountSatellite:
+            json['AmountSatellite'] == "" ? null : json['AmountSatellite'],
+        batteryPercentage:
+            json['BatteryPercentage'] == "" ? null : json['BatteryPercentage'],
         temperature: json['Temperature'] == null ? "" : json['Temperature'],
         timeStamp: json['TimeStamp'] == null
             ? null
@@ -38,14 +40,13 @@ class Monitoring {
   factory Monitoring.fromJsonW(Map<String, dynamic> json) {
     return Monitoring(
       id: json['MonitoringID'],
-        boxID: json['BoxID'],
-        sdCapacity: json['SdCapacity'],
-        amountSatellite: json['AmountSatellite'],
-        batteryPercentage: json['BatteryPercentage'],
-        temperature: json['Temperature'],
-        timeStamp: json['TimeStamp'] == null
-            ? null
-            : DateTime.parse(json['TimeStamp']),
+      boxID: json['BoxID'],
+      sdCapacity: json['SdCapacity'],
+      amountSatellite: json['AmountSatellite'],
+      batteryPercentage: json['BatteryPercentage'],
+      temperature: json['Temperature'],
+      timeStamp:
+          json['TimeStamp'] == null ? null : DateTime.parse(json['TimeStamp']),
     );
   }
 

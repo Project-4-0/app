@@ -35,17 +35,19 @@ class BoxListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            CircleAvatar(
-                radius: 50.0,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
-                  child: Center(
-                      child: Text(box.name,
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center)),
-                )),
+            if (box.name != null)
+              CircleAvatar(
+                  radius: 50.0,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+                    child: Center(
+                        child: Text(box.name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center)),
+                  )),
             SizedBox(
               width: 15.0,
             ),
@@ -53,13 +55,14 @@ class BoxListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                    child: Flexible(
-                        child: Text(
-                  box.macAddress,
-                  style: TextStyle(color: Theme.of(context).accentColor),
-                  textAlign: TextAlign.left,
-                ))),
+                if (this.box.macAddress != null)
+                  Container(
+                      child: Flexible(
+                          child: Text(
+                    box.macAddress,
+                    style: TextStyle(color: Theme.of(context).accentColor),
+                    textAlign: TextAlign.left,
+                  ))),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.start,
                 //   children: <Widget>[
