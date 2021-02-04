@@ -54,6 +54,8 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
   Widget build(BuildContext context) {
     // The children consist of a Chart and Text widgets below to hold the info.
 
+    
+
     final children = <Widget>[
       Text(
         this.widget.title,
@@ -64,6 +66,11 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
       ),
     ];
 
+    children.add(Text("Geen gegevens beschikbaar"));
+
+   if (this.widget.predictList.isEmpty) {
+      return new Column(children: children);
+    }
     children.add(_forOneGraphicTop());
     children.add(
       SizedBox(
@@ -117,7 +124,7 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
               "Datum : " + DateFormat('dd-MM-yyyy').format(_time),
               style: TextStyle(fontSize: 13),
             ),
-             Text(
+            Text(
               "Bodemvochtigheid : " + _measures["Bodemvochtigheid"].toString(),
               style: TextStyle(fontSize: 13),
             ),
@@ -158,9 +165,7 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
       var mea = predict.bodemvochtigheid;
       predictData.add(
           new TimeSeriesSales(predict.predictedatum, predict.bodemvochtigheid));
-      meaMaxData.add(new TimeSeriesSales(
-        predict.predictedatum,mea
-      ));
+      meaMaxData.add(new TimeSeriesSales(predict.predictedatum, mea));
       // meaMaxData.add(new TimeSeriesSales(
       //     predict.predictedatum,
       //     num.parse(
