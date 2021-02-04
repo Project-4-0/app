@@ -134,14 +134,14 @@ class _WeatherInfo extends State<WeatherInfo> {
 
                             Text("Wind: " +
                                 this.weather.windSpeed.toString() +
-                                "km/h" +
+                                "m/s" +
                                 " - " +
                                 this.weather.windDeg.toString() +
                                 "°"),
-                            Text("Pressure: " +
+                            Text("Luchtdruk: " +
                                 this.weather.pressure.toString() +
                                 "hPa"),
-                            Text("Humidity: " +
+                            Text("Vochtigheid: " +
                                 this.weather.humidity.toString() +
                                 "%"),
 

@@ -2,9 +2,9 @@ import 'package:b_one_project_4_0/models/boxUser.dart';
 
 class Location {
   int id;
-  String boxUserID;
-  String latitude;
-  String longitude;
+  int boxUserID;
+  double latitude;
+  double longitude;
   DateTime startDate;
   DateTime endDate;
   BoxUser boxUser;
@@ -24,8 +24,11 @@ class Location {
       boxUserID: json['BoxUserID'],
       latitude: json['Latitude'],
       longitude: json['Longitude'],
-      startDate: json['StartDate'] == null ? null : json['StartDate'],
-      endDate: json['EndDate'] == null ? null : json['EndDate'],
+      startDate: json['StartDate'] == null
+          ? null
+          : DateTime.tryParse(json['StartDate']),
+      endDate:
+          json['EndDate'] == null ? null : DateTime.tryParse(json['EndDate']),
       boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJson(json['BoxUser']),
     );

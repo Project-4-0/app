@@ -222,15 +222,11 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  _openweather() {
-    return Text("weather");
-  }
-
   _predictions() {
     if (this.measurementGraphicsLicht?.boxes?.length != 1) {
       return Container();
     }
-    return Text("ok");
+    // return Text("ok");
   }
 
   _satellietbeeld() {
