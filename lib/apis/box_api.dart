@@ -96,5 +96,4 @@ class BoxApi {
       throw Exception(response.body);
     }
   }
-
 }

@@ -35,7 +35,6 @@ class Box {
       active: json['Active'],
       boxUser:
           json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
-
       monitoring: json['monitoring']?.length == 0
           ? []
           : (json['monitoring'] as List)

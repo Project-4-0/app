@@ -38,8 +38,6 @@ class _BoxenOverviewPage extends State {
   double boxLat;
   double boxLng;
 
-
-
   GlobalKey globalKey = new GlobalKey();
 
   TextEditingController searchController = TextEditingController();
@@ -94,7 +92,6 @@ class _BoxenOverviewPage extends State {
           this.boxLng = result.longitude;
         });
       }
-
     });
 
     // Get all the box info to show the details
