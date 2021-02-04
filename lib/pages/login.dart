@@ -56,33 +56,33 @@ class _LoginPageState extends State<LoginPage> {
 
                   _inputForm(),
                   //TODO NOG weg
-                  OutlineFlatButtonBOne(
-                    text: "Aanmelden (Boer)",
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/boer/dashboard', (route) => false);
-                    },
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  OutlineFlatButtonBOne(
-                    text: "Aanmelden (Monteur)",
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/monteur/dashboard', (route) => false);
-                    },
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  OutlineFlatButtonBOne(
-                    text: "Aanmelden (Admin)",
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/admin/dashboard', (route) => false);
-                    },
-                  ),
+                  // OutlineFlatButtonBOne(
+                  //   text: "Aanmelden (Boer)",
+                  //   onPressed: () {
+                  //     Navigator.pushNamedAndRemoveUntil(
+                  //         context, '/boer/dashboard', (route) => false);
+                  //   },
+                  // ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // OutlineFlatButtonBOne(
+                  //   text: "Aanmelden (Monteur)",
+                  //   onPressed: () {
+                  //     Navigator.pushNamedAndRemoveUntil(
+                  //         context, '/monteur/dashboard', (route) => false);
+                  //   },
+                  // ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // OutlineFlatButtonBOne(
+                  //   text: "Aanmelden (Admin)",
+                  //   onPressed: () {
+                  //     Navigator.pushNamedAndRemoveUntil(
+                  //         context, '/admin/dashboard', (route) => false);
+                  //   },
+                  // ),
                 ],
               ),
             ),
