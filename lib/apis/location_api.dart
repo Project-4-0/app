@@ -7,10 +7,23 @@ class LocationApi {
   static String url = env['API_URL'];
 
   // GET: The location of a specific box
-  static Future<Location>getLocationOfBox(int id) async {
+  static Future<Location> getLocationOfBox(int id) async {
     final response = await http.get(url + '/locations/box/' + id.toString());
     if (response.statusCode == 200) {
-      return Location.fromJson(json.decode(response.body));
+      if (response.body.isNotEmpty) {
+        return Location.fromJson(json.decode(response.body));
+      } else {
+        var location = new Location(
+          id: null,
+          boxUserID: null,
+          latitude: null,
+          longitude: null,
+          startDate: null,
+          endDate: null,
+          boxUser: null,
+        );
+        return location;
+      }
     } else {
       throw Exception(response.body);
     }

@@ -38,6 +38,8 @@ class _BoxenOverviewPage extends State {
   double boxLat;
   double boxLng;
 
+
+
   GlobalKey globalKey = new GlobalKey();
 
   TextEditingController searchController = TextEditingController();
@@ -92,6 +94,7 @@ class _BoxenOverviewPage extends State {
           this.boxLng = result.longitude;
         });
       }
+
     });
 
     // Get all the box info to show the details
@@ -209,13 +212,17 @@ class _BoxenOverviewPage extends State {
                 // Marble to show active status
                 top: 70.0,
                 right: 20.0,
-                child: this.boxList[position].monitoring.length!=0 ? Text(
-                  DateFormat('dd-MM-yyyy')
-                      .format(this.boxList[position].monitoring[0].timeStamp), //// !!!!!!!!!!!!!!!!!!!!!
-                  style: TextStyle(
-                    color: Colors.grey.shade400,
-                  ),
-                ) : Text(""),
+                child: this.boxList[position].monitoring.length != 0
+                    ? Text(
+                        DateFormat('dd-MM-yyyy').format(this
+                            .boxList[position]
+                            .monitoring[0]
+                            .timeStamp), //// !!!!!!!!!!!!!!!!!!!!!
+                        style: TextStyle(
+                          color: Colors.grey.shade400,
+                        ),
+                      )
+                    : Text(""),
               ),
             ]));
       },
@@ -314,17 +321,22 @@ class _BoxenOverviewPage extends State {
                               "Sensors:",
                               style: TextStyle(fontSize: 20),
                             ),
-                            Container(
-                              child: _sensorList(context, box.sensors),
-                            ),
+                            box.sensors != null
+                                ? Container(
+                                    child: _sensorList(context, box.sensors),
+                                  )
+                                : Text("Geen gegevens beschikbaar!",
+                                    textAlign: TextAlign.center),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "Monitoring:",
                               style: TextStyle(fontSize: 20),
                             ),
                             Padding(padding: EdgeInsets.all(5)),
-                            // if (box.monitoring == "HOER")
-                              // _monitoring(box.monitoring[0]),
+                            box.monitoring.length != 0
+                                ? _monitoring(box.monitoring[0])
+                                : Text("Geen gegevens beschikbaar!",
+                                    textAlign: TextAlign.center),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "Locatie:",
@@ -341,15 +353,15 @@ class _BoxenOverviewPage extends State {
                             //         height: 200.0,
                             //         child: Center(
                             //             child: CircularProgressIndicator())),
-                            if (this.boxLat != null && boxLng != null)
-                              Container(
-                                  height: 200.0,
-                                  child: LocationMap(this.boxLat, this.boxLng)),
-                            if (this.boxLat == null && boxLng == null)
-                              Container(
-                                  height: 200.0,
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
+                            this.boxLat != null && boxLng != null
+                                ? Container(
+                                    height: 200.0,
+                                    child:
+                                        LocationMap(this.boxLat, this.boxLng))
+                                : Container(
+                                    height: 200.0,
+                                    child: Center(
+                                        child: CircularProgressIndicator())),
                             Padding(padding: EdgeInsets.all(5)),
                             OutlineFlatButtonBOne(
                               text: "Wijzigen",
