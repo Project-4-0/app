@@ -96,7 +96,7 @@ class _WeatherInfo extends State<WeatherInfo> {
                                             // height: 100.0,
                                             width: 24.0,
                                             child: Image.network(
-                                                'http://openweathermap.org/img/wn/' +
+                                                'https://openweathermap.org/img/wn/' +
                                                     this.weather.weatherIcon +
                                                     '@2x.png'),
                                           ),
@@ -156,7 +156,7 @@ class _WeatherInfo extends State<WeatherInfo> {
                                 // height: 100.0,
                                 width: 100.0,
                                 child: Image.network(
-                                    'http://openweathermap.org/img/wn/' +
+                                    'https://openweathermap.org/img/wn/' +
                                         this.weather.weatherIcon +
                                         '@2x.png'),
                               )),
