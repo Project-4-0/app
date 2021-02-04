@@ -35,6 +35,9 @@ class _BoxenOverviewPage extends State {
   // List boxList = List();
   int count = 0;
 
+  double boxLat;
+  double boxLng;
+
   GlobalKey globalKey = new GlobalKey();
 
   TextEditingController searchController = TextEditingController();
@@ -76,6 +79,21 @@ class _BoxenOverviewPage extends State {
   }
 
   void _showBoxDetail(int id) {
+    // Get the location of the box
+    LocationController.getLocationOfBox(id).then((result) {
+      if (result != null) {
+        print("Lat: " +
+            result.latitude.toString() +
+            " Lng: " +
+            result.longitude.toString());
+
+        setState(() {
+          this.boxLat = result.latitude;
+          this.boxLng = result.longitude;
+        });
+      }
+    });
+
     // Get all the box info to show the details
     BoxController.loadBoxAll(id).then((result) {
       setState(() {
@@ -191,13 +209,13 @@ class _BoxenOverviewPage extends State {
                 // Marble to show active status
                 top: 70.0,
                 right: 20.0,
-                child: Text(
+                child: this.boxList[position].monitoring.length!=0 ? Text(
                   DateFormat('dd-MM-yyyy')
-                      .format(this.boxList[position].monitoring[0].timeStamp),
+                      .format(this.boxList[position].monitoring[0].timeStamp), //// !!!!!!!!!!!!!!!!!!!!!
                   style: TextStyle(
                     color: Colors.grey.shade400,
                   ),
-                ),
+                ) : Text(""),
               ),
             ]));
       },
@@ -207,8 +225,8 @@ class _BoxenOverviewPage extends State {
   // Detail modal of a box with all information
   void _boxDetail(context, Box box) {
     // GlobalKey globalKey = new GlobalKey();
-    box != null
-        ? showModalBottomSheet(
+    Future<void> future = box != null
+        ? showModalBottomSheet<void>(
             isScrollControlled: true,
             // enableDrag: true,
             // isScrollControlled: true, // Full screen height
@@ -305,9 +323,33 @@ class _BoxenOverviewPage extends State {
                               style: TextStyle(fontSize: 20),
                             ),
                             Padding(padding: EdgeInsets.all(5)),
-                            _monitoring(box.monitoring[0]),
+                            // if (box.monitoring == "HOER")
+                              // _monitoring(box.monitoring[0]),
                             Padding(padding: EdgeInsets.all(5)),
-                            // _showBoxLocation(box.id),
+                            Text(
+                              "Locatie:",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Padding(padding: EdgeInsets.all(5)),
+
+                            // this.boxLat != null && boxLng != null
+                            //     ? Container(
+                            //         height: 200.0,
+                            //         child:
+                            //             LocationMap(this.boxLat, this.boxLng))
+                            //     : Container(
+                            //         height: 200.0,
+                            //         child: Center(
+                            //             child: CircularProgressIndicator())),
+                            if (this.boxLat != null && boxLng != null)
+                              Container(
+                                  height: 200.0,
+                                  child: LocationMap(this.boxLat, this.boxLng)),
+                            if (this.boxLat == null && boxLng == null)
+                              Container(
+                                  height: 200.0,
+                                  child: Center(
+                                      child: CircularProgressIndicator())),
                             Padding(padding: EdgeInsets.all(5)),
                             OutlineFlatButtonBOne(
                               text: "Wijzigen",
@@ -346,7 +388,7 @@ class _BoxenOverviewPage extends State {
               });
             },
           )
-        : showModalBottomSheet(
+        : showModalBottomSheet<void>(
             isScrollControlled: true, // Full screen height
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
@@ -368,19 +410,14 @@ class _BoxenOverviewPage extends State {
               });
             },
           );
+    future.then((void value) => _closeModalBox(value));
   }
 
-  _showBoxLocation(int boxID) {
-    LocationController.getLocationOfBox(boxID).then((result) {
-      if (result != null) {
-        print("Lat: " + result.latitude.toString() + " Lng: " + result.longitude.toString());
-        return Container(
-            height: 100.0,
-            child: LocationMap(result.latitude, result.longitude));
-      } else {
-        return Container(
-            height: 100.0, child: Center(child: CircularProgressIndicator()));
-      }
+  void _closeModalBox(void value) {
+    print('BoxModal closed');
+    setState(() {
+      this.boxLat = null;
+      this.boxLng = null;
     });
   }
 
@@ -425,7 +462,7 @@ class _BoxenOverviewPage extends State {
     );
   }
 
-    ListView _userList(context, List<User> userList) {
+  ListView _userList(context, List<User> userList) {
     return new ListView.builder(
       primary: false,
       shrinkWrap: true,

@@ -35,6 +35,7 @@ class BoxListItem extends StatelessWidget {
         ),
         child: Row(
           children: [
+            if(box.name!=null)
             CircleAvatar(
                 radius: 50.0,
                 backgroundColor: Theme.of(context).primaryColor,
@@ -53,6 +54,7 @@ class BoxListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                if(this.box.macAddress!=null)
                 Container(
                     child: Flexible(
                         child: Text(

@@ -19,8 +19,8 @@ class UserListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       color: Colors.white,
       elevation: 2.0,
       child: ListTile(
@@ -46,42 +46,43 @@ class UserListItem extends StatelessWidget {
         ),
         subtitle: Column(
           children: [
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                    ),
-                    // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
-                    GestureDetector(
-                        onTap: () {
-                          print("Tapped on email!");
-                          _launchMailto(this.user.email.toString(),
-                              this.user.firstName, this.user.lastName);
-                        },
-                        child: Icon(Icons.mail_outline,
-                            size: 14, color: Theme.of(context).primaryColor)),
-                    Padding(
-                      padding: EdgeInsets.all(4.0),
-                    ),
-                    SizedBox(
-                        width: showTrailingIcon ? 170.0 : 190.0,
-                        child: GestureDetector(
+            if (this.user.email != null)
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      // Icon(Icons.mail_outline, size: 14, color: Colors.blue),
+                      GestureDetector(
                           onTap: () {
                             print("Tapped on email!");
                             _launchMailto(this.user.email.toString(),
                                 this.user.firstName, this.user.lastName);
                           },
-                          child: Text(
-                            this.user.email.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            softWrap: false,
-                          ),
-                        )),
-                  ],
-                )),
+                          child: Icon(Icons.mail_outline,
+                              size: 14, color: Theme.of(context).primaryColor)),
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                      ),
+                      SizedBox(
+                          width: showTrailingIcon ? 170.0 : 190.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              print("Tapped on email!");
+                              _launchMailto(this.user.email.toString(),
+                                  this.user.firstName, this.user.lastName);
+                            },
+                            child: Text(
+                              this.user.email.toString(),
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              softWrap: false,
+                            ),
+                          )),
+                    ],
+                  )),
             if (this.user.address != null &&
                 this.user.city != null &&
                 this.user.postalCode != null)
@@ -112,11 +113,18 @@ class UserListItem extends StatelessWidget {
                             _openGoogleMaps(this.user.address, this.user.city,
                                 this.user.postalCode);
                           },
-                          child: Text(this.user.address +
-                              ",\n" +
-                              this.user.city +
-                              " " +
-                              this.user.postalCode))
+                          child: SizedBox(
+                              width: showTrailingIcon ? 170.0 : 190.0,
+                              child: Text(
+                                this.user.address +
+                                    ",\n" +
+                                    this.user.city +
+                                    " " +
+                                    this.user.postalCode,
+                                maxLines: 2,
+                                overflow: TextOverflow.fade,
+                                softWrap: false,
+                              )))
                     ],
                   )),
           ],
