@@ -56,108 +56,110 @@ class _WeatherInfo extends State<WeatherInfo> {
                     // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                          flex: 3,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                this.weather.cityName,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w300,
-                                  fontFamily: 'Poppins',
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              if (this.date != null) Text(this.date),
-
-                              Container(
-                                height: 1,
-                                width: 150,
+                        flex: 3,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              this.weather.cityName,
+                              style: TextStyle(
                                 color: Colors.white,
-                                margin: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 5.0),
+                                fontSize: 30,
+                                fontWeight: FontWeight.w300,
+                                fontFamily: 'Poppins',
                               ),
+                              textAlign: TextAlign.left,
+                            ),
+                            if (this.date != null) Text(this.date),
 
-                              // RichText(
-                              //   text: TextSpan(
-                              //     style: DefaultTextStyle.of(context).style,
-                              //     children: <TextSpan>[
-                              //       TextSpan(
-                              //           text: this.weather.temp.toString(),
-                              //           style: TextStyle(
-                              //               fontWeight: FontWeight.bold, fontSize: 30.0,)),
-                              //       TextSpan(text: " °C", style: TextStyle(color: Colors.white, fontSize: 30.0,)),
-                              //     ],
-                              //   ),
-                              // ),
+                            Container(
+                              height: 1,
+                              width: 150,
+                              color: Colors.white,
+                              margin: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 5.0),
+                            ),
 
-                              Text(
-                                this.weather.temp.toString() + "°C",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30.0,
-                                ),
-                                textAlign: TextAlign.left,
-                              ),
-                              Text(
-                                  this.weather.tempMin.toString() +
-                                      " / " +
-                                      this.weather.tempMax.toString() +
-                                      "°C",
-                                  style: TextStyle(fontSize: 14.0)),
-                              Text("Voelt aan als: " +
-                                  this.weather.feelsLike.toString() +
-                                  "°C"),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    // height: 100.0,
-                                    width: 24.0,
-                                    child: Image.network(
-                                        'http://openweathermap.org/img/wn/' +
-                                            this.weather.weatherIcon +
-                                            '@2x.png'),
-                                  ),
-                                  Text(this.weather.weatherDescription),
-                                ],
-                              ),
+                            // RichText(
+                            //   text: TextSpan(
+                            //     style: DefaultTextStyle.of(context).style,
+                            //     children: <TextSpan>[
+                            //       TextSpan(
+                            //           text: this.weather.temp.toString(),
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.bold, fontSize: 30.0,)),
+                            //       TextSpan(text: " °C", style: TextStyle(color: Colors.white, fontSize: 30.0,)),
+                            //     ],
+                            //   ),
+                            // ),
 
-                              Container(
-                                height: 1,
-                                width: 150,
+                            Text(
+                              this.weather.temp.toString() + "°C",
+                              style: TextStyle(
                                 color: Colors.white,
-                                margin: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 5.0),
+                                fontSize: 30.0,
                               ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Text(
+                                this.weather.tempMin.toString() +
+                                    " / " +
+                                    this.weather.tempMax.toString() +
+                                    "°C",
+                                style: TextStyle(fontSize: 14.0)),
+                            Text("Voelt aan als: " +
+                                this.weather.feelsLike.toString() +
+                                "°C"),
 
-                              Text("Wind: " +
-                                  this.weather.windSpeed.toString() +
-                                  "km/h" +
-                                  " - " +
-                                  this.weather.windDeg.toString() +
-                                  "°"),
-                              Text("Pressure: " +
-                                  this.weather.pressure.toString() +
-                                  "hPa"),
-                              Text("Humidity: " +
-                                  this.weather.humidity.toString() +
-                                  "%"),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  // height: 100.0,
+                                  width: 24.0,
+                                  child: Image.network(
+                                      'https://openweathermap.org/img/wn/' +
+                                          this.weather.weatherIcon +
+                                          '@2x.png'),
+                                ),
+                                Text(this.weather.weatherDescription),
+                              ],
+                            ),
 
-                              // Text(this.weather.tempMin.toString() + "°C"),
-                              // Text("min"),
-                              // Text(this.weather.tempMax.toString() + "°C"),
-                              // Text("max"),
-                              // Text(this.weather.weatherMain),
+                            Container(
+                              height: 1,
+                              width: 150,
+                              color: Colors.white,
+                              margin: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 5.0),
+                            ),
 
-                              // //ICON
-                              // Text(this.weather.weatherDescription),
-                              // Text(this.weather.pressure.toString() +
-                              //     "hPa"), // Pressure
-                              // Text(this.weather.humidity.toString() +
-                              //     "%"), // Humidity
-                            ],
-                          )),
+                            Text("Wind: " +
+                                this.weather.windSpeed.toString() +
+                                "km/h" +
+                                " - " +
+                                this.weather.windDeg.toString() +
+                                "°"),
+                            Text("Pressure: " +
+                                this.weather.pressure.toString() +
+                                "hPa"),
+                            Text("Humidity: " +
+                                this.weather.humidity.toString() +
+                                "%"),
+
+                            // Text(this.weather.tempMin.toString() + "°C"),
+                            // Text("min"),
+                            // Text(this.weather.tempMax.toString() + "°C"),
+                            // Text("max"),
+                            // Text(this.weather.weatherMain),
+
+                            // //ICON
+                            // Text(this.weather.weatherDescription),
+                            // Text(this.weather.pressure.toString() +
+                            //     "hPa"), // Pressure
+                            // Text(this.weather.humidity.toString() +
+                            //     "%"), // Humidity
+                          ],
+                        ),
+                      ),
                       Expanded(
                           flex: 1,
                           child: Column(
@@ -169,7 +171,7 @@ class _WeatherInfo extends State<WeatherInfo> {
                                 // height: 100.0,
                                 width: 100.0,
                                 child: Image.network(
-                                    'http://openweathermap.org/img/wn/' +
+                                    'https://openweathermap.org/img/wn/' +
                                         this.weather.weatherIcon +
                                         '@2x.png'),
                               )),
