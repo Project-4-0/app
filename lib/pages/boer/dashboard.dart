@@ -14,6 +14,7 @@ import 'package:b_one_project_4_0/widgets/WeatherInfo.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
 import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+import 'package:b_one_project_4_0/widgets/charts/SelectionCallbackPredict.dart';
 import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
 import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
 import 'package:b_one_project_4_0/models/user.dart';
@@ -30,7 +31,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
   List<Box> boxList = List<Box>();
   MeasurementGraphics measurementGraphicsLicht;
-  MeasurementGraphics measurementGraphicsGeleidbaarheid;
+  MeasurementGraphics measurementGraphicsBodemVochtigheid;
+  MeasurementGraphics measurementGraphicsTemp;
+
 
   //Terrascope IMage
   Terrascope terrascope = new Terrascope();
@@ -89,7 +92,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void _loadAllGraphics() {
     _getMeasurementGraphicLicht();
-    _getMeasurementGraphicGeleidbaarheid();
+    _getMeasurementGraphicBodemVochtigheid();
+    _getMeasurementGraphicTemp();
   }
 
   void _getMeasurementGraphicLicht() {
@@ -102,14 +106,25 @@ class _DashboardPageState extends State<DashboardPage> {
     });
   }
 
-  void _getMeasurementGraphicGeleidbaarheid() {
+  void _getMeasurementGraphicBodemVochtigheid() {
     MeasurementController.loadMeasurementsGraphics(
-            "Geleidbaarheid", filterMeasurement)
-        .then((measurementGraphicsGeleidbaarheid) {
+            "Bodemvochtigheid", filterMeasurement)
+        .then((measurementGraphicsBodemVochtigheid) {
       //get geleidbaarheid measurements
       setState(() {
-        this.measurementGraphicsGeleidbaarheid =
-            measurementGraphicsGeleidbaarheid;
+        this.measurementGraphicsBodemVochtigheid =
+            measurementGraphicsBodemVochtigheid;
+      });
+    });
+  }
+
+  void _getMeasurementGraphicTemp() {
+    MeasurementController.loadMeasurementsGraphics(
+            "Temperatuur", filterMeasurement)
+        .then((measurementGraphicsTemp) {
+      setState(() {
+        this.measurementGraphicsTemp =
+            measurementGraphicsTemp;
       });
     });
   }
@@ -166,7 +181,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ),
                         Padding(padding: EdgeInsets.all(10.0)),
-
                         TopBarButtons(
                           onPressedLeft: () {
                             _filterModal(context);
@@ -180,10 +194,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           iconRight: Icons.business_center,
                           color: Colors.grey.shade900,
                         ),
-
                         Padding(padding: EdgeInsets.all(15.0)),
-                        WeatherInfo(
-                            1), // TODO: set box id !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        _weatherView(),
                         Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
@@ -194,17 +206,25 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         StackAreacLineChartBone(
                           measurementGraphics:
-                              this.measurementGraphicsGeleidbaarheid,
+                              this.measurementGraphicsBodemVochtigheid,
                           title: "BodemVochtigheid",
                         ),
                         SizedBox(
                           height: 40,
                         ),
-                        _predictions(),
+                        StackAreacLineChartBone(
+                          measurementGraphics:
+                              this.measurementGraphicsTemp,
+                          title: "Temp",
+                        ),
                         SizedBox(
                           height: 40,
                         ),
-                        _satellietbeeld(),
+                        _predictionsView(),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        _satellietbeeldView(),
                       ],
                     ),
                   ),
@@ -222,18 +242,25 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  _openweather() {
-    return Text("weather");
-  }
-
-  _predictions() {
+  _weatherView() {
     if (this.measurementGraphicsLicht?.boxes?.length != 1) {
       return Container();
     }
-    return Text("ok");
+    return WeatherInfo(this.measurementGraphicsLicht?.boxes[0].id);
   }
 
-  _satellietbeeld() {
+  _predictionsView() {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 ||
+        this.predict == null) {
+      return Container();
+    }
+    return SelectionCallbackPredict(
+      predictList: this.predict,
+      title: "Predict",
+    );
+  }
+
+  _satellietbeeldView() {
     if (this.measurementGraphicsLicht?.boxes?.length != 1) {
       return Container();
     }

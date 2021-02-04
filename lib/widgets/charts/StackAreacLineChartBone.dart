@@ -135,11 +135,11 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Min. : " + stat.min.toString(),
+              "Min. : " + stat.max.toString(),
               style: TextStyle(fontSize: 13),
             ),
             Text(
-              "Max. : " + stat.max.toString(),
+              "Max. : " + stat.min.toString(),
               style: TextStyle(fontSize: 13),
             ),
           ],
