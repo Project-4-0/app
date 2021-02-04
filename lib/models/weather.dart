@@ -2,16 +2,16 @@ class Weather {
   String weatherMain;
   String weatherDescription;
   String weatherIcon;
-  double temp;
-  double feelsLike;
-  double tempMin;
-  double tempMax;
-  int pressure;
-  int humidity;
-  int visibility;
-  double windSpeed;
-  int windDeg;
-  int clouds;
+  num temp;
+  num feelsLike;
+  num tempMin;
+  num tempMax;
+  num pressure;
+  num humidity;
+  num visibility;
+  num windSpeed;
+  num windDeg;
+  num clouds;
   String cityName;
 
   Weather({
