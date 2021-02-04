@@ -84,7 +84,7 @@ class BoxUserListItem extends StatelessWidget {
                   ],
                 ),
                 // Comment
-                if (box.comment != null)
+                if (box.comment != null && box.comment!="" && box.comment!=" " && box.comment.isNotEmpty)
                   Row(
                     children: <Widget>[
                       Container(

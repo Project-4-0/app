@@ -291,13 +291,6 @@ class _BoxenOverviewPage extends State {
                               "Mac adress:\n" + box.macAddress,
                               style: TextStyle(fontSize: 18),
                             ),
-                            // Padding(padding: EdgeInsets.all(5)),
-                            // Text(
-                            //   "Locatie:\n" +
-                            //       "Harmoniestraat 44 !!!\n" +
-                            //       "2230 Ramsel",
-                            //   style: TextStyle(fontSize: 18),
-                            // ),
                             Padding(padding: EdgeInsets.all(5)),
                             Text(
                               "In gebruik door:",
@@ -306,9 +299,9 @@ class _BoxenOverviewPage extends State {
                             Container(
                               child: _userList(context, box.users),
                             ),
-                            if (box.comment != null)
+                            if (box.comment != null && box.comment!="" && box.comment!=" " && box.comment.isNotEmpty)
                               Padding(padding: EdgeInsets.all(5)),
-                            if (box.comment != null)
+                            if (box.comment != null && box.comment!="" && box.comment!=" " && box.comment.isNotEmpty)
                               Text(
                                 "Opmerking:\n" + box.comment,
                                 style: TextStyle(fontSize: 20),
