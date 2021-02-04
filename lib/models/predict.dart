@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 class Predict {
   DateTime date;
   int boxID;
-  double bodemvochtigheid;
+  num bodemvochtigheid;
   DateTime predictedatum;
-  double mea;
-  double rmsa;
+  num mea;
+  num rmsa;
 
   Predict(
       {this.date,
@@ -22,12 +22,12 @@ class Predict {
           ? null
           : new DateFormat("yyyy-MM-dd").parse(json['datum']),
       // boxID: int.parse(json['boxID']),
-      bodemvochtigheid: double.parse(json['bodemvochtigheid']),
+      bodemvochtigheid: num.parse(num.parse(json['bodemvochtigheid']).toStringAsFixed(2)),
       predictedatum: json['predictedatum'] == null
           ? null
           : new DateFormat("yyyy-MM-dd").parse(json['predictedatum']),
-      mea: double.parse(json['MEA']),
-      rmsa: double.parse(json['RMSA']),
+      mea: num.parse(json['MEA']),
+      rmsa: num.parse(json['RMSA']),
     );
   }
 }
