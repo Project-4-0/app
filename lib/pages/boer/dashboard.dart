@@ -34,7 +34,6 @@ class _DashboardPageState extends State<DashboardPage> {
   MeasurementGraphics measurementGraphicsBodemVochtigheid;
   MeasurementGraphics measurementGraphicsTemp;
 
-
   //Terrascope IMage
   Terrascope terrascope = new Terrascope();
 
@@ -123,8 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
             "Temperatuur", filterMeasurement)
         .then((measurementGraphicsTemp) {
       setState(() {
-        this.measurementGraphicsTemp =
-            measurementGraphicsTemp;
+        this.measurementGraphicsTemp = measurementGraphicsTemp;
       });
     });
   }
@@ -141,7 +139,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _getPrediciton() {
-    PredictController.fetchPredictByBoxID(this.filterMeasurement.boxID)
+    PredictController.fetchPredictByBoxID(this.filterMeasurement)
         .then((predict) {
       setState(() {
         this.predict = predict;
@@ -213,8 +211,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           height: 40,
                         ),
                         StackAreacLineChartBone(
-                          measurementGraphics:
-                              this.measurementGraphicsTemp,
+                          measurementGraphics: this.measurementGraphicsTemp,
                           title: "Temp",
                         ),
                         SizedBox(
@@ -338,6 +335,7 @@ class _DashboardPageState extends State<DashboardPage> {
           },
           onPressedFilter: () {
             _loadAllGraphics();
+            _getPrediciton();
             Navigator.pop(context);
           },
         );
