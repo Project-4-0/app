@@ -19,6 +19,7 @@ import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
 import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DashboardPage extends StatefulWidget {
   @override
@@ -240,10 +241,10 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _weatherView() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1) {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 || this.filterMeasurement.boxID == null) {
       return Container();
     }
-    return WeatherInfo(this.measurementGraphicsLicht?.boxes[0].id);
+    return new WeatherInfo(this.filterMeasurement.boxID);
   }
 
   _predictionsView() {
@@ -300,7 +301,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
     return Column(
       children: [
-        Text(this.terrascope.date.toString()),
+        Text(new DateFormat("dd-MM-yyyy")
+            .format(this.terrascope.date)
+            .toString()),
+        SizedBox(
+          height: 20,
+        ),
         Image.network(
           this.terrascope.url,
           alignment: Alignment.center,
