@@ -92,7 +92,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         // First row of dashboard buttons
                         Container(
                           width: double.infinity,
-                          child: Row(
+                          child: IntrinsicHeight(
+                              child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
@@ -119,7 +120,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                                 ),
                               )
                             ],
-                          ),
+                          )),
                         ),
                         Padding(padding: EdgeInsets.all(5.0)),
                         // Seccond row of dashboard buttons
