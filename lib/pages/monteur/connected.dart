@@ -1232,7 +1232,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
                                     text: "Uw huidige locatie is: \'" +
                                         this.userPositionLat.toString() +
                                         " - " +
-                                        this.userPositionLat.toString() +
+                                        this.userPositionLng.toString() +
                                         "\'.\nDeze locatie representeert de locatie van de box.",
                                     title: "Handmatige locatie",
                                     type: "INFO");
