@@ -104,7 +104,7 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
         this.widget.measurementGraphics.measurementsList.length <= 0) {
       return Container();
     }
-    //get statiestiek
+    // Get statiestiek
     List<double> result = this
         .widget
         .measurementGraphics
@@ -135,11 +135,11 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Min. : " + stat.max.toString(),
+              "Min. : " + stat.min.toString(),
               style: TextStyle(fontSize: 13),
             ),
             Text(
-              "Max. : " + stat.min.toString(),
+              "Max. : " + stat.max.toString(),
               style: TextStyle(fontSize: 13),
             ),
           ],
@@ -150,7 +150,7 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
 
   _forOneGraphicButton() {
     _checkforOneGraphic();
-    //get statiestiek
+    // Get statiestiek
     List<double> result = this
         .widget
         .measurementGraphics

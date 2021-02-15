@@ -27,7 +27,6 @@ class TimeSeriesChart extends StatelessWidget {
       Color lineColor,
       meassureAxisValues}) {
     return new TimeSeriesChart(
-      // TODO: get values from API depending on filter data
       _createSampleData(lineColor),
       title: title,
       subTitle: subTitle,

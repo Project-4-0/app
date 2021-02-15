@@ -15,7 +15,6 @@ import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:b_one_project_4_0/pages/monteur/newUser.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -269,7 +268,6 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
         }
       });
     }
-    // TODO: check the lat and lng
     UserController.addBoxUser(this.selectedUser.id, this.selectedBox.id,
             this.userPositionLat, this.userPositionLng)
         .then((result) {
@@ -876,7 +874,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
             Navigator.of(context).pop();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('Close'),
+          child: const Text('Sluiten'),
         ),
       ],
     );

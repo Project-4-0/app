@@ -88,30 +88,27 @@ class _UserOverviewPage extends State {
   }
 
   // Open mail launcher on device
-  void _launchMailto(
-      String mailaddress, String firstName, String lastName) async {
-    final mailtoLink = Mailto(
-      to: [mailaddress],
-      body: 'Geachte ' + firstName + " " + lastName + ',\n\n',
-    );
-    await launch('$mailtoLink');
-  }
+  // void _launchMailto(
+  //     String mailaddress, String firstName, String lastName) async {
+  //   final mailtoLink = Mailto(
+  //     to: [mailaddress],
+  //     body: 'Geachte ' + firstName + " " + lastName + ',\n\n',
+  //   );
+  //   await launch('$mailtoLink');
+  // }
 
-  static Future<void> _openGoogleMaps(
-      String address, String city, String postalcode) async {
-    String googleUrl =
-        'https://www.google.be/maps/place/$address+$postalcode+$city+Belgium/';
-    if (await canLaunch(googleUrl)) {
-      await launch(googleUrl);
-    } else {
-      throw 'Could not open the map.';
-    }
-  }
+  // static Future<void> _openGoogleMaps(
+  //     String address, String city, String postalcode) async {
+  //   String googleUrl =
+  //       'https://www.google.be/maps/place/$address+$postalcode+$city+Belgium/';
+  //   if (await canLaunch(googleUrl)) {
+  //     await launch(googleUrl);
+  //   } else {
+  //     throw 'Could not open the map.';
+  //   }
+  // }
 
-// TODO: Go to user dertail by id;
   Future<void> _userDetail(id) async {
-    //   Navigator.pushNamedAndRemoveUntil(
-    //       context, '/admin/users/1', (route) => false);
     if (id == null) {
       Navigator.pushNamed(context, '/admin/users/new');
     } else {
@@ -120,6 +117,7 @@ class _UserOverviewPage extends State {
         MaterialPageRoute(builder: (context) => UserDetailPage(id)),
       );
       if (result == true) {
+        // Refresh userList when coming back from detail page
         _getUsers();
       }
     }
@@ -152,7 +150,6 @@ class _UserOverviewPage extends State {
                     Padding(padding: EdgeInsets.all(10.0)),
                     TopSearchBar(
                       onPressedRight: () {
-                        // TODO: go to user detail with empty values
                         _userDetail(null);
                         print("Pressed add user!");
                       },

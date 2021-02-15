@@ -28,32 +28,32 @@ class Box {
   factory Box.fromJson(Map<String, dynamic> json) {
     // print("monitoring length: " + json['monitoring']?.length.toString());
     if (json['monitoring'] == null) {
-     return Box(
-      id: json['BoxID'],
-      macAddress: json['MacAddress'],
-      name: json['Name'],
-      comment: json['Comment'],
-      active: json['Active'],
-      boxUser:
-          json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
-    );
-    }else{
-return Box(
-      id: json['BoxID'],
-      macAddress: json['MacAddress'],
-      name: json['Name'],
-      comment: json['Comment'],
-      active: json['Active'],
-      boxUser:
-          json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
-      monitoring: json['monitoring'] == null || json['monitoring']?.length == 0
-          ? []
-          : (json['monitoring'] as List)
-              .map((tagJson) => Monitoring.fromJson(tagJson))
-              .toList(),
-    );
+      return Box(
+        id: json['BoxID'],
+        macAddress: json['MacAddress'],
+        name: json['Name'],
+        comment: json['Comment'],
+        active: json['Active'],
+        boxUser:
+            json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
+      );
+    } else {
+      return Box(
+        id: json['BoxID'],
+        macAddress: json['MacAddress'],
+        name: json['Name'],
+        comment: json['Comment'],
+        active: json['Active'],
+        boxUser:
+            json['BoxUser'] == null ? null : BoxUser.fromJsonW(json['BoxUser']),
+        monitoring:
+            json['monitoring'] == null || json['monitoring']?.length == 0
+                ? []
+                : (json['monitoring'] as List)
+                    .map((tagJson) => Monitoring.fromJson(tagJson))
+                    .toList(),
+      );
     }
-    
   }
 
   factory Box.fromJsonAll(Map<String, dynamic> json) {
@@ -74,7 +74,7 @@ return Box(
           ? null
           : (json['users'] as List)
               .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
-              .toList(), // TODO: What about boxUsers? !!!!!
+              .toList(),
       monitoring: json['monitoring'] == null
           ? null
           : (json['monitoring'] as List)

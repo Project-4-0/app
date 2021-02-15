@@ -129,7 +129,6 @@ class UserApi {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      // TODO: Check if string type is ok to send !!!!!!
       body: jsonEncode(<String, String>{
         "UserID": userID.toString(),
         "BoxID": boxID.toString(),
@@ -150,7 +149,6 @@ class UserApi {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      // TODO: Check if string type is ok to send !!!!!!
       body: jsonEncode(<String, int>{"UserID": userID, "BoxID": boxID}),
     );
     if (response.statusCode == 200) {

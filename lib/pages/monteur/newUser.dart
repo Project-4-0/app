@@ -188,7 +188,6 @@ class _NewUserMonteurPageState extends State<NewUserMonteurPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        // TODO: Create list of available boxes
                         SizedBox(
                           height: 20,
                         ),

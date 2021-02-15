@@ -2,7 +2,6 @@ import 'package:b_one_project_4_0/models/predict.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:intl/intl.dart';
-import 'package:stats/stats.dart';
 
 class SelectionCallbackPredict extends StatefulWidget {
   const SelectionCallbackPredict({
@@ -64,8 +63,8 @@ class _SelectionCallbackState extends State<SelectionCallbackPredict> {
       ),
     ];
 
-   if (this.widget.predictList.isEmpty) {
-     children.add(Text("Geen gegevens beschikbaar"));
+    if (this.widget.predictList.isEmpty) {
+      children.add(Text("Geen gegevens beschikbaar"));
       return new Column(children: children);
     }
     children.add(_forOneGraphicTop());

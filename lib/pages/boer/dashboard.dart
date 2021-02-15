@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:b_one_project_4_0/apis/predict_api.dart';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
 import 'package:b_one_project_4_0/controller/predictController.dart';
 import 'package:b_one_project_4_0/controller/terrascopeController.dart';
@@ -17,6 +16,7 @@ import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/charts/SelectionCallbackPredict.dart';
 import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
 import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
+import 'package:b_one_project_4_0/widgets/PopUp.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,7 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    //TODO is het nodig om al de boxen te laden?
     _getBoxen();
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 10), (Timer t) => _loadAllGraphics());
@@ -198,7 +197,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
-                          title: "Licht",
+                          title: "Lichthoeveelheid",
                         ),
                         SizedBox(
                           height: 40,
@@ -206,14 +205,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         StackAreacLineChartBone(
                           measurementGraphics:
                               this.measurementGraphicsBodemVochtigheid,
-                          title: "BodemVochtigheid",
+                          title: "Bodemvochtigheid",
                         ),
                         SizedBox(
                           height: 40,
                         ),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsTemp,
-                          title: "Temp",
+                          title: "Temperatuur",
                         ),
                         SizedBox(
                           height: 40,
@@ -241,7 +240,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _weatherView() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1 || this.filterMeasurement.boxID == null) {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 ||
+        this.filterMeasurement.boxID == null) {
       return Container();
     }
     return new WeatherInfo(this.filterMeasurement.boxID);
@@ -254,7 +254,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
     return SelectionCallbackPredict(
       predictList: this.predict,
-      title: "Predict",
+      title: "Voorspelling",
     );
   }
 
@@ -299,20 +299,50 @@ class _DashboardPageState extends State<DashboardPage> {
       ]);
     }
 
-    return Column(
-      children: [
-        Text(new DateFormat("dd-MM-yyyy")
-            .format(this.terrascope.date)
-            .toString()),
-        SizedBox(
-          height: 20,
-        ),
-        Image.network(
-          this.terrascope.url,
-          alignment: Alignment.center,
-        ),
-      ],
-    );
+// Marker !!!!!!!!!!!!!!!!!!!!
+    return Column(children: [
+      Text(
+          new DateFormat("dd-MM-yyyy").format(this.terrascope.date).toString()),
+      SizedBox(
+        height: 20,
+      ),
+      Stack(
+        children: <Widget>[
+          Image.network(
+            this.terrascope.url,
+            alignment: Alignment.center,
+          ),
+          Positioned.fill(
+            // Marble to show marker in the center of the image
+            // top: 50.0,
+            // right: 50.0,
+            // width: double.infinity,
+            // height: double.infinity,
+            child: Center(
+                child: Icon(Icons.gps_fixed, size: 30.0, color: Colors.black)),
+          ),
+          Positioned(
+            bottom: 5.0,
+            right: 5.0,
+            child: GestureDetector(
+              onTap: () {
+                print("Tapped sat info");
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => PopUp(
+                      title: "Sentinel 2 - FAPAR",
+                      message:
+                          "FAPAR toont de fotosyntheseactiviteit van groene vegetatie.\nMeer info op:",
+                      url: "https://terrascope.be/nl",
+                      urlText: "Terrascope.be"),
+                );
+              },
+              child: Icon(Icons.info, size: 30.0, color: Colors.blue),
+            ),
+          )
+        ],
+      )
+    ]);
   }
 
   void _filterModal(context) {

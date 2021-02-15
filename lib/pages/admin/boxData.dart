@@ -8,7 +8,6 @@ import 'package:b_one_project_4_0/widgets/BoxListItem.dart';
 import 'package:b_one_project_4_0/widgets/SafeAreaBOne/safeAreaBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/widgets/buttons/TopBarButtons.dart';
-import 'package:b_one_project_4_0/controller/userController.dart';
 import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
