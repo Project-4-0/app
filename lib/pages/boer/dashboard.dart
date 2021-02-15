@@ -329,10 +329,14 @@ class _DashboardPageState extends State<DashboardPage> {
             child: GestureDetector(
               onTap: () {
                 print("Tapped sat info");
-                            showDialog(
+                showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      PopUp(title: "Sentinel 2 - FAPAR", message: "FAPAR toont de fotosyntheseactiviteit van groene vegetatie.\nMeer info op:", url:"https://terrascope.be/nl", urlText: "Terrascope.be"),
+                  builder: (BuildContext context) => PopUp(
+                      title: "Sentinel 2 - FAPAR",
+                      message:
+                          "FAPAR toont de fotosyntheseactiviteit van groene vegetatie.\nMeer info op:",
+                      url: "https://terrascope.be/nl",
+                      urlText: "Terrascope.be"),
                 );
               },
               child: Icon(Icons.info, size: 30.0, color: Colors.blue),
