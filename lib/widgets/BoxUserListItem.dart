@@ -1,20 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:b_one_project_4_0/models/box.dart';
+// import 'package:b_one_project_4_0/models/location.dart';
+import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 
-class BoxUserListItem extends StatelessWidget {
-  const BoxUserListItem({
-    @required this.onPressed,
-    this.onPressedDelete,
-    @required this.delete,
-    @required this.box, // TODO: Expect to get a full box object !!!
-    Key key,
-  }) : super(key: key);
-
+class BoxUserListItem extends StatefulWidget {
   final Box box;
   final GestureTapCallback onPressed;
   final GestureTapCallback onPressedDelete;
   final bool delete;
+  BoxUserListItem({
+    @required this.onPressed,
+    this.onPressedDelete,
+    @required this.delete,
+    @required this.box,
+    Key key,
+  }) : super(key: key);
+  @override
+  State<StatefulWidget> createState() =>
+      _BoxUserListItem(box, onPressed, onPressedDelete, delete);
+}
+
+class _BoxUserListItem extends State<BoxUserListItem> {
+  Box box;
+  GestureTapCallback onPressed;
+  GestureTapCallback onPressedDelete;
+  bool delete;
+  _BoxUserListItem(this.box, this.onPressed, this.onPressedDelete, this.delete);
+
+  String date;
+
+  double boxLat;
+  double boxLng;
+  String displayAddress;
+
+  @override
+  void initState() {
+    super.initState();
+    // Get the address of the box
+    _getAddressFromLatLng();
+  }
+
+// class BoxUserListItem extends StatelessWidget {
+//   const BoxUserListItem({
+//     @required this.onPressed,
+//     this.onPressedDelete,
+//     @required this.delete,
+//     @required this.box, // TODO: Expect to get a full box object !!!
+//     Key key,
+//   }) : super(key: key);
+
+  // final Box box;
+  // final GestureTapCallback onPressed;
+  // final GestureTapCallback onPressedDelete;
+  // final bool delete;
+
+// final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +89,7 @@ class BoxUserListItem extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
                   child: Center(
-                      child: Text(box.name,
+                      child: Text(this.box.name,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -83,6 +126,28 @@ class BoxUserListItem extends StatelessWidget {
                         )),
                   ],
                 ),
+                // Calculated address
+                if (this.displayAddress != null)
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.place,
+                        color: Theme.of(context).accentColor,
+                        size: 16,
+                      ),
+                      Container(
+                          width: delete ? 150.0 : 170.0,
+                          padding: EdgeInsets.only(top: 5.0),
+                          child: Text(
+                            this.displayAddress,
+                            style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ],
+                  ),
                 // Comment
                 if (box.comment != null &&
                     box.comment != "" &&
@@ -114,5 +179,77 @@ class BoxUserListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _getLatLngBox() async {
+    print("Get the Lat & Lng of the box: " + this.box.name);
+    await LocationController.getLocationOfBox(this.box.id).then((result) {
+      if (result != null) {
+        var location = result;
+        setState(() {
+          this.boxLat = result.latitude;
+          this.boxLng = result.longitude;
+          print("LatLng: " +
+              this.boxLat.toString() +
+              " - " +
+              this.boxLng.toString());
+        });
+      } else {
+        print("Location for box: " + this.box.name + " is unknown!");
+        this.boxLat = null;
+        this.boxLng = null;
+      }
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    // Get the coordinates from the box
+    await _getLatLngBox();
+
+    print("Get the address of the box: " + this.box.name);
+    try {
+      if (this.boxLat != null && this.boxLng != null) {
+        List<Placemark> placemarks =
+            await placemarkFromCoordinates(this.boxLat, this.boxLng);
+        Placemark place = placemarks[0];
+        print('Get address');
+        // print("Locality: " + place.locality);
+        // print("PostalCode: " + place.postalCode);
+        // print("Country: " + place.country);
+        // print("ISO country code: " + place.isoCountryCode);
+
+        if (place.locality != "" &&
+            place.postalCode != null &&
+            place.administrativeArea != null &&
+            place.isoCountryCode != null) {
+          setState(() {
+            this.displayAddress = place.postalCode +
+                " - " +
+                place.locality +
+                ",\n" +
+                place.administrativeArea +
+                " (" +
+                place.isoCountryCode +
+                ")";
+            // this.displayAddress = place.name + " - " +  + ",\n" + place.locality;
+          });
+        } else {
+          // If there is no address found for the box his coordinates
+          setState(() {
+            this.displayAddress = null;
+          });
+        }
+      } else {
+        // If there is no location found for the box display nothing
+        setState(() {
+          this.displayAddress = null;
+        });
+      }
+    } catch (e) {
+      print(e);
+              setState(() {
+          this.displayAddress = null;
+        });
+    }
   }
 }

@@ -53,6 +53,8 @@ dependencies:
   latlong: ^0.6.1
   location: ^2.5.0
   # flutter_launcher_icons: ^0.8.1
+  geocoder: ^0.2.1
+  geocoding: ^1.0.5
 
   # Environmental variables
   flutter_dotenv: ^3.1.0
