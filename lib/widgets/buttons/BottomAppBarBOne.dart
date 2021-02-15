@@ -109,7 +109,7 @@ class FloatingActionButtonBOne extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
         onPressed: () {
-          Navigator.pushNamedAndRemoveUntil(context, '/info', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false);
         },
       ),
     );

@@ -207,7 +207,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         StackAreacLineChartBone(
                           measurementGraphics:
                               this.measurementGraphicsBodemVochtigheid,
-                          title: "BodemVochtigheid",
+                          title: "Bodemvochtigheid",
                         ),
                         SizedBox(
                           height: 40,
