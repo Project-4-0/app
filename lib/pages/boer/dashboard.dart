@@ -241,7 +241,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _weatherView() {
-    if (this.measurementGraphicsLicht?.boxes?.length != 1 || this.filterMeasurement.boxID == null) {
+    if (this.measurementGraphicsLicht?.boxes?.length != 1 ||
+        this.filterMeasurement.boxID == null) {
       return Container();
     }
     return new WeatherInfo(this.filterMeasurement.boxID);
@@ -299,6 +300,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ]);
     }
 
+// Marker !!!!!!!!!!!!!!!!!!!!
     return Column(
       children: [
         Text(new DateFormat("dd-MM-yyyy")
@@ -307,10 +309,20 @@ class _DashboardPageState extends State<DashboardPage> {
         SizedBox(
           height: 20,
         ),
-        Image.network(
-          this.terrascope.url,
-          alignment: Alignment.center,
-        ),
+        Stack(children: <Widget>[
+          Image.network(
+            this.terrascope.url,
+            alignment: Alignment.center,
+          ),
+          Positioned.fill(
+            // Marble to show marker in the center of the image
+            // top: 50.0,
+            // right: 50.0,
+            // width: double.infinity,
+            // height: double.infinity,
+            child: Center(child: Icon(Icons.gps_fixed, size: 30.0, color: Colors.black)),
+          ),
+        ])
       ],
     );
   }

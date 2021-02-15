@@ -117,8 +117,7 @@ class UserController {
       print("first name" + user.firstName.toString());
       return user;
     }).catchError((error) {
-      SnackBarController()
-          .show(text: error.message, title: "Server", type: "ERROR");
+      SnackBarController().show(text: error, title: "Server", type: "ERROR");
       return null;
     });
   }
