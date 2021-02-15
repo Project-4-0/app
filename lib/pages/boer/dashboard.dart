@@ -17,6 +17,7 @@ import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/widgets/charts/SelectionCallbackPredict.dart';
 import 'package:b_one_project_4_0/widgets/charts/StackAreacLineChartBone.dart';
 import 'package:b_one_project_4_0/widgets/modalButton/ShowModalBottomFilter.dart';
+import 'package:b_one_project_4_0/widgets/PopUp.dart';
 import 'package:b_one_project_4_0/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -301,15 +302,14 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
 // Marker !!!!!!!!!!!!!!!!!!!!
-    return Column(
-      children: [
-        Text(new DateFormat("dd-MM-yyyy")
-            .format(this.terrascope.date)
-            .toString()),
-        SizedBox(
-          height: 20,
-        ),
-        Stack(children: <Widget>[
+    return Column(children: [
+      Text(
+          new DateFormat("dd-MM-yyyy").format(this.terrascope.date).toString()),
+      SizedBox(
+        height: 20,
+      ),
+      Stack(
+        children: <Widget>[
           Image.network(
             this.terrascope.url,
             alignment: Alignment.center,
@@ -323,9 +323,24 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Center(
                 child: Icon(Icons.gps_fixed, size: 30.0, color: Colors.black)),
           ),
-        ])
-      ],
-    );
+          Positioned(
+            bottom: 5.0,
+            right: 5.0,
+            child: GestureDetector(
+              onTap: () {
+                print("Tapped sat info");
+                            showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      PopUp(title: "Sentinel 2 - FAPAR", message: "FAPAR toont de fotosyntheseactiviteit van groene vegetatie.\nMeer info op:", url:"https://terrascope.be/nl", urlText: "Terrascope.be"),
+                );
+              },
+              child: Icon(Icons.info, size: 30.0, color: Colors.blue),
+            ),
+          )
+        ],
+      )
+    ]);
   }
 
   void _filterModal(context) {

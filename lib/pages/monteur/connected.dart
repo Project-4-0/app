@@ -876,7 +876,7 @@ class _MonteurConnectedPageState extends State<MonteurConnectedPage> {
             Navigator.of(context).pop();
           },
           textColor: Theme.of(context).primaryColor,
-          child: const Text('Close'),
+          child: const Text('Sluiten'),
         ),
       ],
     );
