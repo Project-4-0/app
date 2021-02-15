@@ -104,7 +104,7 @@ class _StackAreacLineChartBoneState extends State<StackAreacLineChartBone> {
         this.widget.measurementGraphics.measurementsList.length <= 0) {
       return Container();
     }
-    //get statiestiek
+    // Get statiestiek
     List<double> result = this
         .widget
         .measurementGraphics

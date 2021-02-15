@@ -10,7 +10,6 @@ import 'authController.dart';
 class MeasurementController {
   static Future<MeasurementGraphics> loadMeasurementsGraphics(
       String sensorTypeName, FilterMeasurement filterMeasurement) async {
-    //TODO change usid
     var us = (await AuthController.getUser());
 
     return MeasurementApi.fetchMeasurementsGraphics(

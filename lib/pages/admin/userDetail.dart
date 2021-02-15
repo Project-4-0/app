@@ -408,7 +408,6 @@ class _UserDetailPageState extends State<UserDetailPage> {
                         SizedBox(
                           height: 20,
                         ),
-                        // TODO: Think about ban, delete, or end box subscriptions
                         // IconButton(
                         //   icon: Icon(Icons.remove_circle),
                         //   color: Colors.red,

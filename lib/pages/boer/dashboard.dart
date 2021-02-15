@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:b_one_project_4_0/apis/predict_api.dart';
 import 'package:b_one_project_4_0/controller/measurementController.dart';
 import 'package:b_one_project_4_0/controller/predictController.dart';
 import 'package:b_one_project_4_0/controller/terrascopeController.dart';
@@ -51,7 +50,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    //TODO is het nodig om al de boxen te laden?
     _getBoxen();
     liveUpdateTimer =
         Timer.periodic(Duration(seconds: 100), (Timer t) => _loadAllGraphics());

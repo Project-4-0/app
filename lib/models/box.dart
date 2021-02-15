@@ -74,7 +74,7 @@ class Box {
           ? null
           : (json['users'] as List)
               .map((tagJson) => User.fromJsonWithBoxUser(tagJson))
-              .toList(), // TODO: What about boxUsers? !!!!!
+              .toList(),
       monitoring: json['monitoring'] == null
           ? null
           : (json['monitoring'] as List)

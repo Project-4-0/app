@@ -4,7 +4,7 @@ import 'package:b_one_project_4_0/models/box.dart';
 class BoxListItem extends StatelessWidget {
   const BoxListItem({
     @required this.onPressed,
-    @required this.box, // TODO: Expect to get a full box object !!!
+    @required this.box,
     Key key,
   }) : super(key: key);
 

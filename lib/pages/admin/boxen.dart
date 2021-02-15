@@ -5,7 +5,6 @@ import 'package:b_one_project_4_0/controller/boxController.dart';
 import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:b_one_project_4_0/models/box.dart';
 import 'package:b_one_project_4_0/models/user.dart';
-import 'package:b_one_project_4_0/models/location.dart';
 import 'package:b_one_project_4_0/widgets/buttons/BottomAppBarBOne.dart';
 import 'package:b_one_project_4_0/pages/admin/boxDetail.dart';
 import 'package:b_one_project_4_0/widgets/TopSearchBar.dart';
@@ -140,7 +139,6 @@ class _BoxenOverviewPage extends State {
                     Padding(padding: EdgeInsets.all(10.0)),
                     TopSearchBar(
                       onPressedRight: () {
-                        // TODO: go to box detail with empty values
                         print("Pressed add box");
                         Navigator.pushNamed(context, '/admin/boxen/new');
                       },
