@@ -197,7 +197,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Padding(padding: EdgeInsets.all(15.0)),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsLicht,
-                          title: "Licht",
+                          title: "Lichthoeveelheid",
                         ),
                         SizedBox(
                           height: 40,
@@ -212,7 +212,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                         StackAreacLineChartBone(
                           measurementGraphics: this.measurementGraphicsTemp,
-                          title: "Temp",
+                          title: "Temperatuur",
                         ),
                         SizedBox(
                           height: 40,
@@ -254,7 +254,7 @@ class _DashboardPageState extends State<DashboardPage> {
     }
     return SelectionCallbackPredict(
       predictList: this.predict,
-      title: "Predict",
+      title: "Voorspelling",
     );
   }
 
