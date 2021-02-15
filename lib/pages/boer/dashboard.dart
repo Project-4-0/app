@@ -320,7 +320,8 @@ class _DashboardPageState extends State<DashboardPage> {
             // right: 50.0,
             // width: double.infinity,
             // height: double.infinity,
-            child: Center(child: Icon(Icons.gps_fixed, size: 30.0, color: Colors.black)),
+            child: Center(
+                child: Icon(Icons.gps_fixed, size: 30.0, color: Colors.black)),
           ),
         ])
       ],

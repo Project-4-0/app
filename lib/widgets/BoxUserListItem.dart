@@ -5,6 +5,8 @@ import 'package:b_one_project_4_0/controller/locationController.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:b_one_project_4_0/controller/snackbarController.dart';
 
 class BoxUserListItem extends StatefulWidget {
   final Box box;
@@ -128,26 +130,31 @@ class _BoxUserListItem extends State<BoxUserListItem> {
                 ),
                 // Calculated address
                 if (this.displayAddress != null)
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.place,
-                        color: Theme.of(context).accentColor,
-                        size: 16,
-                      ),
-                      Container(
-                          width: delete ? 150.0 : 170.0,
-                          padding: EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            this.displayAddress,
-                            style: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontSize: 14),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          )),
-                    ],
-                  ),
+                  GestureDetector(
+                      onTap: () {
+                        print("Tapped on location!");
+                        _openGoogleMaps();
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.place,
+                            color: Theme.of(context).accentColor,
+                            size: 12,
+                          ),
+                          Container(
+                              width: delete ? 150.0 : 170.0,
+                              padding: EdgeInsets.only(top: 5.0),
+                              child: Text(
+                                this.displayAddress,
+                                style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontSize: 12),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )),
+                        ],
+                      )),
                 // Comment
                 if (box.comment != null &&
                     box.comment != "" &&
@@ -185,7 +192,6 @@ class _BoxUserListItem extends State<BoxUserListItem> {
     print("Get the Lat & Lng of the box: " + this.box.name);
     await LocationController.getLocationOfBox(this.box.id).then((result) {
       if (result != null) {
-        var location = result;
         setState(() {
           this.boxLat = result.latitude;
           this.boxLng = result.longitude;
@@ -247,9 +253,25 @@ class _BoxUserListItem extends State<BoxUserListItem> {
       }
     } catch (e) {
       print(e);
-              setState(() {
-          this.displayAddress = null;
-        });
+      setState(() {
+        this.displayAddress = null;
+      });
+    }
+  }
+
+  Future<void> _openGoogleMaps() async {
+    String googleUrl = 'https://www.google.com/maps/search/?api=1&query=' +
+        this.boxLat.toString() +
+        ',' +
+        this.boxLng.toString();
+    if (await canLaunch(googleUrl)) {
+      await launch(googleUrl);
+    } else {
+      SnackBarController().show(
+          text: "Kan de map voor deze locatie niet opnenen",
+          title: "Kan map niet openen",
+          type: "ERROR");
+      throw 'Could not open the map.';
     }
   }
 }
